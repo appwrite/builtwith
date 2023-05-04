@@ -1,56 +1,54 @@
-/**
- * WHAT IS THIS FILE?
- *
- * Globally applied styles. No matter which components are in the page or matching route,
- * the styles in here will be applied to the Document, without any sort of CSS scoping.
- *
- */
-
-:root {
-  --qwik-dark-blue: #006ce9;
-  --qwik-light-blue: #18b6f6;
-  --qwik-light-purple: #ac7ff4;
-  --qwik-dark-purple: #713fc2;
-  --qwik-dirty-black: #1d2033;
-  --qwik-dark-background: #151934;
-  --qwik-dark-text: #ffffff;
+.separator-start {
+  border-block-start: solid 0.0625rem hsl(var(--color-border));
 }
 
-html {
-  line-height: 1;
-  -webkit-text-size-adjust: 100%;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
+.object-og {
+  aspect-ratio: 1.8 / 1;
+  width: 100%;
 }
 
-body {
-  padding: 0;
-  margin: 0;
-  line-height: inherit;
+.object-og img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/**
- * WHAT IS THIS FILE?
- *
- * Globally applied styles. No matter which components are in the page or matching route,
- * the styles in here will be applied to the Document, without any sort of CSS scoping.
- *
- */
-html {
-  -webkit-text-size-adjust: 100%;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
+.object-square {
+  aspect-ratio: 1 / 1;
+  width: 100%;
 }
 
-body {
-  padding: 0;
-  line-height: inherit;
+.object-square img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upvote-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column !important;
+  padding: 0.5rem !important;
+  --p-button-size: none !important;
+}
+
+.reverse-grid {
+  grid-template-areas: "alert alert" "header header" "main   side" !important;
+}
+
+aside {
+  padding-top: var(--container-padding-block, 1.25rem);
+}
+
+@media (min-width: 1199px) {
+  .grid-with-side {
+    display: grid;
+    grid-template-columns: 1fr 12.5rem;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "header header"
+      "main   side  "
+      "footer side  ";
+  }
 }
