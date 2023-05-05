@@ -24,7 +24,7 @@
   object-fit: cover;
 }
 
-.upvote-button {
+.vertical-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,22 +33,27 @@
   --p-button-size: none !important;
 }
 
-.reverse-grid {
-  grid-template-areas: "alert alert" "header header" "main   side" !important;
+.upvote-button.is-primary {
+  background-color: transparent;
+  background: transparent;
+  border-color: hsl(var(--color-primary-300));
+}
+.upvote-button.is-primary .icon-heart {
+  color: hsl(var(--color-primary-200));
 }
 
 aside {
   padding-top: var(--container-padding-block, 1.25rem);
 }
 
-@media (min-width: 1199px) {
-  .grid-with-side {
-    display: grid;
-    grid-template-columns: 1fr 12.5rem;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "header header"
-      "main   side  "
-      "footer side  ";
-  }
+.tag {
+  background-color: hsl(var(--color-neutral-400)) !important;
+  border-color: hsl(var(--color-neutral-200)) !important;
+}
+
+.c-trim {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }

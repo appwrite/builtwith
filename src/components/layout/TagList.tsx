@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import Category from "./Category";
+import Tag from "./Tag";
 
 export default component$(() => {
   return (
@@ -8,13 +8,16 @@ export default component$(() => {
       style="--grid-gap:1rem; --grid-item-size:16rem; --grid-item-size-small-screens:8rem;"
     >
       <li>
-        <Category />
-      </li> <li>
-        <Category />
-      </li> <li>
-        <Category />
-      </li> <li>
-        <Category />
+        <Tag name="Stater" />
+      </li>
+      <li>
+        <Tag name="Ecommerce" />
+      </li>
+      <li>
+        <Tag name="AI" />
+      </li>
+      <li>
+        <Tag name="Blog" />
       </li>
     </ul>
   );

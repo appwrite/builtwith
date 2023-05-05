@@ -60,11 +60,6 @@ export default component$(() => {
               Timeline
             </a>
           </li>
-          <li class="buttons-list-item u-padding-inline-0">
-            <a href="#" class="button is-text">
-              Topics
-            </a>
-          </li>
         </ul>
       </div>
       <div class="logo is-only-mobile"></div>

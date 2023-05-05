@@ -1,3 +1,17 @@
+TODO:
+
+- XResponsive cards count
+- XProper light theme
+- X Responsive loved by Appwrite
+- X Get rid of most of style=""
+- Mobile Menu (home, timeline)
+- X Featured. Inline tags with gap?
+
+- Who made it (Publisher?)
+- Links (View Website, Read Article, View on GitHub, Follow on Twitter)
+- Share Button
+- Description as MARKDOWN
+
 # Qwik City App ⚡️
 
 - [Qwik Docs](https://qwik.builder.io/)

@@ -1,7 +1,11 @@
-import { component$ } from '@builder.io/qwik';
-import { QwikCityProvider, RouterOutlet, ServiceWorkerRegister } from '@builder.io/qwik-city';
+import { component$ } from "@builder.io/qwik";
+import {
+  QwikCityProvider,
+  RouterOutlet,
+  ServiceWorkerRegister,
+} from "@builder.io/qwik-city";
 
-import './global.css';
+import "./global.css";
 import "@appwrite.io/pink";
 import "@appwrite.io/pink-icons";
 

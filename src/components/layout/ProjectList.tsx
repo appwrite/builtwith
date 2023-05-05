@@ -9,9 +9,11 @@ export default component$(() => {
     >
       <li>
         <Project />
-      </li> <li>
+      </li>{" "}
+      <li>
         <Project />
-      </li> <li>
+      </li>{" "}
+      <li>
         <Project />
       </li>
     </ul>
