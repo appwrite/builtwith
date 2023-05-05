@@ -5,7 +5,7 @@ export default component$(() => {
   return (
     <ul
       class="grid-box"
-      style="--grid-gap:1rem; --grid-item-size:12rem; --grid-item-size-small-screens:11rem;"
+      style="--grid-gap:1rem; --grid-item-size:12rem; --grid-item-size-small-screens:8rem;"
     >
       <li>
         <Service name="Databases" image="/images/services-db.png" />

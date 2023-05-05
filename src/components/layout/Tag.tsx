@@ -8,11 +8,10 @@ export default component$((props: { name: string }) => {
         style="padding: 0px;"
       >
         <div style="padding: var(--p-card-padding)">
-          <p class=" eyebrow-heading-3">{props.name}</p>
+          <p class="eyebrow-heading-3 c-trim">{props.name}</p>
 
-          <p class=" u-margin-block-start-4">
-            {" "}
-            Templates ready to be used when making new proejct.{" "}
+          <p class=" u-margin-block-start-4 c-trim-2">
+            Templates ready to be used when making new proejct.
           </p>
 
           <button class="button is-secondary  u-margin-block-start-16">

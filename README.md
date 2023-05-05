@@ -1,18 +1,19 @@
+# Built with Appwrite
+
 TODO:
-
-- XResponsive cards count
-- XProper light theme
-- X Responsive loved by Appwrite
-- X Get rid of most of style=""
-- Mobile Menu (home, timeline)
-- X Featured. Inline tags with gap?
-
+- Side menu scrollable
+- timeline
+- filtering menu
+- homepage from DB
+- publish page
+- admin page
 - Who made it (Publisher?)
-- Links (View Website, Read Article, View on GitHub, Follow on Twitter)
 - Share Button
 - Description as MARKDOWN
 
-# Qwik City App ⚡️
+## 🤖 Auto-generated documentation
+
+## Qwik City App ⚡️
 
 - [Qwik Docs](https://qwik.builder.io/)
 - [Discord](https://qwik.builder.io/chat)

@@ -28,11 +28,7 @@ export default component$(() => {
         <Group title="Based on Services" action="showAll">
           <ServiceList />
         </Group>
-
-        <Group title="Updated and Upgraded" action="showAll">
-          <ProjectList />
-        </Group>
-
+        
         <Group title="Surprise Me" action="showAll">
           <ProjectList />
         </Group>

@@ -3,19 +3,16 @@ import Project from "./Project";
 
 export default component$(() => {
   return (
-    <ul
-      class="grid-box"
-      style="--grid-gap:1rem; --grid-item-size:22rem; --grid-item-size-small-screens:8rem;"
-    >
-      <li>
+    <div class="u-flex u-flex-wrap u-flex-vertical-mobile u-gap-8">
+      <div style="flex-basis: calc(33.33% - 0.5rem)">
         <Project />
-      </li>{" "}
-      <li>
+      </div>
+      <div style="flex-basis: calc(33.33% - 0.5rem)">
         <Project />
-      </li>{" "}
-      <li>
+      </div>
+      <div style="flex-basis: calc(33.33% - 0.5rem)">
         <Project />
-      </li>
-    </ul>
+      </div>
+    </div>
   );
 });

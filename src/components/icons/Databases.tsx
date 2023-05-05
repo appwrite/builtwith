@@ -3,13 +3,9 @@ import { component$ } from "@builder.io/qwik";
 export default component$((props: { active: boolean; disabled?: boolean }) => {
   return (
     <svg
-      style={
-        props.disabled
-          ? "color: hsl(var(--color-neutral-200))"
-          : props.active
-          ? "color: hsl(var(--color-primary-200))"
-          : "color: hsl(var(--color-neutral-150))"
-      }
+    class={`c-service ${
+      props.disabled ? "is-disabled" : props.active ? "is-active" : ""
+    }`}
       width="24"
       height="24"
       viewBox="0 0 24 24"

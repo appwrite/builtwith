@@ -1,19 +1,66 @@
-import { component$, Slot } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  Slot,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
+import { Models } from "appwrite";
+import { AppwriteService } from "~/AppwriteService";
+import { Config } from "~/Config";
 import Footer from "~/components/layout/Footer";
 import Header from "~/components/layout/Header";
 
-export const useServerTimeLoader = routeLoader$(() => {
+export const useAccount = routeLoader$(async () => {
   return {
-    date: new Date().toISOString(),
+    account: await AppwriteService.getAccount(),
   };
 });
 
 export default component$(() => {
+  const account = useSignal<null | Models.User<any>>(null);
+
+  useVisibleTask$(async () => {
+    account.value = await AppwriteService.getAccount();
+  });
+
+  const openedFilter = useSignal("Service");
+  const filters = [
+    {
+      name: "Service",
+      options: Config.services,
+    },
+    {
+      name: "Framework",
+      options: Config.frameworks,
+    },
+    {
+      name: "UI Library",
+      options: Config.uiLibraries,
+    },
+    {
+      name: "Use Case",
+      options: Config.useCases,
+    },
+  ];
+
+  const toggleFilter = $((name: string) => {
+    if (openedFilter.value === name) {
+      openedFilter.value = "";
+    } else {
+      openedFilter.value = name;
+    }
+  });
+
+  function getOption(options: any, id: string) {
+    return options[id];
+  }
+
   return (
     <>
       <div class="grid-with-side">
-        <Header />
+        <Header account={account} />
         <main class="main-content">
           <div class="container hero-top-container">
             <Slot />
@@ -25,86 +72,51 @@ export default component$(() => {
             class="u-flex u-flex-vertical u-gap-16"
             style="margin-left: 1rem"
           >
-            <div>
-              <button
-                style="width: 100%;"
-                class="u-flex u-main-space-between u-cross-center"
-              >
-                <h4 class="eyebrow-heading-3">Service</h4>
-                <span
-                  class="icon-cheveron-down"
-                  style="transform: rotate(180deg);"
-                ></span>
-              </button>
+            {filters.map((filter) => (
+              <div>
+                <button
+                  onClick$={() => toggleFilter(filter.name)}
+                  style="width: 100%;"
+                  class="u-flex u-main-space-between u-cross-center"
+                >
+                  <h4 class="eyebrow-heading-3">{filter.name}</h4>
+                  <span
+                    class="icon-cheveron-down"
+                    style={
+                      openedFilter.value === filter.name
+                        ? "transform: rotate(180deg);"
+                        : ""
+                    }
+                  ></span>
+                </button>
 
-              <div class="u-flex-vertical u-gap-8 u-margin-block-start-8">
-                <div
-                  class="u-flex u-cross-center u-gap-8"
-                  style="background: hsl(var(--color-neutral-300)); border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
-                >
-                  <input type="checkbox" style="width: 16px; height: 16px;" />
-                  <p>Databases</p>
-                </div>
-                <div
-                  class="u-flex u-cross-center u-gap-8"
-                  style="background: hsl(var(--color-neutral-300)); border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
-                >
-                  <input type="checkbox" style="width: 16px; height: 16px;" />
-                  <p>Authentication</p>
-                </div>
-                <div
-                  class="u-flex u-cross-center u-gap-8"
-                  style="background: hsl(var(--color-neutral-300)); border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
-                >
-                  <input type="checkbox" style="width: 16px; height: 16px;" />
-                  <p>Storage</p>
-                </div>
-                <div
-                  class="u-flex u-cross-center u-gap-8"
-                  style="background: hsl(var(--color-neutral-300)); border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
-                >
-                  <input type="checkbox" style="width: 16px; height: 16px;" />
-                  <p>Functions</p>
-                </div>
-                <div
-                  class="u-flex u-cross-center u-gap-8"
-                  style="background: hsl(var(--color-neutral-300)); border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
-                >
-                  <input type="checkbox" style="width: 16px; height: 16px;" />
-                  <p>Realtime</p>
-                </div>
+                {openedFilter.value === filter.name && (
+                  <div class="u-flex-vertical u-gap-8 u-margin-block-start-8">
+                    {Object.keys(filter.options).map((id) => (
+                      <div
+                        class="u-flex u-cross-center u-gap-8 c-filter-card"
+                        style="border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
+                      >
+                        <input
+                          type="checkbox"
+                          style="width: 16px; height: 16px;"
+                        />
+
+                        {getOption(filter.options, id).icon && (
+                          <div
+                            class="u-flex u-cross-center u-main-center"
+                            dangerouslySetInnerHTML={
+                              getOption(filter.options, id).icon
+                            }
+                          ></div>
+                        )}
+                        <p>{getOption(filter.options, id).name}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-
-            <div>
-              <button
-                style="width: 100%;"
-                class="u-flex u-main-space-between u-cross-center"
-              >
-                <h4 class="eyebrow-heading-3">Framework</h4>
-                <span class="icon-cheveron-down"></span>
-              </button>
-            </div>
-
-            <div>
-              <button
-                style="width: 100%;"
-                class="u-flex u-main-space-between u-cross-center"
-              >
-                <h4 class="eyebrow-heading-3">UI Library</h4>
-                <span class="icon-cheveron-down"></span>
-              </button>
-            </div>
-
-            <div>
-              <button
-                style="width: 100%;"
-                class="u-flex u-main-space-between u-cross-center"
-              >
-                <h4 class="eyebrow-heading-3">Use Case</h4>
-                <span class="icon-cheveron-down"></span>
-              </button>
-            </div>
+            ))}
           </div>
         </aside>
       </div>
