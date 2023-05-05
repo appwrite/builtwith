@@ -10,6 +10,12 @@ TODO:
 - Who made it (Publisher?)
 - Share Button
 - Description as MARKDOWN
+- On mobile, "see all" at the bottom
+- On mobile, dont add fillers "submit project" cards
+- add "services" attribute
+- create all
+- SEO tags
+- Proper README
 
 ## 🤖 Auto-generated documentation
 

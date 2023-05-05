@@ -22,6 +22,7 @@ export default component$(() => {
       <head>
         <meta charSet="utf-8" />
         <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
 
         <title>Built with Appwrite</title>
       </head>
