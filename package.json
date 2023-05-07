@@ -6,7 +6,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "qwik build && cd .vercel/output/functions/_qwik-city.func && echo 'var XMLHttpRequest = require('xhr2');' > @qwik-city-plan2.js && cp @qwik-city-plan.js @qwik-city-plan3.js && rm @qwik-city-plan.js && paste @qwik-city-plan2.js @qwik-city-plan3.js > @qwik-city-plan.js",
+    "build": "qwik build && cd .vercel/output/functions/_qwik-city.func && echo 'import * as XMLHttpRequest from \"xhr2\";' > @qwik-city-plan2.js && cp @qwik-city-plan.js @qwik-city-plan3.js && rm @qwik-city-plan.js && paste @qwik-city-plan2.js @qwik-city-plan3.js > @qwik-city-plan.js && rm package.json && cp ../../../../__fallback.json package.json",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/vercel-edge/vite.config.ts",

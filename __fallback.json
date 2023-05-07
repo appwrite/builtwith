@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "xhr2": "^0.2.1"
+  }
+}
