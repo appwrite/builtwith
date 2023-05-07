@@ -9,7 +9,7 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import type { Models } from "meldiron-appwrite";
+import type { Models } from "appwrite";
 import type { ProjectUpvote } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Config } from "~/Config";

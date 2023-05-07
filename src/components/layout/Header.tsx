@@ -1,7 +1,7 @@
 import type { Signal } from "@builder.io/qwik";
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
-import type { Models } from "meldiron-appwrite";
+import type { Models } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 
 export default component$(

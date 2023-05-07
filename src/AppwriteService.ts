@@ -1,4 +1,4 @@
-import type { Models } from "meldiron-appwrite";
+import type { Models } from "appwrite";
 import {
   Account,
   Client,
@@ -6,7 +6,7 @@ import {
   Functions,
   Query,
   Storage,
-} from "meldiron-appwrite";
+} from "appwrite";
 
 // Manually kept in sync with Appwrite collection attributes
 export type Project = {

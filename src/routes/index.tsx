@@ -13,7 +13,7 @@ import TagList from "~/components/layout/TagList";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
-import { Query } from "meldiron-appwrite";
+import { Query } from "appwrite";
 import { UpvotesContext } from "./layout";
 
 export const useHomeData = routeLoader$(async () => {
