@@ -6,15 +6,16 @@ import Function from "../icons/Function";
 import Upvote from "../blocks/Upvote";
 import Realtime from "../icons/Realtime";
 import { useNavigate } from "@builder.io/qwik-city";
+import type { Project } from "~/AppwriteService";
+import { AppwriteService } from "~/AppwriteService";
 
-export default component$(() => {
+export default component$((props: { project: Project | null }) => {
+  const { project } = props;
   const nav = useNavigate();
 
-  const isEmpty = Math.random() < 0.5;
-
-  return isEmpty ? (
+  return project === null ? (
     <div
-      class="card c-empty-card is-border-dashed u-flex-vertical u-cross-center u-main-center"
+      class="is-not-mobile card c-empty-card is-border-dashed u-flex-vertical u-cross-center u-main-center"
       style="padding: 0px; height: 100%;"
     >
       <div
@@ -41,7 +42,11 @@ export default component$(() => {
 
       <div class="object-og">
         <img class="c-dark-only" src="/images/project-placeholder.png" alt="" />
-        <img class="c-light-only" src="/images/project-placeholder-light.png" alt="" />
+        <img
+          class="c-light-only"
+          src="/images/project-placeholder-light.png"
+          alt=""
+        />
       </div>
 
       <div style="padding: 1.5rem var(--p-card-padding) 1.5rem var(--p-card-padding); width: 100%;">
@@ -92,7 +97,7 @@ export default component$(() => {
       </div>
     </div>
   ) : (
-    <a href="#">
+    <a href={`/projects/${project.$id}`}>
       <div
         class="card u-flex-vertical u-cross-center u-main-center"
         style="padding: 0px;"
@@ -103,22 +108,19 @@ export default component$(() => {
             style="width: 100%;"
           >
             <div>
-              <p class="eyebrow-heading-2 c-trim">Almost SSR - Qwik</p>
-              <p class="u-margin-block-start-4 c-trim-2">
-                Demo application with authorized server-side and client-side
-                rendering.
-              </p>
+              <p class="eyebrow-heading-2 c-trim">{project.name}</p>
+              <p class="u-margin-block-start-4 c-trim-2">{project.tagline}</p>
             </div>
 
             <Upvote
-              votes={Math.ceil(Math.random() * 100) + 30}
-              upvoted={Math.random() < 0.5}
+              projectId={project.$id}
+              votes={project.upvotes}
             />
           </div>
         </div>
 
         <div class="object-og">
-          <img src="/project.png" alt="" />
+          <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
         </div>
 
         <div style="padding: 1.5rem var(--p-card-padding) 1.5rem var(--p-card-padding); width: 100%;">
@@ -131,7 +133,7 @@ export default component$(() => {
               style="--button-size:1.5rem;"
               aria-label="Remove item"
             >
-              <Auth active={Math.random() < 0.5} />
+              <Databases active={project.services.includes("databases")} />
             </button>
 
             <button
@@ -139,7 +141,7 @@ export default component$(() => {
               style="--button-size:1.5rem;"
               aria-label="Remove item"
             >
-              <Databases active={Math.random() < 0.5} />
+              <Auth active={project.services.includes("auth")} />
             </button>
 
             <button
@@ -147,7 +149,7 @@ export default component$(() => {
               style="--button-size:1.5rem;"
               aria-label="Remove item"
             >
-              <Storage active={Math.random() < 0.5} />
+              <Storage active={project.services.includes("storage")} />
             </button>
 
             <button
@@ -155,7 +157,7 @@ export default component$(() => {
               style="--button-size:1.5rem;"
               aria-label="Remove item"
             >
-              <Function active={Math.random() < 0.5} />
+              <Function active={project.services.includes("functions")} />
             </button>
 
             <button
@@ -163,7 +165,7 @@ export default component$(() => {
               style="--button-size:1.5rem;"
               aria-label="Remove item"
             >
-              <Realtime active={Math.random() < 0.5} />
+              <Realtime active={project.services.includes("realtime")} />
             </button>
           </div>
         </div>

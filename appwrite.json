@@ -1,136 +1,279 @@
 {
-    "projectId": "builtWithAppwrite",
-    "projectName": "Built with Appwrite",
-    "databases": [
+  "projectId": "builtWithAppwrite",
+  "projectName": "Built with Appwrite",
+  "databases": [
+    {
+      "$id": "main",
+      "name": "Main",
+      "$createdAt": "2023-05-05T17:03:31.534+00:00",
+      "$updatedAt": "2023-05-05T17:03:31.534+00:00"
+    }
+  ],
+  "collections": [
+    {
+      "$id": "projects",
+      "$permissions": ["read(\"any\")"],
+      "databaseId": "main",
+      "name": "Projects",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [
         {
-            "$id": "main",
-            "name": "Main",
-            "$createdAt": "2023-05-05T17:03:31.534+00:00",
-            "$updatedAt": "2023-05-05T17:03:31.534+00:00"
-        }
-    ],
-    "collections": [
+          "key": "name",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        },
         {
-            "$id": "projects",
-            "$permissions": [
-                "read(\"any\")"
-            ],
-            "databaseId": "main",
-            "name": "Projects",
-            "enabled": true,
-            "documentSecurity": false,
-            "attributes": [
-                {
-                    "key": "name",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                },
-                {
-                    "key": "tagline",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                },
-                {
-                    "key": "description",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 100000,
-                    "default": null
-                },
-                {
-                    "key": "upvotes",
-                    "type": "integer",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "min": -9223372036854775808,
-                    "max": 9223372036854775807,
-                    "default": null
-                },
-                {
-                    "key": "framework",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                },
-                {
-                    "key": "uiLibrary",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                },
-                {
-                    "key": "useCase",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                },
-                {
-                    "key": "urlWebsite",
-                    "type": "string",
-                    "status": "available",
-                    "required": false,
-                    "array": false,
-                    "format": "url",
-                    "default": null
-                },
-                {
-                    "key": "urlArticle",
-                    "type": "string",
-                    "status": "available",
-                    "required": false,
-                    "array": false,
-                    "format": "url",
-                    "default": null
-                },
-                {
-                    "key": "urlTwitter",
-                    "type": "string",
-                    "status": "available",
-                    "required": false,
-                    "array": false,
-                    "format": "url",
-                    "default": null
-                },
-                {
-                    "key": "urlGitHub",
-                    "type": "string",
-                    "status": "available",
-                    "required": false,
-                    "array": false,
-                    "format": "url",
-                    "default": null
-                },
-                {
-                    "key": "imageId",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                }
-            ],
-            "indexes": []
+          "key": "tagline",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "description",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 100000,
+          "default": null
+        },
+        {
+          "key": "upvotes",
+          "type": "integer",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "min": -9223372036854775808,
+          "max": 9223372036854775807,
+          "default": null
+        },
+        {
+          "key": "framework",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "uiLibrary",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "useCase",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "urlWebsite",
+          "type": "string",
+          "status": "available",
+          "required": false,
+          "array": false,
+          "format": "url",
+          "default": null
+        },
+        {
+          "key": "urlArticle",
+          "type": "string",
+          "status": "available",
+          "required": false,
+          "array": false,
+          "format": "url",
+          "default": null
+        },
+        {
+          "key": "urlTwitter",
+          "type": "string",
+          "status": "available",
+          "required": false,
+          "array": false,
+          "format": "url",
+          "default": null
+        },
+        {
+          "key": "urlGitHub",
+          "type": "string",
+          "status": "available",
+          "required": false,
+          "array": false,
+          "format": "url",
+          "default": null
+        },
+        {
+          "key": "imageId",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "isPublished",
+          "type": "boolean",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "default": null
+        },
+        {
+          "key": "isFeatured",
+          "type": "boolean",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "default": null
         }
-    ]
+      ],
+      "indexes": [
+        {
+          "key": "index_1",
+          "type": "key",
+          "status": "available",
+          "attributes": ["isFeatured", "isPublished"],
+          "orders": ["ASC", "ASC"]
+        },
+        {
+          "key": "index_2",
+          "type": "key",
+          "status": "available",
+          "attributes": ["isPublished"],
+          "orders": ["ASC"]
+        },
+        {
+          "key": "index_3",
+          "type": "key",
+          "status": "available",
+          "attributes": ["upvotes", "$createdAt"],
+          "orders": ["ASC", "ASC"]
+        },
+        {
+          "key": "index_4",
+          "type": "key",
+          "status": "available",
+          "attributes": ["framework", "isPublished"],
+          "orders": ["ASC", "ASC"]
+        },
+        {
+          "key": "index_5",
+          "type": "key",
+          "status": "available",
+          "attributes": ["uiLibrary", "isPublished"],
+          "orders": ["ASC", "ASC"]
+        },
+        {
+          "key": "index_6",
+          "type": "key",
+          "status": "available",
+          "attributes": ["useCase", "isPublished"],
+          "orders": ["ASC", "ASC"]
+        },
+        {
+          "key": "index_7",
+          "type": "key",
+          "status": "available",
+          "attributes": ["$id", "isPublished"],
+          "orders": ["ASC", "ASC"]
+        }
+      ]
+    },
+    {
+      "$id": "projectServices",
+      "$permissions": ["read(\"any\")"],
+      "databaseId": "main",
+      "name": "Project - Services",
+      "enabled": true,
+      "documentSecurity": false,
+      "attributes": [
+        {
+          "key": "projectId",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        },
+        {
+          "key": "service",
+          "type": "string",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "size": 255,
+          "default": null
+        }
+      ],
+      "indexes": [
+        {
+          "key": "index_1",
+          "type": "key",
+          "status": "available",
+          "attributes": ["projectId"],
+          "orders": ["ASC"]
+        }
+      ]
+    }
+  ],
+  "buckets": [
+    {
+      "$id": "thumbnails",
+      "$createdAt": "2023-05-07T11:59:36.915+00:00",
+      "$updatedAt": "2023-05-07T12:00:07.460+00:00",
+      "$permissions": ["create(\"any\")", "read(\"any\")"],
+      "fileSecurity": false,
+      "name": "Thumbnails",
+      "enabled": true,
+      "maximumFileSize": 10485760,
+      "allowedFileExtensions": ["jpg", "png", "jpeg"],
+      "compression": "none",
+      "encryption": true,
+      "antivirus": true
+    }
+  ],
+  "functions": [
+    {
+      "$id": "rotateRandomness",
+      "name": "rotateRandomness",
+      "runtime": "node-16.0",
+      "path": "functions/rotateRandomness",
+      "entrypoint": "src/index.js",
+      "ignore": ["node_modules", ".npm"],
+      "execute": [],
+      "events": [],
+      "schedule": "0 9 * * *",
+      "timeout": 60
+    },
+    {
+      "$id": "upvoteProject",
+      "name": "upvoteProject",
+      "runtime": "node-16.0",
+      "path": "functions/upvoteProject",
+      "entrypoint": "src/index.js",
+      "ignore": ["node_modules", ".npm"],
+      "execute": ["users"],
+      "events": [],
+      "schedule": "",
+      "timeout": 15
+    }
+  ]
 }

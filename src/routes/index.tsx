@@ -1,53 +1,221 @@
-import { component$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useContext,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import ProjectFeatured from "~/components/layout/ProjectFeatured";
 import Group from "~/components/layout/Group";
 import ProjectList from "~/components/layout/ProjectList";
 import ServiceList from "~/components/layout/ServiceList";
 import TagList from "~/components/layout/TagList";
+import { routeLoader$ } from "@builder.io/qwik-city";
+import type { Project } from "~/AppwriteService";
+import { AppwriteService } from "~/AppwriteService";
+import { Query } from "appwrite";
+import { UpvotesContext } from "./layout";
+
+export const useHomeData = routeLoader$(async () => {
+  const [
+    featured,
+    newAndShiny,
+    trendZone,
+    madeWithReact,
+    rockWithStarterTemplates,
+    madeWithTailwind,
+    demoAppsTotal,
+    startersTotal,
+    docsTotal,
+    othersTotal,
+    dailySurprise,
+  ] = await Promise.all([
+    AppwriteService.listProjects([
+      Query.equal("isFeatured", true),
+      Query.limit(1),
+    ]),
+    AppwriteService.listProjects([
+      Query.limit(3), // order applied automatically
+    ]),
+    AppwriteService.listProjects([Query.orderDesc("upvotes"), Query.limit(3)]),
+    AppwriteService.listProjects([
+      Query.equal("framework", "react"),
+      Query.limit(3),
+    ]),
+    AppwriteService.listProjects([
+      Query.equal("useCase", "starter"),
+      Query.limit(3),
+    ]),
+    AppwriteService.listProjects([
+      Query.equal("uiLibrary", "tailwind"),
+      Query.limit(3),
+    ]),
+    AppwriteService.countProjects([
+      Query.equal("useCase", "demoApp"),
+      Query.limit(1),
+    ]),
+    AppwriteService.countProjects([
+      Query.equal("useCase", "starter"),
+      Query.limit(1),
+    ]),
+    AppwriteService.countProjects([
+      Query.equal("useCase", "documentation"),
+      Query.limit(1),
+    ]),
+    AppwriteService.countProjects([
+      Query.equal("useCase", "other"),
+      Query.limit(1),
+    ]),
+    AppwriteService.listProjects([
+      Query.orderDesc("randomness"),
+      Query.limit(3),
+    ]),
+  ]);
+
+  return {
+    featured: featured[0] ?? null,
+    newAndShiny,
+    trendZone,
+    madeWithReact,
+    rockWithStarterTemplates,
+    madeWithTailwind,
+    demoAppsTotal,
+    startersTotal,
+    docsTotal,
+    othersTotal,
+    dailySurprise,
+  };
+});
 
 export default component$(() => {
+  const { value: homeData } = useHomeData();
+
+  const upvoteContext = useContext(UpvotesContext);
+
+  const seenRecently = useSignal<Project[] | null>(null);
+  const yourPicks = useSignal<Project[] | null>(null);
+
+  const fetchSeenRecently = $(async () => {
+    const seenRecentlyIds = JSON.parse(
+      localStorage.getItem("seenRecently") ?? "[]"
+    );
+    if (seenRecentlyIds.length <= 0) {
+      seenRecently.value = [];
+      return;
+    }
+
+    seenRecently.value = await AppwriteService.listProjects([
+      Query.equal("$id", seenRecentlyIds),
+      Query.limit(3),
+    ]);
+  });
+  
+  const fetchYourPicks = $(async () => {
+    const upvotes = upvoteContext.value;
+
+    const yourPickIds = upvotes.map((upvote) => upvote.projectId);
+    if (yourPickIds.length <= 0) {
+      yourPicks.value = [];
+      return;
+    }
+
+    yourPicks.value = await AppwriteService.listProjects([
+      Query.equal("$id", yourPickIds.slice(0, 3)),
+      Query.limit(3),
+    ]);
+  });
+
+  // TODO: Re-fetch when navigation is forced
+  useVisibleTask$(async () => {
+    await Promise.all([
+      fetchSeenRecently(),
+      fetchYourPicks()
+    ]);
+  });
+
   return (
     <>
       <div class="u-flex-vertical u-gap-32">
-        <Group title="Loved by Appwrite" action="none">
-          <ProjectFeatured></ProjectFeatured>
+        {homeData.featured && (
+          <Group title="Loved by Appwrite">
+            <ProjectFeatured project={homeData.featured}></ProjectFeatured>
+          </Group>
+        )}
+
+        <Group title="New and Shiny" href={`/search?sort=latest`}>
+          <ProjectList
+            href={`/search?sort=latest`}
+            projects={homeData.newAndShiny}
+          />
         </Group>
 
-        <Group title="New and Shiny" action="showAll">
-          <ProjectList />
+        <Group title="Trend Zone" href={`/search?sort=upvotes`}>
+          <ProjectList
+            href={`/search?sort=upvotes`}
+            projects={homeData.trendZone}
+          />
         </Group>
 
-        <Group title="Trend Zone" action="showAll">
-          <ProjectList />
+        <Group title="Daily Surprise" href={`/search?sort=randomness`}>
+          <ProjectList
+            href={`/search?sort=randomness`}
+            projects={homeData.dailySurprise}
+          />
         </Group>
 
-        <Group title="Made with React" action="showAll">
-          <ProjectList />
+        <Group title="Made with React" href={`/search?framework=react`}>
+          <ProjectList
+            href={`/search?framework=react`}
+            projects={homeData.madeWithReact}
+          />
         </Group>
 
-        <Group title="Based on Services" action="showAll">
+        <Group title="Based on Services">
           <ServiceList />
         </Group>
-        
-        <Group title="Surprise Me" action="showAll">
-          <ProjectList />
+
+        <Group
+          title="Rock with Starter Templates"
+          href={`/search?useCase=starter`}
+        >
+          <ProjectList
+            href={`/search?useCase=starter`}
+            projects={homeData.rockWithStarterTemplates}
+          />
         </Group>
 
-        <Group title="Made with Tailwind" action="showAll">
-          <ProjectList />
+        <Group title="Made with Tailwind" href={`/search?uiLibrary=tailwind`}>
+          <ProjectList
+            href={`/search?uiLibrary=tailwind`}
+            projects={homeData.madeWithTailwind}
+          />
         </Group>
 
-        <Group title="Common Use Cases" action="showAll">
-          <TagList />
+        <Group title="Common Use Cases">
+          <TagList
+            startersTotal={homeData.startersTotal}
+            demoAppsTotal={homeData.demoAppsTotal}
+            othersTotal={homeData.othersTotal}
+            docsTotal={homeData.docsTotal}
+          />
         </Group>
 
-        <Group title="Your Picks" action="showAll">
-          <ProjectList />
-        </Group>
+        {yourPicks.value !== null && (
+          <Group title="Your Picks">
+            <ProjectList
+              projects={yourPicks.value}
+            />
+          </Group>
+        )}
 
-        <Group title="Seen Recently" action="showAll">
-          <ProjectList />
-        </Group>
+        {seenRecently.value !== null && (
+          <Group title="Seen Recently" href={`/search?filter=seenRecently`}>
+            <ProjectList
+              href={`/search?filter=seenRecently`}
+              projects={seenRecently.value}
+            />
+          </Group>
+        )}
       </div>
     </>
   );

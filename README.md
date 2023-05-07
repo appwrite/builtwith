@@ -1,21 +1,28 @@
 # Built with Appwrite
 
-TODO:
-- Side menu scrollable
-- timeline
-- filtering menu
-- homepage from DB
-- publish page
+DEVREL
+- 🚧 SEO tags
+- 🚧 Proper README
+
+FEATURES
+- 🚧 /projects/:projectId (Share Button, Description as MARKDOWN, Publisher)
+- 🚧 /search (framework, uiLibrary, useCase, service, sort=latest, filter=seenRecently)
+- 🚧 /submit-project
+- Your Picks
 - admin page
-- Who made it (Publisher?)
-- Share Button
-- Description as MARKDOWN
-- On mobile, "see all" at the bottom
-- On mobile, dont add fillers "submit project" cards
-- add "services" attribute
-- create all
-- SEO tags
-- Proper README
+- timeline page
+
+JS
+- 🚧 filtering menu
+- seed with Almost apps
+- Relatime update upvotes
+- 🚧 All TODOs
+
+CSS
+- 🚧 Side menu scrollable
+- 🚧 checkbox design on dark a little wrong, A LOT wrong on white
+- Tooltips on icons (github, sign out)
+- full width footer
 
 ## 🤖 Auto-generated documentation
 

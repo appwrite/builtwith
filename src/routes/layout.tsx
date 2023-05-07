@@ -1,16 +1,29 @@
 import {
   $,
   component$,
+  createContextId,
+  Signal,
   Slot,
+  useComputed$,
+  useContextProvider,
   useSignal,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
-import { Models } from "appwrite";
+import { routeLoader$, useLocation } from "@builder.io/qwik-city";
+import type { Models } from "appwrite";
+import type { ProjectUpvote } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Config } from "~/Config";
 import Footer from "~/components/layout/Footer";
 import Header from "~/components/layout/Header";
+
+export const UpvotesContext = createContextId<Signal<ProjectUpvote[]>>(
+  "app.upvotes-context"
+);
+
+export const AccountContext = createContextId<Signal<null | Models.User<any>>>(
+  "app.account-context"
+);
 
 export const useAccount = routeLoader$(async () => {
   return {
@@ -20,9 +33,17 @@ export const useAccount = routeLoader$(async () => {
 
 export default component$(() => {
   const account = useSignal<null | Models.User<any>>(null);
+  useContextProvider(AccountContext, account);
+
+  const upvotes = useSignal<ProjectUpvote[]>([]);
+  useContextProvider(UpvotesContext, upvotes);
 
   useVisibleTask$(async () => {
     account.value = await AppwriteService.getAccount();
+
+    if (account.value) {
+      upvotes.value = await AppwriteService.listUpvotes(account.value.$id);
+    }
   });
 
   const openedFilter = useSignal("Service");
@@ -73,7 +94,7 @@ export default component$(() => {
             style="margin-left: 1rem"
           >
             {filters.map((filter) => (
-              <div>
+              <div key={filter.name}>
                 <button
                   onClick$={() => toggleFilter(filter.name)}
                   style="width: 100%;"
@@ -94,6 +115,7 @@ export default component$(() => {
                   <div class="u-flex-vertical u-gap-8 u-margin-block-start-8">
                     {Object.keys(filter.options).map((id) => (
                       <div
+                        key={id}
                         class="u-flex u-cross-center u-gap-8 c-filter-card"
                         style="border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
                       >

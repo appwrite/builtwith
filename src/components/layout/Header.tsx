@@ -1,6 +1,7 @@
-import { $, Signal, component$, useSignal } from "@builder.io/qwik";
+import type { Signal } from "@builder.io/qwik";
+import { $, component$, useSignal } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
-import { Models } from "appwrite";
+import type { Models } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 
 export default component$(
@@ -9,7 +10,7 @@ export default component$(
 
     const links = [
       { name: "Home", url: "/" },
-      { name: "Timeline", url: "/timeline" },
+      // { name: "Timeline", url: "/timeline" },
     ];
 
     const isDark = useSignal(true);
@@ -82,7 +83,7 @@ export default component$(
               <li></li>
 
               {links.map((link) => (
-                <li class="buttons-list-item u-padding-inline-0">
+                <li key={link.name} class="buttons-list-item u-padding-inline-0">
                   <button
                     onClick$={async () => await nav(link.url)}
                     class="button is-text"
@@ -128,7 +129,6 @@ export default component$(
                       AppwriteService.signIn();
                     }}
                     class="button is-secondary"
-                    aria-label="Add new item"
                   >
                     <span class="icon-github" aria-hidden="true"></span>
                     <span class="text">Sign In</span>
@@ -137,7 +137,10 @@ export default component$(
               ) : (
                 <>
                   <li class="buttons-list-item u-padding-inline-0">
-                    <button onClick$={async () => await nav('/submit-project')}  class="button is-text">
+                    <button
+                      onClick$={async () => await nav("/submit-project")}
+                      class="button is-text"
+                    >
                       <span class="text">Submit</span>
                     </button>
                   </li>
@@ -173,7 +176,7 @@ export default component$(
                 <section class="drop-section">
                   <ul class="drop-list">
                     {links.map((link) => (
-                      <li class="drop-list-item">
+                      <li key={link.name} class="drop-list-item">
                         <button
                           onClick$={async () => await nav(link.url)}
                           class="drop-button u-capitalize u-small u-bold"
