@@ -5,12 +5,13 @@ import {
   useContext,
   useSignal,
 } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
+import { useLocation, useNavigate } from "@builder.io/qwik-city";
 import { AppwriteService } from "~/AppwriteService";
 import { AccountContext, UpvotesContext } from "~/routes/layout";
 
 export default component$(
   (props: { projectId: string; votes: number; inline?: boolean }) => {
+    const location = useLocation();
     const nav = useNavigate();
     const upvoteContext = useContext(UpvotesContext);
     const accountContext = useContext(AccountContext);
@@ -35,8 +36,8 @@ export default component$(
           );
         }
 
-        // TODO: Do current path somehow
-        await nav("/", true);
+        const navUrl = location.url.pathname + location.url.search;
+        await nav(navUrl, true);
       } catch (err: any) {
         alert(err.message);
       } finally {

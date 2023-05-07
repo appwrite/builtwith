@@ -4,12 +4,11 @@ import {
   createContextId,
   Signal,
   Slot,
-  useComputed$,
   useContextProvider,
   useSignal,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import { routeLoader$, useLocation } from "@builder.io/qwik-city";
+import { routeLoader$ } from "@builder.io/qwik-city";
 import type { Models } from "appwrite";
 import type { ProjectUpvote } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
