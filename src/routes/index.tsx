@@ -1,7 +1,6 @@
 import {
   $,
   component$,
-  useComputed$,
   useContext,
   useSignal,
   useVisibleTask$,
@@ -11,7 +10,7 @@ import Group from "~/components/layout/Group";
 import ProjectList from "~/components/layout/ProjectList";
 import ServiceList from "~/components/layout/ServiceList";
 import TagList from "~/components/layout/TagList";
-import { routeLoader$, useLocation } from "@builder.io/qwik-city";
+import { routeLoader$ } from "@builder.io/qwik-city";
 import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Query } from "appwrite";
