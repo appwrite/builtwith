@@ -67,12 +67,11 @@ export default component$(() => {
 
   const toggleFilter = $((name: string) => {
     if (openedFilters.value.includes(name)) {
-      openedFilters.value = openedFilters.value.filter((filter) => filter !== name);
+      openedFilters.value = openedFilters.value.filter(
+        (filter) => filter !== name
+      );
     } else {
-      openedFilters.value = [
-        ...openedFilters.value,
-        name
-      ]
+      openedFilters.value = [...openedFilters.value, name];
     }
   });
 
