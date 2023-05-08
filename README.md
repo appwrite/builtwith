@@ -3,18 +3,14 @@
 FEATURES
 - 🚧 /projects/:projectId (Share Button, Description as MARKDOWN, Publisher)
 - 🚧 /search (framework, uiLibrary, useCase, service, sort=latest, filter=seenRecently)
-- 🚧 /submit-project
 - admin page
 - timeline page
 - Search input
-- New footer from Console
 
 JS
 - 🚧 filtering menu (allow multipel at the same time)
-- seed with Almost apps
 - Relatime update upvotes
 - Ensure no more "a href" and "#" hrefs
-- All TODOs
 
 CSS
 - Tooltips on icons (github, sign out)

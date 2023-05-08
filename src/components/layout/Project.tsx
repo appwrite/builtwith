@@ -40,7 +40,7 @@ export default component$((props: { project: Project | null }) => {
         </div>
       </div>
 
-      <div class="object-og">
+      <div class="object-og" style="height: 200px;">
         <img class="c-dark-only" src="/images/project-placeholder.png" alt="" />
         <img
           class="c-light-only"
@@ -119,7 +119,7 @@ export default component$((props: { project: Project | null }) => {
           </div>
         </div>
 
-        <div class="object-og">
+        <div class="object-og" style="height: 200px;">
           <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
         </div>
 

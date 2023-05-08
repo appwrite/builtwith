@@ -1,4 +1,4 @@
-import type { Models } from "appwrite";
+import { ID, Models } from "appwrite";
 import {
   Account,
   Client,
@@ -159,5 +159,26 @@ export const AppwriteService = {
         Query.equal("userId", userId),
       ])
     ).documents;
+  },
+  uploadThumbnail: async (file: File) => {
+    return await storage.createFile('thumbnails', ID.unique(), file);
+  },
+  submitProject: async (data: any) => {
+    const execution = await functions.createExecution(
+      "submitProject",
+      JSON.stringify(data)
+    );
+
+    if (!execution.response) {
+      throw new Error("Unexpected error occured.");
+    }
+
+    const json = JSON.parse(execution.response);
+
+    if (json.ok === false) {
+      throw new Error(json.msg);
+    }
+
+    return json;
   },
 };

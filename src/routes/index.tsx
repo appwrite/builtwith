@@ -125,6 +125,8 @@ export default component$(() => {
       Query.equal("$id", yourPickIds.slice(0, 3)),
       Query.limit(3),
     ]);
+
+    console.log(yourPicks.value);
   });
 
   useVisibleTask$(async ({ track }) => {

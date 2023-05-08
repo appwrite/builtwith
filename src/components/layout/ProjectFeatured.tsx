@@ -15,7 +15,7 @@ export default component$((props: { project: Project }) => {
       <div class="u-flex u-flex-vertical-mobile u-gap-24">
         <a href="#" class="object-og u-flex-basis-50-percent u-flex-shrink-0">
           <img
-            src={AppwriteService.getProjectThumbnail(project.imageId)}
+            src={AppwriteService.getProjectThumbnail(project.imageId, 1920)}
             style="border-radius: var(--border-radius-medium);"
           />
         </a>
