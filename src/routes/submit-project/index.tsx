@@ -20,18 +20,18 @@ export default component$(() => {
     file.value = noSerialize(tempFile);
   });
 
-  const name = useSignal("");
-  const tagline = useSignal("");
-  const description = useSignal("");
+  // const name = useSignal("");
+  // const tagline = useSignal("");
+  // const description = useSignal("");
 
-  const framework = useSignal("");
-  const uiLibrary = useSignal("");
-  const useCase = useSignal("");
+  // const framework = useSignal("");
+  // const uiLibrary = useSignal("");
+  // const useCase = useSignal("");
 
-  const websiteUrl = useSignal("");
-  const twitterUrl = useSignal("");
-  const githubUrl = useSignal("");
-  const articleUrl = useSignal("");
+  // const websiteUrl = useSignal("");
+  // const twitterUrl = useSignal("");
+  // const githubUrl = useSignal("");
+  // const articleUrl = useSignal("");
 
   // TODO: Services
 

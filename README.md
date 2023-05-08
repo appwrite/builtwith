@@ -21,7 +21,6 @@ CSS
 - loading state of upvote keep number
 
 DEVREL
-- 🚧 SEO tags
 - 🚧 Proper README
 
 ## 🤖 Auto-generated documentation
