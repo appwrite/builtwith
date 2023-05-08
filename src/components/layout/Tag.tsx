@@ -1,9 +1,11 @@
 import { component$ } from "@builder.io/qwik";
+import { useNavigate } from "@builder.io/qwik-city";
 
 export default component$(
   (props: { id: string; name: string; description: string; total: number }) => {
+    const nav = useNavigate();
     return (
-      <a href={`/search?useCase=${props.id}`}>
+      <div class="u-cursor-pointer" onClick$={async () => await nav(`/search?useCase=${props.id}`)}>
         <div
           class="card u-flex-vertical u-cross-center u-main-center"
           style="padding: 0px;"
@@ -11,7 +13,7 @@ export default component$(
           <div style="padding: var(--p-card-padding)">
             <p class="eyebrow-heading-3 c-trim">{props.name}</p>
 
-            <p class=" u-margin-block-start-4 c-trim-2">{props.description}</p>
+            <p class="u-margin-block-start-4 c-trim-2">{props.description}</p>
 
             <button class="button is-secondary  u-margin-block-start-16">
               <span class="text">
@@ -20,7 +22,7 @@ export default component$(
             </button>
           </div>
         </div>
-      </a>
+      </div>
     );
   }
 );

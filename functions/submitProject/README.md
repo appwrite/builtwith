@@ -20,7 +20,7 @@ _Example output:_
 
 ```json
 {
- "areDevelopersAwesome": true
+  "areDevelopersAwesome": true
 }
 ```
 

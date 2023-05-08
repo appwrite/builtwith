@@ -87,7 +87,7 @@ aside {
   color: hsl(var(--color-neutral-150));
 }
 
-.theme-dark input[type="checkbox"]:not(:checked)   {
+.theme-dark input[type="checkbox"]:not(:checked) {
   background: none;
   border-color: hsl(var(--color-neutral-150));
 }
@@ -148,11 +148,11 @@ aside {
   background: white;
 }
 
-.buttons-list-item:nth-child(n+2)::before {
+.buttons-list-item:nth-child(n + 2)::before {
   display: none !important;
 }
 
-.buttons-list-item:nth-child(2)::before {
+.menu-right .buttons-list-item:nth-child(2)::before {
   display: block !important;
 }
 
@@ -162,4 +162,8 @@ aside {
 
 .theme-dark .upload-box {
   background-color: hsl(var(--color-neutral-500));
+}
+
+.tooltip-popup {
+  z-index: 10 !important;
 }

@@ -8,19 +8,39 @@ export default component$(() => {
       style="--grid-gap:1rem; --grid-item-size:12rem; --grid-item-size-small-screens:8rem;"
     >
       <li>
-        <Service name="Databases" image="/images/services-db.png" />
+        <Service
+          id="databases"
+          name="Databases"
+          image="/images/services-db.png"
+        />
       </li>
       <li>
-        <Service name="Authentication" image="/images/services-auth.png" />
+        <Service
+          id="authentication"
+          name="Authentication"
+          image="/images/services-auth.png"
+        />
       </li>
       <li>
-        <Service name="Storage" image="/images/services-storage.png" />
+        <Service
+          id="storage"
+          name="Storage"
+          image="/images/services-storage.png"
+        />
       </li>
       <li>
-        <Service name="Functions" image="/images/services-functions.png" />
+        <Service
+          id="functions"
+          name="Functions"
+          image="/images/services-functions.png"
+        />
       </li>
       <li>
-        <Service name="Realtime" image="/images/services-realtime.png" />
+        <Service
+          id="realtime"
+          name="Realtime"
+          image="/images/services-realtime.png"
+        />
       </li>
     </ul>
   );

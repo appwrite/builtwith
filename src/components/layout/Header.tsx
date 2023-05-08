@@ -10,7 +10,7 @@ export default component$(
 
     const links = [
       { name: "Home", url: "/" },
-      // { name: "Timeline", url: "/timeline" },
+      { name: "Timeline", url: "/search?sort=latest" },
     ];
 
     const isDark = useSignal(true);
@@ -98,7 +98,7 @@ export default component$(
             </ul>
           </div>
           <div class="logo is-only-mobile"></div>
-          <div class="main-header-end u-margin-inline-end-16">
+          <div class={`main-header-end u-margin-inline-end-16 menu-right TODO-MENU-RIGHT-ONLY-IF-SIGNED-IN`}>
             <ul class="buttons-list is-with-padding">
               <li class="buttons-list-item u-padding-inline-0">
                 <div class="tooltip" aria-label="Toggle Dark Theme">

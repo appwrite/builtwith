@@ -30,7 +30,7 @@ module.exports = async function (req, res) {
     urlTwitter,
     urlGitHub,
     urlArticle,
-    fileId
+    fileId,
   } = payload;
 
   if (
@@ -60,31 +60,35 @@ module.exports = async function (req, res) {
 
   console.log("Creating project");
 
-  const project = await databases.createDocument("main", "projects", sdk.ID.unique(), {
-    name,
-    tagline,
-    description,
-    upvotes: 0,
-    framework,
-    uiLibrary,
-    useCase,
-    urlWebsite: urlWebsite ? urlWebsite : undefined,
-    urlTwitter: urlTwitter ? urlTwitter : undefined,
-    urlGitHub: urlGitHub ? urlGitHub : undefined,
-    urlArticle: urlArticle ? urlArticle : undefined,
-    imageId: fileId,
-    isPublished: false,
-    isFeatured: false,
-    randomness: 99
-  });
-
+  const project = await databases.createDocument(
+    "main",
+    "projects",
+    sdk.ID.unique(),
+    {
+      name,
+      tagline,
+      description,
+      upvotes: 0,
+      framework,
+      uiLibrary,
+      useCase,
+      urlWebsite: urlWebsite ? urlWebsite : undefined,
+      urlTwitter: urlTwitter ? urlTwitter : undefined,
+      urlGitHub: urlGitHub ? urlGitHub : undefined,
+      urlArticle: urlArticle ? urlArticle : undefined,
+      imageId: fileId,
+      isPublished: false,
+      isFeatured: false,
+      randomness: 99,
+    }
+  );
 
   console.log("Creating project services");
 
-  for(const service of services) {
-    await databases.createDocument('main', 'projectServices', sdk.ID.unique(), {
+  for (const service of services) {
+    await databases.createDocument("main", "projectServices", sdk.ID.unique(), {
       projectId: project.$id,
-      service
+      service,
     });
   }
 
@@ -92,6 +96,6 @@ module.exports = async function (req, res) {
 
   res.json({
     ok: true,
-    msg: "Submission successful. Please allow us some time to review your project."
+    msg: "Submission successful. Please allow us some time to review your project.",
   });
 };

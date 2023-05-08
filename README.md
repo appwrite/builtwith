@@ -1,22 +1,13 @@
 # Built with Appwrite
 
-FEATURES
 - 🚧 /projects/:projectId (Share Button, Description as MARKDOWN, Publisher)
-- 🚧 /search (framework, uiLibrary, useCase, service, sort=latest, filter=seenRecently)
-- admin page
-- timeline page
-- Search input
-
-JS
 - 🚧 filtering menu (allow multipel at the same time)
+- 🚧 /search (framework, uiLibrary, useCase, service, sort=latest, filter=seenRecently)
+
+- admin page
+- timeline into menu
+- Search input
 - Relatime update upvotes
-- Ensure no more "a href" and "#" hrefs
-
-CSS
-- Tooltips on icons (github, sign out)
-- loading state of upvote keep number
-
-DEVREL
 - 🚧 Proper README
 
 ## 🤖 Auto-generated documentation

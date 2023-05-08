@@ -1,6 +1,6 @@
 import {
   $,
-  NoSerialize,
+  type NoSerialize,
   component$,
   noSerialize,
   useSignal,
@@ -79,7 +79,7 @@ export default component$(() => {
         services.push("authentication");
       }
 
-      if(services.length <= 0) {
+      if (services.length <= 0) {
         throw Error("Your project must use at least one Appwrite service.");
       }
 
@@ -97,7 +97,7 @@ export default component$(() => {
         urlGitHub: githubUrl.value,
         urlArticle: articleUrl.value,
         services,
-        fileId
+        fileId,
       };
 
       const response = await AppwriteService.submitProject(data);
@@ -284,7 +284,7 @@ export default component$(() => {
                     <select bind:value={framework} name="pets" id="framework">
                       <option value="">Select option</option>
                       {Object.keys(Config.frameworks).map((framework) => (
-                        <option value={framework}>
+                        <option key={framework} value={framework}>
                           {(Config.frameworks as any)[framework].name}
                         </option>
                       ))}
@@ -300,7 +300,7 @@ export default component$(() => {
                     <select bind:value={uiLibrary} name="pets" id="uilibrary">
                       <option value="">Select option</option>
                       {Object.keys(Config.uiLibraries).map((uiLibrary) => (
-                        <option value={uiLibrary}>
+                        <option key={uiLibrary} value={uiLibrary}>
                           {(Config.uiLibraries as any)[uiLibrary].name}
                         </option>
                       ))}
@@ -316,7 +316,7 @@ export default component$(() => {
                     <select bind:value={useCase} name="pets" id="usecase">
                       <option value="">Select option</option>
                       {Object.keys(Config.useCases).map((useCase) => (
-                        <option value={useCase}>
+                        <option key={useCase} value={useCase}>
                           {(Config.useCases as any)[useCase].name}
                         </option>
                       ))}
@@ -335,7 +335,7 @@ export default component$(() => {
                     </div>
                     <div class="u-width-full-line u-flex u-gap-8 u-margin-block-start-4 u-cross-center">
                       <input type="checkbox" bind:checked={servicesAuth} />{" "}
-                      <span>Authorization</span>
+                      <span>Authentication</span>
                     </div>
                     <div class="u-width-full-line u-flex u-gap-8 u-margin-block-start-4 u-cross-center">
                       <input type="checkbox" bind:checked={servicesStorage} />{" "}

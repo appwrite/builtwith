@@ -61,9 +61,12 @@ export default component$(
         aria-label="Upvote"
       >
         {isLoading.value === true ? (
-          <div style="transform: scale(0.8);">
-            <div class="loader"></div>
-          </div>
+          <>
+            <div style="transform: scale(0.8); height: 20px;">
+              <div class="loader"></div>
+            </div>
+            <span class="text">{props.votes}</span>
+          </>
         ) : (
           <>
             <span class="icon-heart" aria-hidden="true"></span>

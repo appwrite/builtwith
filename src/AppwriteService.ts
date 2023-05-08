@@ -1,4 +1,4 @@
-import { ID, Models } from "appwrite";
+import { ID, type Models } from "appwrite";
 import {
   Account,
   Client,
@@ -161,7 +161,7 @@ export const AppwriteService = {
     ).documents;
   },
   uploadThumbnail: async (file: File) => {
-    return await storage.createFile('thumbnails', ID.unique(), file);
+    return await storage.createFile("thumbnails", ID.unique(), file);
   },
   submitProject: async (data: any) => {
     const execution = await functions.createExecution(

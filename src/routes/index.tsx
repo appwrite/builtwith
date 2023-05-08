@@ -84,7 +84,7 @@ export const useHomeData = routeLoader$(async () => {
     docsTotal,
     othersTotal,
     dailySurprise,
-    trackSync: Date.now()
+    trackSync: Date.now(),
   };
 });
 
@@ -111,31 +111,29 @@ export default component$(() => {
       Query.limit(3),
     ]);
   });
-  
-  const fetchYourPicks = $(async () => {
-    const upvotes = upvoteContext.value;
 
-    const yourPickIds = upvotes.map((upvote) => upvote.projectId);
-    if (yourPickIds.length <= 0) {
-      yourPicks.value = [];
-      return;
+  const yourPickIds = useSignal<string[] | null>([]);
+
+  const fetchYourPicks = $(async () => {
+    if (yourPickIds.value === null || yourPickIds.value.length <= 0) {
+      const upvotes = upvoteContext.value;
+      yourPickIds.value = upvotes.map((upvote) => upvote.projectId);
     }
 
-    yourPicks.value = await AppwriteService.listProjects([
-      Query.equal("$id", yourPickIds.slice(0, 3)),
-      Query.limit(3),
-    ]);
-
-    console.log(yourPicks.value);
+    if (yourPickIds.value && yourPickIds.value.length > 0) {
+      yourPicks.value = await AppwriteService.listProjects([
+        Query.equal("$id", yourPickIds.value.slice(0, 3)),
+        Query.limit(3),
+      ]);
+    } else {
+      yourPicks.value = [];
+    }
   });
 
   useVisibleTask$(async ({ track }) => {
     track(() => homeData);
 
-    await Promise.all([
-      fetchSeenRecently(),
-      fetchYourPicks()
-    ]);
+    await Promise.all([fetchSeenRecently(), fetchYourPicks()]);
   });
 
   return (
@@ -207,9 +205,7 @@ export default component$(() => {
 
         {yourPicks.value !== null && (
           <Group title="Your Picks">
-            <ProjectList
-              projects={yourPicks.value}
-            />
+            <ProjectList projects={yourPicks.value} />
           </Group>
         )}
 
