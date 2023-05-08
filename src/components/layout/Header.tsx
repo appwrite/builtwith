@@ -80,10 +80,13 @@ export default component$(
           </button>
           <div class="logo is-not-mobile">
             <ul class="buttons-list is-with-padding">
-              <li></li>
+              {/* <li></li> */}
 
               {links.map((link) => (
-                <li key={link.name} class="buttons-list-item u-padding-inline-0">
+                <li
+                  key={link.name}
+                  class="buttons-list-item u-padding-inline-0"
+                >
                   <button
                     onClick$={async () => await nav(link.url)}
                     class="button is-text"
@@ -98,7 +101,7 @@ export default component$(
           <div class="main-header-end u-margin-inline-end-16">
             <ul class="buttons-list is-with-padding">
               <li class="buttons-list-item u-padding-inline-0">
-                <div>
+                <div class="tooltip" aria-label="Toggle Dark Theme">
                   {isDark.value ? (
                     <>
                       <button
@@ -120,6 +123,10 @@ export default component$(
                       </button>
                     </>
                   )}
+
+                  <span class="tooltip-popup is-bottom" role="tooltip">
+                    Toggle Dark Theme
+                  </span>
                 </div>
               </li>
               {props.account.value === null ? (
@@ -147,6 +154,7 @@ export default component$(
                   <li class="buttons-list-item u-padding-inline-0">
                     <button onClick$={signOut} class="button is-text">
                       <svg
+                        class="is-not-desktop"
                         width="20"
                         height="20"
                         viewBox="0 0 24 24"
@@ -161,6 +169,7 @@ export default component$(
                           fill="currentColor"
                         />
                       </svg>
+                      <p class="is-only-desktop">Sign Out</p>
                     </button>
                   </li>
                 </>

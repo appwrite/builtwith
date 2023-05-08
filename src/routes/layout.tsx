@@ -45,7 +45,7 @@ export default component$(() => {
     }
   });
 
-  const openedFilter = useSignal("Service");
+  const openedFilters = useSignal(["Service"]);
   const filters = [
     {
       name: "Service",
@@ -66,10 +66,13 @@ export default component$(() => {
   ];
 
   const toggleFilter = $((name: string) => {
-    if (openedFilter.value === name) {
-      openedFilter.value = "";
+    if (openedFilters.value.includes(name)) {
+      openedFilters.value = openedFilters.value.filter((filter) => filter !== name);
     } else {
-      openedFilter.value = name;
+      openedFilters.value = [
+        ...openedFilters.value,
+        name
+      ]
     }
   });
 
@@ -87,57 +90,62 @@ export default component$(() => {
             <Footer />
           </div>
         </main>
-        <aside class="main-side">
-          <div
-            class="u-flex u-flex-vertical u-gap-16"
-            style="margin-left: 1rem"
-          >
-            {filters.map((filter) => (
-              <div key={filter.name}>
-                <button
-                  onClick$={() => toggleFilter(filter.name)}
-                  style="width: 100%;"
-                  class="u-flex u-main-space-between u-cross-center"
-                >
-                  <h4 class="eyebrow-heading-3">{filter.name}</h4>
-                  <span
-                    class="icon-cheveron-down"
-                    style={
-                      openedFilter.value === filter.name
-                        ? "transform: rotate(180deg);"
-                        : ""
-                    }
-                  ></span>
-                </button>
-
-                {openedFilter.value === filter.name && (
-                  <div class="u-flex-vertical u-gap-8 u-margin-block-start-8">
-                    {Object.keys(filter.options).map((id) => (
-                      <div
-                        key={id}
-                        class="u-flex u-cross-center u-gap-8 c-filter-card"
-                        style="border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
+        <aside class="main-side" style="padding-top: 0px;">
+          <div class="side-nav">
+            <div class="side-nav-main">
+              <div class="drop-section" style="padding-top: 0.5rem;">
+                <div class="drop-list">
+                  {filters.map((filter) => (
+                    <div class="drop-list-item" key={filter.name}>
+                      <button
+                        onClick$={() => toggleFilter(filter.name)}
+                        style="width: 100%;"
+                        class="u-flex u-main-space-between u-cross-center"
                       >
-                        <input
-                          type="checkbox"
-                          style="width: 16px; height: 16px;"
-                        />
+                        <h4 class="eyebrow-heading-3">{filter.name}</h4>
+                        <span
+                          class="icon-cheveron-down"
+                          style={
+                            openedFilters.value.includes(filter.name)
+                              ? "transform: rotate(180deg);"
+                              : ""
+                          }
+                        ></span>
+                      </button>
 
-                        {getOption(filter.options, id).icon && (
-                          <div
-                            class="u-flex u-cross-center u-main-center"
-                            dangerouslySetInnerHTML={
-                              getOption(filter.options, id).icon
-                            }
-                          ></div>
-                        )}
-                        <p>{getOption(filter.options, id).name}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+                      {openedFilters.value.includes(filter.name) && (
+                        <div class="u-flex-vertical u-gap-8 u-margin-block-start-8">
+                          {Object.keys(filter.options).map((id) => (
+                            <label
+                              for={id}
+                              key={id}
+                              class="u-flex u-cross-center u-gap-8 c-filter-card u-cursor-pointer"
+                              style="border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
+                            >
+                              <input
+                                id={id}
+                                type="checkbox"
+                                style="width: 16px; height: 16px;"
+                              />
+
+                              {getOption(filter.options, id).icon && (
+                                <div
+                                  class="u-flex u-cross-center u-main-center"
+                                  dangerouslySetInnerHTML={
+                                    getOption(filter.options, id).icon
+                                  }
+                                ></div>
+                              )}
+                              <p>{getOption(filter.options, id).name}</p>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </aside>
       </div>

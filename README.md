@@ -1,28 +1,28 @@
 # Built with Appwrite
 
-DEVREL
-- 🚧 SEO tags
-- 🚧 Proper README
-
 FEATURES
 - 🚧 /projects/:projectId (Share Button, Description as MARKDOWN, Publisher)
 - 🚧 /search (framework, uiLibrary, useCase, service, sort=latest, filter=seenRecently)
 - 🚧 /submit-project
-- Your Picks
 - admin page
 - timeline page
+- Search input
+- New footer from Console
 
 JS
-- 🚧 filtering menu
+- 🚧 filtering menu (allow multipel at the same time)
 - seed with Almost apps
 - Relatime update upvotes
-- 🚧 All TODOs
+- Ensure no more "a href" and "#" hrefs
+- All TODOs
 
 CSS
-- 🚧 Side menu scrollable
-- 🚧 checkbox design on dark a little wrong, A LOT wrong on white
 - Tooltips on icons (github, sign out)
-- full width footer
+- loading state of upvote keep number
+
+DEVREL
+- 🚧 SEO tags
+- 🚧 Proper README
 
 ## 🤖 Auto-generated documentation
 

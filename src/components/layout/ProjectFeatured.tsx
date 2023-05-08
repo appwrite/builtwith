@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import Upvote from "../blocks/Upvote";
-import type { Project } from "~/AppwriteService";
+import { AppwriteService, Project } from "~/AppwriteService";
 import { Config } from "~/Config";
 
 export default component$((props: { project: Project }) => {
@@ -15,8 +15,7 @@ export default component$((props: { project: Project }) => {
       <div class="u-flex u-flex-vertical-mobile u-gap-24">
         <a href="#" class="object-og u-flex-basis-50-percent u-flex-shrink-0">
           <img
-            src="/project.png"
-            alt=""
+            src={AppwriteService.getProjectThumbnail(project.imageId)}
             style="border-radius: var(--border-radius-medium);"
           />
         </a>
@@ -77,7 +76,7 @@ export default component$((props: { project: Project }) => {
                 }
                 aria-hidden="true"
               ></span>
-              <p>Appwrite Databases</p>
+              <p>Databases</p>
             </a>
 
             <a
@@ -94,7 +93,7 @@ export default component$((props: { project: Project }) => {
                 }
                 aria-hidden="true"
               ></span>
-              <p>Appwrite Authorization</p>
+              <p>Authorization</p>
             </a>
             <a
               href="search?service=storage"
@@ -110,7 +109,7 @@ export default component$((props: { project: Project }) => {
                 }
                 aria-hidden="true"
               ></span>
-              <p>Appwrite Storage</p>
+              <p>Storage</p>
             </a>
             <a
               href="search?service=functions"
@@ -128,7 +127,7 @@ export default component$((props: { project: Project }) => {
                 }
                 aria-hidden="true"
               ></span>
-              <p>Appwrite Functions</p>
+              <p>Functions</p>
             </a>
             <a
               href="search?service=realtime"
@@ -146,49 +145,53 @@ export default component$((props: { project: Project }) => {
                 }
                 aria-hidden="true"
               ></span>
-              <p>Appwrite Realtime</p>
+              <p>Realtime</p>
             </a>
           </div>
 
-          <div class="u-margin-block-start-16  u-flex u-cross-center u-gap-8">
-            {project.urlGitHub && (
-              <a
-                href={project.urlGitHub}
-                target="_blank"
-                class="button is-secondary"
-              >
-                <span class="icon-github" aria-hidden="true"></span>
-              </a>
-            )}
-            {project.urlTwitter && (
-              <a
-                href={project.urlTwitter}
-                target="_blank"
-                class="button is-secondary"
-              >
-                <span class="icon-twitter" aria-hidden="true"></span>
-              </a>
-            )}
+          <div class="u-margin-block-start-16  u-flex u-flex-vertical-mobile u-cross-center u-main-space-between u-gap-8">
+            <div class=" u-flex u-cross-center u-gap-8">
+              {project.urlGitHub && (
+                <a
+                  href={project.urlGitHub}
+                  target="_blank"
+                  class="button is-secondary"
+                >
+                  <span class="icon-github" aria-hidden="true"></span>
+                </a>
+              )}
+              {project.urlTwitter && (
+                <a
+                  href={project.urlTwitter}
+                  target="_blank"
+                  class="button is-secondary"
+                >
+                  <span class="icon-twitter" aria-hidden="true"></span>
+                </a>
+              )}
 
-            {project.urlWebsite && (
-              <a
-                href={project.urlWebsite}
-                target="_blank"
-                class="button is-secondary"
-              >
-                <span class="icon-globe" aria-hidden="true"></span>
-              </a>
-            )}
-
-            {project.urlArticle && (
-              <a
-                href={project.urlArticle}
-                target="_blank"
-                class="button is-secondary"
-              >
-                <span class="icon-open" aria-hidden="true"></span>
-              </a>
-            )}
+              {project.urlArticle && (
+                <a
+                  href={project.urlArticle}
+                  target="_blank"
+                  class="button is-secondary"
+                >
+                  <span class="icon-book-open" aria-hidden="true"></span>
+                </a>
+              )}
+            </div>
+            <div class=" u-flex u-cross-center u-gap-8">
+              {project.urlWebsite && (
+                <a
+                  href={project.urlWebsite}
+                  target="_blank"
+                  class="button is-secondary"
+                >
+                  <span class="icon-link" aria-hidden="true"></span>
+                  <p class="text">Visit Website</p>
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>

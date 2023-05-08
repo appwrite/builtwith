@@ -87,8 +87,9 @@ aside {
   color: hsl(var(--color-neutral-150));
 }
 
-input[type="checkbox"] {
+.theme-dark input[type="checkbox"]:not(:checked)   {
   background: none;
+  border-color: hsl(var(--color-neutral-150));
 }
 
 .theme-dark .c-service {
@@ -145,4 +146,20 @@ input[type="checkbox"] {
 
 .c-filter-card {
   background: white;
+}
+
+.buttons-list-item:nth-child(n+2)::before {
+  display: none !important;
+}
+
+.buttons-list-item:nth-child(2)::before {
+  display: block !important;
+}
+
+.main-header {
+  gap: 0.5rem !important;
+}
+
+.theme-dark .upload-box {
+  background-color: hsl(var(--color-neutral-500));
 }
