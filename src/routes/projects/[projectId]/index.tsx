@@ -1,15 +1,15 @@
 import { component$ } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
-import { AppwriteService } from "~/AppwriteService";
+// import { routeLoader$ } from "@builder.io/qwik-city";
+// import { AppwriteService } from "~/AppwriteService";
 
-export const useProjectData = routeLoader$(async ({ params }) => {
-  return {
-    project: await AppwriteService.getProject(params.projectId),
-  };
-});
+// export const useProjectData = routeLoader$(async ({ params }) => {
+//   return {
+//     project: await AppwriteService.getProject(params.projectId),
+//   };
+// });
 
 export default component$(() => {
-  const projectData = useProjectData();
+//   const projectData = useProjectData();
 
   return (
     <>
