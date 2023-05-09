@@ -1,58 +1,166 @@
 import { component$ } from "@builder.io/qwik";
-// import { routeLoader$ } from "@builder.io/qwik-city";
-// import { AppwriteService } from "~/AppwriteService";
+import { AppwriteService } from "~/AppwriteService";
+import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
+import * as marked from "marked";
+import { Config } from "~/Config";
 
-// export const useProjectData = routeLoader$(async ({ params }) => {
-//   return {
-//     project: await AppwriteService.getProject(params.projectId),
-//   };
-// });
+export const useProjectData = routeLoader$(async ({ params }) => {
+  return {
+    project: await AppwriteService.getProject(params.projectId),
+  };
+});
 
 export default component$(() => {
-//   const projectData = useProjectData();
+  const nav = useNavigate();
+  const location = useLocation();
+  const projectData = useProjectData();
+
+  const html = marked.marked.parse(projectData.value.project.description);
+
+  const services = {
+    databases: {
+      used: projectData.value.project.hasDatabases,
+      name: "Databases",
+    },
+    authentication: {
+      used: projectData.value.project.hasAuthentication,
+      name: "Authentication",
+    },
+    storage: {
+      used: projectData.value.project.hasStorage,
+      name: "Storage",
+    },
+    functions: {
+      used: projectData.value.project.hasFunctions,
+      name: "Functions",
+    },
+    realtime: {
+      used: projectData.value.project.hasRealtime,
+      name: "Realtime",
+    },
+  };
 
   return (
     <>
-      <ul
-        class="grid-box"
-        style="--grid-gap:1rem; --grid-item-size:32rem; --grid-item-size-small-screens:24rem;"
-      >
-        <li>
-          <section class="card">
-            <table class="table is-remove-outer-styles">
-              <tbody class="table-tbody">
-                <tr class="table-row">
-                  <td class="table-col">
-                    <span class="text">Framework</span>
-                  </td>
-                  <td class="table-col u-overflow-visible">
-                    <span class="text">React</span>
-                  </td>
-                </tr>
-                <tr class="table-row">
-                  <td class="table-col">
-                    <span class="text">UI Library</span>
-                  </td>
-                  <td class="table-col u-overflow-visible">
-                    <span class="text">Taiwind</span>
-                  </td>
-                </tr>
-                <tr class="table-row">
-                  <td class="table-col">
-                    <span class="text">Use Case</span>
-                  </td>
-                  <td class="table-col u-overflow-visible">
-                    <span class="text">Demo</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="u-flex u-margin-block-start-16">BUTTONS</div>
-          </section>
-        </li>
-        <li>
-          <div class="card">card</div>
-        </li>
+      <ul class="u-flex u-gap-24 u-flex-vertical-mobile">
+        <div
+          class="u-flex-vertical u-gap-24 u-flex-shrink-0"
+          style="flex-basis: 40%;"
+        >
+          <button
+            style="padding: 0px;"
+            onClick$={() => nav("/")}
+            class="button is-text"
+          >
+            <span class="icon-cheveron-left" aria-hidden="true"></span>
+            <span class="text">Back to Projects</span>
+          </button>
+
+          <h2 class="heading-level-2">{projectData.value.project.name}</h2>
+          <p class="u-margin-block-start-8" style="font-size: 1.2rem;">
+            {projectData.value.project.tagline}
+          </p>
+
+          <div class="u-flex u-cross-center u-gap-8 u-flex-vertical-mobile">
+            <div class="u-flex u-cross-center u-gap-8">
+              {projectData.value.project.urlGitHub && (
+                <div class="tooltip">
+                  <a
+                    href={projectData.value.project.urlGitHub}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-github" aria-hidden="true"></span>
+                  </a>
+
+                  <span class="tooltip-popup is-bottom" role="tooltip">
+                    View on GitHub
+                  </span>
+                </div>
+              )}
+              {projectData.value.project.urlTwitter && (
+                <div class="tooltip">
+                  <a
+                    href={projectData.value.project.urlTwitter}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-twitter" aria-hidden="true"></span>
+                  </a>
+                  <span class="tooltip-popup is-bottom" role="tooltip">
+                    Follow on Twitter
+                  </span>
+                </div>
+              )}
+
+              {projectData.value.project.urlArticle && (
+                <div class="tooltip">
+                  <a
+                    href={projectData.value.project.urlArticle}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-book-open" aria-hidden="true"></span>
+                  </a>
+                  <span class="tooltip-popup is-bottom" role="tooltip">
+                    Read Article
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {projectData.value.project.urlWebsite && (
+              <div style="width: 100%;">
+                <a
+                  href={projectData.value.project.urlWebsite}
+                  target="_blank"
+                  style="width: 100%;"
+                  class="button u-flex u-main-center"
+                >
+                  <span class="icon-link" aria-hidden="true"></span>
+                  <span class="text">Visit Website</span>
+                </a>
+              </div>
+            )}
+          </div>
+
+          <div class="u-flex u-gap-8 u-flex-wrap u-main-center u-cross-center">
+            {Object.keys(services).map((service) => (
+              <button
+                onClick$={async () => await nav(`/search?service=${service}`)}
+              >
+                {(services as any)[service].used ? (
+                  <div class="tag is-success">
+                    <span class="icon-check-circle" aria-hidden="true"></span>
+                    <span class="text">{(services as any)[service].name}</span>
+                  </div>
+                ) : (
+                  <div class="tag is-danger">
+                    <span class="icon-x-circle" aria-hidden="true"></span>
+                    <span class="text">{(services as any)[service].name}</span>
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div style="width:100%;" class="u-flex-vertical u-gap-24">
+          <div class="object-og u-cursor-pointer " style="width: 100%;">
+            <img
+              style="border-radius: var(--border-radius-medium);"
+              src={AppwriteService.getProjectThumbnail(
+                projectData.value.project.imageId
+              )}
+            />
+          </div>
+
+          <div class="card" style="background-color: hsl(var(--color-neutral-0));">
+            <div
+              class="prose prose-slate"
+              dangerouslySetInnerHTML={html}
+            ></div>
+          </div>
+        </div>
       </ul>
     </>
   );
