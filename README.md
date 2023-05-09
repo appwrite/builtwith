@@ -1,13 +1,7 @@
 # Built with Appwrite
 
 - 🚧 /projects/:projectId (Share Button, Description as MARKDOWN, Publisher)
-- 🚧 filtering menu (allow multipel at the same time)
-- 🚧 /search (framework, uiLibrary, useCase, service, sort=latest, filter=seenRecently)
-
-- admin page
-- timeline into menu
 - Search input
-- Relatime update upvotes
 - 🚧 Proper README
 
 ## 🤖 Auto-generated documentation

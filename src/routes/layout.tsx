@@ -7,8 +7,9 @@ import {
   useContextProvider,
   useSignal,
   useVisibleTask$,
+  useComputed$,
 } from "@builder.io/qwik";
-import { routeLoader$ } from "@builder.io/qwik-city";
+import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import type { Models } from "appwrite";
 import type { ProjectUpvote } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
@@ -34,6 +35,9 @@ export default component$(() => {
   const account = useSignal<null | Models.User<any>>(null);
   useContextProvider(AccountContext, account);
 
+  const location = useLocation();
+  const nav = useNavigate();
+
   const upvotes = useSignal<ProjectUpvote[]>([]);
   useContextProvider(UpvotesContext, upvotes);
 
@@ -41,37 +45,49 @@ export default component$(() => {
     account.value = await AppwriteService.getAccount();
 
     if (account.value) {
-      upvotes.value = await AppwriteService.listUpvotes(account.value.$id);
+      upvotes.value = await AppwriteService.listUserUpvotes(account.value.$id);
     }
   });
 
-  const openedFilters = useSignal(["Service"]);
+  const openedFilter = useSignal<string | null>(null);
+  if (openedFilter.value === null) {
+    for (const key of location.url.searchParams.keys()) {
+      openedFilter.value = key;
+      break;
+    }
+    if (openedFilter.value === null) {
+      openedFilter.value = "service";
+    }
+  }
+
   const filters = [
     {
+      id: "service",
       name: "Service",
       options: Config.services,
     },
     {
+      id: "framework",
       name: "Framework",
       options: Config.frameworks,
     },
     {
+      id: "uiLibrary",
       name: "UI Library",
       options: Config.uiLibraries,
     },
     {
+      id: "useCase",
       name: "Use Case",
       options: Config.useCases,
     },
   ];
 
-  const toggleFilter = $((name: string) => {
-    if (openedFilters.value.includes(name)) {
-      openedFilters.value = openedFilters.value.filter(
-        (filter) => filter !== name
-      );
+  const toggleFilter = $((id: string) => {
+    if (openedFilter.value === id) {
+      openedFilter.value = null;
     } else {
-      openedFilters.value = [...openedFilters.value, name];
+      openedFilter.value = id;
     }
   });
 
@@ -79,9 +95,36 @@ export default component$(() => {
     return options[id];
   }
 
+  const checkFilter = $((key: string, value: string) => {
+    nav(`/search?${key}=${value}`, true);
+  });
+
+  const currentFilter = useComputed$(() => {
+    const params = location.url.searchParams;
+
+    for (const key of params.keys()) {
+      return {
+        key,
+        value: params.get(key) ?? null,
+      };
+    }
+
+    return {
+      key: null,
+      value: null,
+    };
+  });
+
   return (
     <>
-      <div class="grid-with-side">
+      <div
+        class={
+          location.url.pathname === "/" ||
+          location.url.pathname.startsWith("/search")
+            ? "grid-with-side"
+            : "grid"
+        }
+      >
         <Header account={account} />
         <main class="main-content">
           <div class="container hero-top-container">
@@ -89,64 +132,73 @@ export default component$(() => {
             <Footer />
           </div>
         </main>
-        <aside class="main-side" style="padding-top: 0px;">
-          <div class="side-nav">
-            <div class="side-nav-main">
-              <div class="drop-section" style="padding-top: 0.5rem;">
-                <div class="drop-list">
-                  {filters.map((filter) => (
-                    <div class="drop-list-item" key={filter.name}>
-                      <button
-                        onClick$={() => toggleFilter(filter.name)}
-                        style="width: 100%;"
-                        class="u-flex u-main-space-between u-cross-center"
-                      >
-                        <h4 class="eyebrow-heading-3">{filter.name}</h4>
-                        <span
-                          class="icon-cheveron-down"
-                          style={
-                            openedFilters.value.includes(filter.name)
-                              ? "transform: rotate(180deg);"
-                              : ""
-                          }
-                        ></span>
-                      </button>
 
-                      {openedFilters.value.includes(filter.name) && (
-                        <div class="u-flex-vertical u-gap-8 u-margin-block-start-8">
-                          {Object.keys(filter.options).map((id) => (
-                            <label
-                              for={id}
-                              key={id}
-                              class="u-flex u-cross-center u-gap-8 c-filter-card u-cursor-pointer"
-                              style="border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
-                            >
-                              <input
-                                id={id}
-                                type="checkbox"
-                                style="width: 16px; height: 16px;"
-                              />
+        {(location.url.pathname === "/" ||
+          location.url.pathname.startsWith("/search")) && (
+          <aside class="main-side" style="padding-top: 0px;">
+            <div class="side-nav">
+              <div class="side-nav-main">
+                <div class="drop-section" style="padding-top: 0.5rem;">
+                  <div class="drop-list">
+                    {filters.map((filter) => (
+                      <div class="drop-list-item" key={filter.name}>
+                        <button
+                          onClick$={() => toggleFilter(filter.id)}
+                          style="width: 100%;"
+                          class="u-flex u-main-space-between u-cross-center"
+                        >
+                          <h4 class="eyebrow-heading-3">{filter.name}</h4>
+                          <span
+                            class="icon-cheveron-down"
+                            style={
+                              openedFilter.value === filter.id
+                                ? "transform: rotate(180deg);"
+                                : ""
+                            }
+                          ></span>
+                        </button>
 
-                              {getOption(filter.options, id).icon && (
-                                <div
-                                  class="u-flex u-cross-center u-main-center"
-                                  dangerouslySetInnerHTML={
-                                    getOption(filter.options, id).icon
+                        {openedFilter.value === filter.id && (
+                          <div class="u-flex-vertical u-gap-8 u-margin-block-start-8">
+                            {Object.keys(filter.options).map((id) => (
+                              <label
+                                for={id}
+                                key={id}
+                                class="u-flex u-cross-center u-gap-8 c-filter-card u-cursor-pointer"
+                                style="border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
+                              >
+                                <input
+                                  checked={
+                                    currentFilter.value.key === filter.id &&
+                                    currentFilter.value.value === id
                                   }
-                                ></div>
-                              )}
-                              <p>{getOption(filter.options, id).name}</p>
-                            </label>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                                  onChange$={() => checkFilter(filter.id, id)}
+                                  id={id}
+                                  type="checkbox"
+                                  style="width: 16px; height: 16px;"
+                                />
+
+                                {getOption(filter.options, id).icon && (
+                                  <div
+                                    class="u-flex u-cross-center u-main-center"
+                                    dangerouslySetInnerHTML={
+                                      getOption(filter.options, id).icon
+                                    }
+                                  ></div>
+                                )}
+                                <p>{getOption(filter.options, id).name}</p>
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </aside>
+          </aside>
+        )}
       </div>
     </>
   );

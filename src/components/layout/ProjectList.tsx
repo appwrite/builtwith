@@ -12,19 +12,19 @@ export default component$(
     const project3 = props.projects[2] ?? null;
 
     return (
-      <div class="u-flex u-flex-wrap u-flex-vertical-mobile u-gap-8">
-        <div style="flex-basis: calc(33.33% - 0.5rem)">
+      <div class="u-flex u-flex-wrap u-flex-vertical-mobile u-gap-16">
+        <div style="flex-basis: calc(33.33% - 1rem)">
           <Project project={project1} />
         </div>
-        <div style="flex-basis: calc(33.33% - 0.5rem)">
+        <div style="flex-basis: calc(33.33% - 1rem)">
           <Project project={project2} />
         </div>
-        <div style="flex-basis: calc(33.33% - 0.5rem)">
+        <div style="flex-basis: calc(33.33% - 1rem)">
           <Project project={project3} />
         </div>
 
         {props.projects.length === 0 && (
-          <article class="is-only-mobile  card u-grid u-cross-center u-min-width-100-percent u-flex-shrink-0 common-section">
+          <article class="is-only-mobile card u-grid u-cross-center u-min-width-100-percent u-flex-shrink-0 common-section">
             <div class="u-flex u-flex-vertical u-cross-center u-gap-24">
               <div class="u-text-center">
                 <h2 class="heading-level-7 u-trim-1">

@@ -83,14 +83,14 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=databases")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.services.includes("databases")
+                project.hasDatabases
                   ? ""
                   : "c-service-disabled"
               }`}
             >
               <span
                 class={
-                  project.services.includes("databases")
+                  project.hasDatabases
                     ? "icon-check u-color-text-success"
                     : "icon-x"
                 }
@@ -102,14 +102,14 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=authentication")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.services.includes("authentication")
+                project.hasAuthentication
                   ? ""
                   : "c-service-disabled"
               }`}
             >
               <span
                 class={
-                  project.services.includes("authentication")
+                  project.hasAuthentication
                     ? "icon-check u-color-text-success"
                     : "icon-x"
                 }
@@ -120,12 +120,12 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=storage")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.services.includes("storage") ? "" : "c-service-disabled"
+                project.hasStorage ? "" : "c-service-disabled"
               }`}
             >
               <span
                 class={
-                  project.services.includes("storage")
+                  project.hasStorage
                     ? "icon-check u-color-text-success"
                     : "icon-x"
                 }
@@ -136,14 +136,14 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=functions")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.services.includes("functions")
+                project.hasFunctions
                   ? ""
                   : "c-service-disabled"
               }`}
             >
               <span
                 class={
-                  project.services.includes("functions")
+                  project.hasFunctions
                     ? "icon-check u-color-text-success"
                     : "icon-x"
                 }
@@ -154,14 +154,14 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=realtime")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.services.includes("realtime")
+                project.hasRealtime
                   ? ""
                   : "c-service-disabled"
               }`}
             >
               <span
                 class={
-                  project.services.includes("realtime")
+                  project.hasRealtime
                     ? "icon-check u-color-text-success"
                     : "icon-x"
                 }

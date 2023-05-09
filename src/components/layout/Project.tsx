@@ -139,7 +139,7 @@ export default component$((props: { project: Project | null }) => {
                 style="--button-size:1.5rem;"
                 aria-label="Remove item"
               >
-                <Databases active={project.services.includes("databases")} />
+                <Databases active={project.hasDatabases} />
               </button>
               <span class="tooltip-popup is-bottom" role="tooltip">
                 Appwrite Databases
@@ -155,7 +155,7 @@ export default component$((props: { project: Project | null }) => {
                   await nav(`/search?service=authentication`)
                 }
               >
-                <Auth active={project.services.includes("authentication")} />
+                <Auth active={project.hasAuthentication} />
               </button>
               <span class="tooltip-popup is-bottom" role="tooltip">
                 Appwrite Authentication
@@ -169,7 +169,7 @@ export default component$((props: { project: Project | null }) => {
                 aria-label="Remove item"
                 onClick$={async () => await nav(`/search?service=storage`)}
               >
-                <Storage active={project.services.includes("storage")} />
+                <Storage active={project.hasStorage} />
               </button>
               <span class="tooltip-popup is-bottom" role="tooltip">
                 Appwrite Storage
@@ -183,7 +183,7 @@ export default component$((props: { project: Project | null }) => {
                 aria-label="Remove item"
                 onClick$={async () => await nav(`/search?service=functions`)}
               >
-                <Function active={project.services.includes("functions")} />
+                <Function active={project.hasFunctions} />
               </button>
               <span class="tooltip-popup is-bottom" role="tooltip">
                 Appwrite Functions
@@ -197,7 +197,7 @@ export default component$((props: { project: Project | null }) => {
                 aria-label="Remove item"
                 onClick$={async () => await nav(`/search?service=realtime`)}
               >
-                <Realtime active={project.services.includes("realtime")} />
+                <Realtime active={project.hasRealtime} />
               </button>
               <span class="tooltip-popup is-bottom" role="tooltip">
                 Appwrite Realtime

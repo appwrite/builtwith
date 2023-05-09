@@ -80,17 +80,14 @@ module.exports = async function (req, res) {
       isPublished: false,
       isFeatured: false,
       randomness: 99,
+
+      hasAuthentication: services.includes("authentication"),
+      hasStorage: services.includes("storage"),
+      hasRealtime: services.includes("relatime"),
+      hasFunctions: services.includes("functions"),
+      hasDatabases: services.includes("databases"),
     }
   );
-
-  console.log("Creating project services");
-
-  for (const service of services) {
-    await databases.createDocument("main", "projectServices", sdk.ID.unique(), {
-      projectId: project.$id,
-      service,
-    });
-  }
 
   console.log("Done");
 

@@ -65,5 +65,6 @@ module.exports = async function (req, res) {
   res.json({
     ok: true,
     isUpvoted: !isUpvoted,
+    votes: totalUpvotes
   });
 };

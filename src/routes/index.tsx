@@ -67,7 +67,7 @@ export const useHomeData = routeLoader$(async () => {
       Query.limit(1),
     ]),
     AppwriteService.listProjects([
-      Query.orderDesc("randomness"),
+      Query.orderAsc("randomness"),
       Query.limit(3),
     ]),
   ]);
@@ -210,11 +210,8 @@ export default component$(() => {
         )}
 
         {seenRecently.value !== null && (
-          <Group title="Seen Recently" href={`/search?filter=seenRecently`}>
-            <ProjectList
-              href={`/search?filter=seenRecently`}
-              projects={seenRecently.value}
-            />
+          <Group title="Seen Recently">
+            <ProjectList projects={seenRecently.value} />
           </Group>
         )}
       </div>

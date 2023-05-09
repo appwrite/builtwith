@@ -23,18 +23,23 @@ export default component$(
         : false;
     });
 
+    const votes = useSignal(props.votes);
+
     const isLoading = useSignal(false);
 
     const upvoteProject = $(async () => {
       isLoading.value = true;
       try {
-        await AppwriteService.upvoteProject(props.projectId);
+        const res = await AppwriteService.upvoteProject(props.projectId);
 
         if (accountContext.value) {
-          upvoteContext.value = await AppwriteService.listUpvotes(
+          upvoteContext.value = await AppwriteService.listUserUpvotes(
             accountContext.value.$id
           );
         }
+
+        votes.value = res.votes;
+        // isUpvoted.value = res.isUpvoted;
 
         const navUrl = location.url.pathname + location.url.search;
         await nav(navUrl, true);
@@ -65,12 +70,12 @@ export default component$(
             <div style="transform: scale(0.8); height: 20px;">
               <div class="loader"></div>
             </div>
-            <span class="text">{props.votes}</span>
+            <span class="text">{votes}</span>
           </>
         ) : (
           <>
             <span class="icon-heart" aria-hidden="true"></span>
-            <span class="text">{props.votes}</span>
+            <span class="text">{votes}</span>
           </>
         )}
       </button>

@@ -23,8 +23,11 @@ export type Project = {
   urlGitHub?: string;
   imageId: string;
   randomness: number;
-
-  services: string[];
+  hasAuthentication: boolean;
+  hasStorage: boolean;
+  hasRealtime: boolean;
+  hasFunctions: boolean;
+  hasDatabases: boolean;
 } & Models.Document;
 
 export type ProjectService = {
@@ -60,16 +63,27 @@ export const AppwriteService = {
     try {
       return await account.get();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return null;
     }
   },
   countProjects: async (queries: string[]) => {
-    queries = [
-      ...queries,
-      Query.equal("isPublished", true),
-      Query.orderDesc("$createdAt"),
-    ];
+    const hasIsPublished = queries.find((query) =>
+      query.startsWith('equal("isPublished')
+    );
+    const hasCreatedAtSort = queries.find(
+      (query) =>
+        query.startsWith('orderDesc("$createdAt') ||
+        query.startsWith('orderAsc("$createdAt')
+    );
+
+    if (!hasIsPublished) {
+      queries.push(Query.equal("isPublished", true));
+    }
+
+    if (!hasCreatedAtSort) {
+      queries.push(Query.orderDesc("$createdAt"));
+    }
 
     const response = await databases.listDocuments<Project>(
       "main",
@@ -79,39 +93,37 @@ export const AppwriteService = {
 
     return response.total;
   },
+  getProject: async (projectId: string) => {
+    const project = await databases.getDocument<Project>(
+      "main",
+      "projects",
+      projectId
+    );
+    return project;
+  },
   listProjects: async (queries: string[]) => {
-    queries = [
-      ...queries,
-      Query.equal("isPublished", true),
-      Query.orderDesc("$createdAt"),
-    ];
+    const hasIsPublished = queries.find((query) =>
+      query.startsWith('equal("isPublished')
+    );
+    const hasCreatedAtSort = queries.find(
+      (query) =>
+        query.startsWith('orderDesc("$createdAt') ||
+        query.startsWith('orderAsc("$createdAt')
+    );
 
-    let { documents: projects } = await databases.listDocuments<Project>(
+    if (!hasIsPublished) {
+      queries.push(Query.equal("isPublished", true));
+    }
+
+    if (!hasCreatedAtSort) {
+      queries.push(Query.orderDesc("$createdAt"));
+    }
+
+    const { documents: projects } = await databases.listDocuments<Project>(
       "main",
       "projects",
       queries
     );
-
-    const projectIds = [...new Set(projects.map((project) => project.$id))];
-
-    if (projectIds.length > 0) {
-      const { documents: services } =
-        await databases.listDocuments<ProjectService>(
-          "main",
-          "projectServices",
-          [Query.equal("projectId", projectIds), Query.orderDesc("$createdAt")]
-        );
-
-      projects = projects.map((project) => {
-        const projectServices = services.filter(
-          (service) => service.projectId === project.$id
-        );
-
-        project.services = projectServices.map((service) => service.service);
-
-        return project;
-      });
-    }
 
     return projects;
   },
@@ -152,7 +164,16 @@ export const AppwriteService = {
 
     return json;
   },
-  listUpvotes: async (userId: string) => {
+  listUpvotes: async (queries: string[]) => {
+    return (
+      await databases.listDocuments<ProjectUpvote>(
+        "main",
+        "projectUpvotes",
+        queries
+      )
+    ).documents;
+  },
+  listUserUpvotes: async (userId: string) => {
     return (
       await databases.listDocuments<ProjectUpvote>("main", "projectUpvotes", [
         Query.limit(100),
