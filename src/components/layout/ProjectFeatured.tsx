@@ -83,9 +83,7 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=databases")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.hasDatabases
-                  ? ""
-                  : "c-service-disabled"
+                project.hasDatabases ? "" : "c-service-disabled"
               }`}
             >
               <span
@@ -102,9 +100,7 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=authentication")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.hasAuthentication
-                  ? ""
-                  : "c-service-disabled"
+                project.hasAuthentication ? "" : "c-service-disabled"
               }`}
             >
               <span
@@ -136,9 +132,7 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=functions")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.hasFunctions
-                  ? ""
-                  : "c-service-disabled"
+                project.hasFunctions ? "" : "c-service-disabled"
               }`}
             >
               <span
@@ -154,9 +148,7 @@ export default component$((props: { project: Project }) => {
             <button
               onClick$={async () => await nav("search?service=realtime")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
-                project.hasRealtime
-                  ? ""
-                  : "c-service-disabled"
+                project.hasRealtime ? "" : "c-service-disabled"
               }`}
             >
               <span

@@ -5,7 +5,10 @@ export default component$(
   (props: { id: string; name: string; description: string; total: number }) => {
     const nav = useNavigate();
     return (
-      <div class="u-cursor-pointer" onClick$={async () => await nav(`/search?useCase=${props.id}`)}>
+      <div
+        class="u-cursor-pointer"
+        onClick$={async () => await nav(`/search?useCase=${props.id}`)}
+      >
         <div
           class="card u-flex-vertical u-cross-center u-main-center"
           style="padding: 0px;"
