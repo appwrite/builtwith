@@ -80,11 +80,11 @@ aside {
 }
 
 .c-service-disabled {
-  color: hsl(var(--color-neutral-50));
+  color: hsl(var(--color-neutral-70));
 }
 
 .theme-dark .c-service-disabled {
-  color: hsl(var(--color-neutral-150));
+  color: hsl(var(--color-neutral-70));
 }
 
 .theme-dark input[type="checkbox"]:not(:checked) {

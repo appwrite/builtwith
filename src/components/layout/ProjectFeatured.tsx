@@ -90,7 +90,7 @@ export default component$((props: { project: Project }) => {
                 class={
                   project.hasDatabases
                     ? "icon-check u-color-text-success"
-                    : "icon-x"
+                    : "icon-x u-color-text-danger"
                 }
                 aria-hidden="true"
               ></span>
@@ -107,7 +107,7 @@ export default component$((props: { project: Project }) => {
                 class={
                   project.hasAuthentication
                     ? "icon-check u-color-text-success"
-                    : "icon-x"
+                    : "icon-x u-color-text-danger"
                 }
                 aria-hidden="true"
               ></span>
@@ -123,7 +123,7 @@ export default component$((props: { project: Project }) => {
                 class={
                   project.hasStorage
                     ? "icon-check u-color-text-success"
-                    : "icon-x"
+                    : "icon-x u-color-text-danger"
                 }
                 aria-hidden="true"
               ></span>
@@ -139,7 +139,7 @@ export default component$((props: { project: Project }) => {
                 class={
                   project.hasFunctions
                     ? "icon-check u-color-text-success"
-                    : "icon-x"
+                    : "icon-x u-color-text-danger"
                 }
                 aria-hidden="true"
               ></span>
@@ -155,7 +155,7 @@ export default component$((props: { project: Project }) => {
                 class={
                   project.hasRealtime
                     ? "icon-check u-color-text-success"
-                    : "icon-x"
+                    : "icon-x u-color-text-danger"
                 }
                 aria-hidden="true"
               ></span>

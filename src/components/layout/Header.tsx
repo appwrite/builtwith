@@ -37,7 +37,7 @@ export default component$(
 
     return (
       <>
-        <header class="main-header u-padding-inline-end-0">
+        <header class="main-header u-padding-inline-end-0 u-flex-shrink-0">
           <button
             onClick$={toggleMenu}
             class="button is-text is-only-icon is-only-mobile nav-btn"

@@ -4,7 +4,6 @@ export default component$(() => {
   return (
     <footer
       class="main-footer u-cross-center"
-      style="margin-left: 0px; margin-right: 0px;"
     >
       <div class="main-footer-start">
         <ul class="inline-links is-no-padding-first-and-last u-x-small">

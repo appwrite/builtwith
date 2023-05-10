@@ -122,15 +122,16 @@ export default component$(() => {
           location.url.pathname === "/" ||
           location.url.pathname.startsWith("/search")
             ? "grid-with-side"
-            : "grid"
+            : "u-flex-vertical u-full-screen-height"
         }
       >
         <Header account={account} />
-        <main class="main-content">
+        <main class="main-content u-flex u-flex-vertical u-main-space-between">
           <div class="container hero-top-container">
             <Slot />
-            <Footer />
           </div>
+
+          <Footer />
         </main>
 
         {(location.url.pathname === "/" ||
