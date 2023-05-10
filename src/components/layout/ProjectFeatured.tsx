@@ -81,7 +81,7 @@ export default component$((props: { project: Project }) => {
 
           <div class="u-margin-block-start-8 u-flex u-gap-0 u-flex-wrap u-flex-vertical-mobile">
             <button
-              onClick$={async () => await nav("search?service=databases")}
+              onClick$={async () => await nav("/search?service=databases")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
                 project.hasDatabases ? "" : "c-service-disabled"
               }`}
@@ -98,7 +98,7 @@ export default component$((props: { project: Project }) => {
             </button>
 
             <button
-              onClick$={async () => await nav("search?service=authentication")}
+              onClick$={async () => await nav("/search?service=authentication")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
                 project.hasAuthentication ? "" : "c-service-disabled"
               }`}
@@ -114,7 +114,7 @@ export default component$((props: { project: Project }) => {
               <p>Authentication</p>
             </button>
             <button
-              onClick$={async () => await nav("search?service=storage")}
+              onClick$={async () => await nav("/search?service=storage")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
                 project.hasStorage ? "" : "c-service-disabled"
               }`}
@@ -130,7 +130,7 @@ export default component$((props: { project: Project }) => {
               <p>Storage</p>
             </button>
             <button
-              onClick$={async () => await nav("search?service=functions")}
+              onClick$={async () => await nav("/search?service=functions")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
                 project.hasFunctions ? "" : "c-service-disabled"
               }`}
@@ -146,7 +146,7 @@ export default component$((props: { project: Project }) => {
               <p>Functions</p>
             </button>
             <button
-              onClick$={async () => await nav("search?service=realtime")}
+              onClick$={async () => await nav("/search?service=realtime")}
               class={`u-flex u-gap-4 u-cross-center u-flex-basis-50-percent ${
                 project.hasRealtime ? "" : "c-service-disabled"
               }`}

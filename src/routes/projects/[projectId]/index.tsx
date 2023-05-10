@@ -44,7 +44,7 @@ export default component$(() => {
       <ul class="u-flex u-gap-24 u-flex-vertical-mobile">
         <div
           class="u-flex-vertical u-gap-24 u-flex-shrink-0"
-          style="flex-basis: 40%;"
+          style="flex-basis: 50%;"
         >
           <button
             style="padding: 0px;"
@@ -59,64 +59,6 @@ export default component$(() => {
           <p style="font-size: 1.2rem; margin-top: -1rem;">
             {projectData.value.project.tagline}
           </p>
-
-          <div class="list">
-            <button
-              onClick$={async () =>
-                await nav(
-                  `/search?framework=${projectData.value.project.framework}`
-                )
-              }
-              class="list-item"
-            >
-              <span class="icon-arrow-circle-right" aria-hidden="true"></span>
-              <span class="text">
-                {
-                  (Config.frameworks as any)[
-                    projectData.value.project.framework
-                  ].name
-                }{" "}
-                Framework
-              </span>
-            </button>
-            <button
-              onClick$={async () =>
-                await nav(
-                  `/search?uiLibrary=${projectData.value.project.uiLibrary}`
-                )
-              }
-              class="list-item"
-            >
-              <span class="icon-arrow-circle-right" aria-hidden="true"></span>
-
-              <span class="text">
-                {
-                  (Config.uiLibraries as any)[
-                    projectData.value.project.uiLibrary
-                  ].name
-                }{" "}
-                UI Library
-              </span>
-            </button>
-            <button
-              onClick$={async () =>
-                await nav(
-                  `/search?useCase=${projectData.value.project.useCase}`
-                )
-              }
-              class="list-item"
-            >
-              <span class="icon-arrow-circle-right" aria-hidden="true"></span>
-
-              <span class="text">
-                {
-                  (Config.useCases as any)[projectData.value.project.useCase]
-                    .name
-                }{" "}
-                Use Case
-              </span>
-            </button>
-          </div>
 
           <div class="u-flex u-cross-center u-gap-8 u-flex-vertical-mobile">
             <div class="u-flex u-cross-center u-gap-8">
@@ -182,19 +124,70 @@ export default component$(() => {
           </div>
 
           <div class="u-flex u-gap-8 u-flex-wrap u-main-center u-cross-center">
+            <button
+              onClick$={async () =>
+                await nav(
+                  `/search?framework=${projectData.value.project.framework}`
+                )
+              }
+            >
+              <div class="tag is-secondary">
+                <span class="icon-check-circle" aria-hidden="true"></span>
+                <span class="text">
+                  {
+                    (Config.frameworks as any)[
+                      projectData.value.project.framework
+                    ].name
+                  }{" "}
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick$={async () =>
+                await nav(
+                  `/search?uiLibrary=${projectData.value.project.uiLibrary}`
+                )
+              }
+            >
+              <div class="tag is-secondary">
+                <span class="icon-check-circle" aria-hidden="true"></span>
+                <span class="text">
+                  {
+                    (Config.uiLibraries as any)[
+                      projectData.value.project.uiLibrary
+                    ].name
+                  }{" "}
+                </span>
+              </div>
+            </button>
+
+            <button
+              onClick$={async () =>
+                await nav(
+                  `/search?useCase=${projectData.value.project.useCase}`
+                )
+              }
+            >
+              <div class="tag is-secondary">
+                <span class="icon-check-circle" aria-hidden="true"></span>
+                <span class="text">
+                  {
+                    (Config.useCases as any)[projectData.value.project.useCase]
+                      .name
+                  }
+                </span>
+              </div>
+            </button>
+
             {Object.keys(services).map((service) => (
               <button
                 key={service}
                 onClick$={async () => await nav(`/search?service=${service}`)}
               >
-                {(services as any)[service].used ? (
+                {(services as any)[service].used && (
                   <div class="tag is-success">
                     <span class="icon-check-circle" aria-hidden="true"></span>
-                    <span class="text">{(services as any)[service].name}</span>
-                  </div>
-                ) : (
-                  <div class="tag is-danger">
-                    <span class="icon-x-circle" aria-hidden="true"></span>
                     <span class="text">{(services as any)[service].name}</span>
                   </div>
                 )}
@@ -211,15 +204,12 @@ export default component$(() => {
               )}
             />
           </div>
-
-          <div
-            class="card"
-            style="background-color: hsl(var(--color-neutral-0));"
-          >
-            <div class="prose prose-slate" dangerouslySetInnerHTML={html}></div>
-          </div>
         </div>
       </ul>
+
+      <div class="card u-margin-block-start-20">
+        <div class="prose" dangerouslySetInnerHTML={html}></div>
+      </div>
     </>
   );
 });

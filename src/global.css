@@ -167,3 +167,25 @@ aside {
 .tooltip-popup {
   z-index: 10 !important;
 }
+
+.theme-dark .prose h1,
+.theme-dark .prose h2,
+.theme-dark .prose h3,
+.theme-dark .prose h4,
+.theme-dark .prose h5,
+.theme-dark .prose h6 {
+  color: hsl(var(--color-neutral-10));
+}
+
+.theme-dark .prose p,
+.theme-dark .prose a,
+.theme-dark .prose ul,
+.theme-dark .prose li,
+.theme-dark .prose ol {
+  color: hsl(var(--color-neutral-50));
+}
+
+.theme-dark .prose span,
+.theme-dark .prose code {
+  color: hsl(var(--color-neutral-25));
+}

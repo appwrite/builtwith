@@ -1,10 +1,5 @@
 # Built with Appwrite
 
-- Trigger deployment
-- 🚧 /projects/:projectId (Share Button, Description as MARKDOWN, Publisher)
-- Search input
-- 🚧 Proper README
-
 ## 🤖 Auto-generated documentation
 
 ## Qwik City App ⚡️
