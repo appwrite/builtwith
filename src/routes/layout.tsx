@@ -8,6 +8,7 @@ import {
   useSignal,
   useVisibleTask$,
   useComputed$,
+  useTask$,
 } from "@builder.io/qwik";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import type { Models } from "appwrite";
@@ -50,15 +51,18 @@ export default component$(() => {
   });
 
   const openedFilter = useSignal<string | null>(null);
-  if (openedFilter.value === null) {
-    for (const key of location.url.searchParams.keys()) {
-      openedFilter.value = key;
-      break;
-    }
+
+  useTask$(() => {
     if (openedFilter.value === null) {
-      openedFilter.value = "service";
+      for (const key of location.url.searchParams.keys()) {
+        openedFilter.value = key;
+        break;
+      }
+      if (openedFilter.value === null) {
+        openedFilter.value = "service";
+      }
     }
-  }
+  });
 
   const filters = [
     {
@@ -175,7 +179,7 @@ export default component$(() => {
                                   }
                                   onChange$={() => checkFilter(filter.id, id)}
                                   id={id}
-                                  type="checkbox"
+                                  type="radio"
                                   style="width: 16px; height: 16px;"
                                 />
 

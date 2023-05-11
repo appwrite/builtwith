@@ -1,4 +1,59 @@
-# Built with Appwrite
+![Cover](public/cover.png)
+
+# 🙌 Built with Appwrite
+
+> Explore popular projects built with Appwrite.
+
+## 🧰 Tech Stack
+
+- [Appwrite](https://appwrite.io/)
+- [Qwik](https://qwik.builder.io/)
+- [Pink Design](https://pink.appwrite.io/)
+- [Node.JS](https://nodejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+
+## 🛠️ Setup Server
+
+1. Register [Appwrite](https://cloud.appwrite.io/) account
+2. Create project
+3. Install Appwrite CLI
+4. Login with `appwrite login`
+5. Update project ID in `appwrite.json`
+6. Deploy database structure with `appwrite deploy collection`
+7. Deploy storage structure with `appwrite deploy bucket`
+8. Deploy functions with `appwrite deploy function`
+9. Set variables on deployed functions. Functions can be found in `functions` folder. They all have `README.md` describing what variables they need
+10. Setup `GitHub` OAuth provider
+
+## 👀 Client Setup
+
+1. Install libraries `npm install`
+2. Update projectID or endpoint in `src/AppwriteService.ts`, if not using production
+3. Start server `npm run dev`
+
+## 🚨 Moderation
+
+Give moderators access to Appwrite Console. When project is good for publication, update `isPublished` to `true` and save document.
+
+## 🚀 Deploy
+
+1. Deploy frontend on root domain such as `myapp.com` 
+2. Add custom subdomain to Appwrite Project, such as `appwrite.myapp.com`
+3. Add frontend domain as a platform in Appwrite project
+
+## 🤝 Contributing
+
+To contribute to frontend, make sure to use the [Pink Design](https://pink.appwrite.io/) design system. For state management, features of [Qwik](https://qwik.builder.io/) should be used. All logic related to communication with backend should be kept in `src/AppwriteService.ts`.
+
+When contributing to Appwrite Functions, use [Appwrite CLI](https://appwrite.io/docs/command-line). Also use Appwrite CLI to sync changes to project structure such as databases, collections or buckets.
+
+## 🖼️ Screenshots
+
+![Screenshot](docs/ss1.png)
+![Screenshot](docs/ss2.png)
+![Screenshot](docs/ss3.png)
+![Screenshot](docs/ss4.png)
+![Screenshot](docs/ss5.png)
 
 ## 🤖 Auto-generated documentation
 

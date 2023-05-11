@@ -35,7 +35,6 @@ module.exports = async function (req, res) {
 
   if (
     !useCase ||
-    !uiLibrary ||
     !framework ||
     !name ||
     !tagline ||

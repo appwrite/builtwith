@@ -4,7 +4,7 @@ Welcome to the documentation of this function 👋 We strongly recommend keeping
 
 ## 🤖 Documentation
 
-Simple function similar to typical "hello world" example, but instead, we return a simple JSON that tells everyone how awesome developers are.
+A cron triggered action which rotates randomness on projects collection. Running this changes order of projects in "Daily Surprise" section.
 
 <!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
 
@@ -20,7 +20,7 @@ _Example output:_
 
 ```json
 {
-  "areDevelopersAwesome": true
+  "ok": true
 }
 ```
 
@@ -28,7 +28,6 @@ _Example output:_
 
 List of environment variables used by this cloud function:
 
-- **APPWRITE_FUNCTION_ENDPOINT** - Endpoint of Appwrite project
 - **APPWRITE_FUNCTION_API_KEY** - Appwrite API Key
 <!-- Add your custom environment variables -->
 

@@ -26,10 +26,16 @@ export default component$(() => {
   const tagline = useSignal("");
   const description = useSignal("");
 
+  const platform = useSignal("web");
   const framework = useSignal("");
-  const uiLibrary = useSignal("");
   const useCase = useSignal("");
+  const uiLibrary = useSignal("");
 
+  const googlePlayUrl = useSignal("");
+  const appStoreUrl = useSignal("");
+  const linuxUrl = useSignal("");
+  const macOsUrl = useSignal("");
+  const windowsUrl = useSignal("");
   const websiteUrl = useSignal("");
   const twitterUrl = useSignal("");
   const githubUrl = useSignal("");
@@ -70,7 +76,7 @@ export default component$(() => {
         services.push("functions");
       }
       if (servicesStorage.value) {
-        services.push("stirage");
+        services.push("storage");
       }
       if (servicesRealtime.value) {
         services.push("realtime");
@@ -126,6 +132,25 @@ export default component$(() => {
       isLoading.value = false;
     }
   });
+
+  const useCaseElement = (
+    <li class="form-item">
+      <label class="label" for="usecase">
+        Use Case
+      </label>
+      <div class="select u-width-full-line">
+        <select bind:value={useCase} id="usecase">
+          <option value="">Select option</option>
+          {Object.keys(Config.useCases).map((useCase) => (
+            <option key={useCase} value={useCase}>
+              {(Config.useCases as any)[useCase].name}
+            </option>
+          ))}
+        </select>
+        <span class="icon-cheveron-down" aria-hidden="true"></span>
+      </div>
+    </li>
+  );
 
   return (
     <>
@@ -209,6 +234,9 @@ export default component$(() => {
                   ></textarea>
                 </li>
 
+
+                {useCaseElement}
+
                 <li class="form-item">
                   <label class="label" for="previewimage">
                     Preview Image
@@ -276,54 +304,7 @@ export default component$(() => {
                 <h3 class="eyebrow-heading-2 u-margin-block-start-12">
                   2. Technology Information
                 </h3>
-                <li class="form-item">
-                  <label class="label" for="framework">
-                    Framework
-                  </label>
-                  <div class="select u-width-full-line">
-                    <select bind:value={framework} name="pets" id="framework">
-                      <option value="">Select option</option>
-                      {Object.keys(Config.frameworks).map((framework) => (
-                        <option key={framework} value={framework}>
-                          {(Config.frameworks as any)[framework].name}
-                        </option>
-                      ))}
-                    </select>
-                    <span class="icon-cheveron-down" aria-hidden="true"></span>
-                  </div>
-                </li>
-                <li class="form-item">
-                  <label class="label" for="uilibrary">
-                    UI Library
-                  </label>
-                  <div class="select u-width-full-line">
-                    <select bind:value={uiLibrary} name="pets" id="uilibrary">
-                      <option value="">Select option</option>
-                      {Object.keys(Config.uiLibraries).map((uiLibrary) => (
-                        <option key={uiLibrary} value={uiLibrary}>
-                          {(Config.uiLibraries as any)[uiLibrary].name}
-                        </option>
-                      ))}
-                    </select>
-                    <span class="icon-cheveron-down" aria-hidden="true"></span>
-                  </div>
-                </li>
-                <li class="form-item">
-                  <label class="label" for="usecase">
-                    Use Case
-                  </label>
-                  <div class="select u-width-full-line">
-                    <select bind:value={useCase} name="pets" id="usecase">
-                      <option value="">Select option</option>
-                      {Object.keys(Config.useCases).map((useCase) => (
-                        <option key={useCase} value={useCase}>
-                          {(Config.useCases as any)[useCase].name}
-                        </option>
-                      ))}
-                    </select>
-                    <span class="icon-cheveron-down" aria-hidden="true"></span>
-                  </div>
-                </li>
+
                 <li class="form-item">
                   <label class="label" for="usecase">
                     Appwrite Services
@@ -351,10 +332,183 @@ export default component$(() => {
                     </div>
                   </div>
                 </li>
+                {/* 
+                <li class="form-item">
+                  <label class="label" for="platform">
+                    Platform
+                  </label>
+                  <div class="select u-width-full-line">
+                    <select bind:value={platform} id="platform">
+                      <option value="">Select option</option>
+                      <option value="web">Web</option>
+                      <option value="flutter">Flutter</option>
+                      <option value="apple">Apple</option>
+                      <option value="android">Android</option>
+                    </select>
+                    <span class="icon-cheveron-down" aria-hidden="true"></span>
+                  </div>
+                </li> */}
+
+                {platform.value === "web" && (
+                  <>
+                    <li class="form-item">
+                      <label class="label" for="framework">
+                        Web Framework
+                      </label>
+                      <div class="select u-width-full-line">
+                        <select bind:value={framework} id="framework">
+                          <option value="">Select option</option>
+                          {Object.keys(Config.frameworks).map((framework) => (
+                            <option key={framework} value={framework}>
+                              {(Config.frameworks as any)[framework].name}
+                            </option>
+                          ))}
+                        </select>
+                        <span
+                          class="icon-cheveron-down"
+                          aria-hidden="true"
+                        ></span>
+                      </div>
+                    </li>
+                    <li class="form-item">
+                      <label class="label" for="uilibrary">
+                        Web UI Library
+                      </label>
+                      <div class="select u-width-full-line">
+                        <select bind:value={uiLibrary} id="uilibrary">
+                          <option value="">Select option</option>
+                          {Object.keys(Config.uiLibraries).map((uiLibrary) => (
+                            <option key={uiLibrary} value={uiLibrary}>
+                              {(Config.uiLibraries as any)[uiLibrary].name}
+                            </option>
+                          ))}
+                        </select>
+                        <span
+                          class="icon-cheveron-down"
+                          aria-hidden="true"
+                        ></span>
+                      </div>
+                    </li>
+                  </>
+                )}
+
+                {platform.value === "android" && (
+                  <>
+                    <li class="form-item">
+                      <label class="label" for="googlePlay">
+                        Google Play URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={googlePlayUrl}
+                          id="googlePlay"
+                          placeholder="https://..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+                  </>
+                )}
+
+                {platform.value === "apple" && (
+                  <>
+                    <li class="form-item">
+                      <label class="label" for="appStore">
+                        App Store URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={appStoreUrl}
+                          id="appStore"
+                          placeholder="https://..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+                  </>
+                )}
+
+                {platform.value === "flutter" && (
+                  <>
+                    <li class="form-item">
+                      <label class="label" for="googlePlay">
+                        Google Play URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={googlePlayUrl}
+                          id="googlePlay"
+                          placeholder="https://..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+                    <li class="form-item">
+                      <label class="label" for="appStore">
+                        iOS App Store URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={appStoreUrl}
+                          id="appStore"
+                          placeholder="https://..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+                    <li class="form-item">
+                      <label class="label" for="macOS">
+                        macOS App Store URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={macOsUrl}
+                          id="macOS"
+                          placeholder="https://..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+                    <li class="form-item">
+                      <label class="label" for="linux">
+                        Linux App URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={linuxUrl}
+                          id="linux"
+                          placeholder="https://..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+                    <li class="form-item">
+                      <label class="label" for="windows">
+                        Microsoft Store URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={windowsUrl}
+                          id="windows"
+                          placeholder="https://..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+                  </>
+                )}
 
                 <h3 class="eyebrow-heading-2 u-margin-block-start-12">
                   3. Social Information (optional)
                 </h3>
+
                 <li class="form-item">
                   <label class="label" for="website">
                     Website URL

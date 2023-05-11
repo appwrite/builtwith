@@ -2,20 +2,35 @@ import { component$ } from "@builder.io/qwik";
 
 export default component$(() => {
   return (
-    <footer
-      class="main-footer u-cross-center"
-    >
+    <footer class="main-footer u-cross-center">
       <div class="main-footer-start">
         <ul class="inline-links is-no-padding-first-and-last u-x-small">
           <li class="inline-links-item">
-          <a
-                class="text"
-                href="https://qwik.builder.io/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Made with 💖 using Qwik
-              </a>
+            <a
+              href="https://appwrite.io/policy/terms"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="text">Terms</span>
+            </a>
+          </li>{" "}
+          <li class="inline-links-item">
+            <a
+              href="https://appwrite.io/policy/privacy"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="text">Privacy</span>
+            </a>
+          </li>
+          <li class="inline-links-item">
+            <a
+              href="https://appwrite.io/policy/cookies"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span class="text">Cookies</span>
+            </a>
           </li>
         </ul>
       </div>{" "}

@@ -44,7 +44,11 @@ export default component$(
         const navUrl = location.url.pathname + location.url.search;
         await nav(navUrl, true);
       } catch (err: any) {
-        alert(err.message);
+        if (err.code && err.code === 401) {
+          alert("Please sign in first.");
+        } else {
+          alert(err.message);
+        }
       } finally {
         isLoading.value = false;
       }

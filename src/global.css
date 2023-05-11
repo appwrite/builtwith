@@ -87,7 +87,12 @@ aside {
   color: hsl(var(--color-neutral-70));
 }
 
-.theme-dark input[type="checkbox"]:not(:checked) {
+.theme-dark input[type="radio"]:not(:checked) {
+  background: none;
+  border-color: hsl(var(--color-neutral-150));
+}
+
+input[type="radio"]:not(:checked) {
   background: none;
   border-color: hsl(var(--color-neutral-150));
 }

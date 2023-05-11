@@ -4,13 +4,17 @@ Welcome to the documentation of this function 👋 We strongly recommend keeping
 
 ## 🤖 Documentation
 
-Simple function similar to typical "hello world" example, but instead, we return a simple JSON that tells everyone how awesome developers are.
+Function for user to use to toggle upvote (upvote/downvote).
 
 <!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
 
 _Example input:_
 
-This function expects no input
+This function expects string input of project ID that user wants to upvote.
+
+```
+645792eb7bc0bb181aa0
+```
 
 <!-- If input is expected, add example -->
 
@@ -20,7 +24,16 @@ _Example output:_
 
 ```json
 {
-  "areDevelopersAwesome": true
+  "ok": true,
+  "votes": 12,
+  "isUpvoted": true
+}
+```
+
+```json
+{
+  "ok": false,
+  "msg": "Missing project ID."
 }
 ```
 
@@ -28,7 +41,6 @@ _Example output:_
 
 List of environment variables used by this cloud function:
 
-- **APPWRITE_FUNCTION_ENDPOINT** - Endpoint of Appwrite project
 - **APPWRITE_FUNCTION_API_KEY** - Appwrite API Key
 <!-- Add your custom environment variables -->
 

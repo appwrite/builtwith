@@ -245,6 +245,9 @@ export const Config = {
     "demo-app": {
       name: "Demo App",
     },
+    "plugins": {
+      name: "plugins",
+    },
     other: {
       name: "Other",
     },

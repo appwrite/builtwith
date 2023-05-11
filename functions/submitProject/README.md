@@ -4,13 +4,30 @@ Welcome to the documentation of this function 👋 We strongly recommend keeping
 
 ## 🤖 Documentation
 
-Simple function similar to typical "hello world" example, but instead, we return a simple JSON that tells everyone how awesome developers are.
+A function to submit project by an user. Project is marked as `isPublished=false`, so it needs moderator to approve it manually before it's public.
 
 <!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
 
 _Example input:_
 
-This function expects no input
+This function expects payload in JSON format with following properties:
+
+```js
+  const {
+    useCase,
+    uiLibrary,
+    framework,
+    name,
+    tagline,
+    description,
+    services,
+    urlWebsite,
+    urlTwitter,
+    urlGitHub,
+    urlArticle,
+    fileId,
+  } = payload;
+```
 
 <!-- If input is expected, add example -->
 
@@ -20,7 +37,15 @@ _Example output:_
 
 ```json
 {
-  "areDevelopersAwesome": true
+  "ok": true,
+  "msg": "Submission successful. Please allow us some time to review your project."
+}
+```
+
+```json
+{
+  "ok": false,
+  "msg": "Please fill in all the defail. Only URLs are optional."
 }
 ```
 
@@ -28,7 +53,6 @@ _Example output:_
 
 List of environment variables used by this cloud function:
 
-- **APPWRITE_FUNCTION_ENDPOINT** - Endpoint of Appwrite project
 - **APPWRITE_FUNCTION_API_KEY** - Appwrite API Key
 <!-- Add your custom environment variables -->
 
