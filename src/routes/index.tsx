@@ -1,20 +1,12 @@
-import {
-  $,
-  component$,
-  useContext,
-  useSignal,
-  useVisibleTask$,
-} from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import ProjectFeatured from "~/components/layout/ProjectFeatured";
 import Group from "~/components/layout/Group";
 import ProjectList from "~/components/layout/ProjectList";
 import ServiceList from "~/components/layout/ServiceList";
 import TagList from "~/components/layout/TagList";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Query } from "appwrite";
-import { UpvotesContext } from "./layout";
 
 export const useHomeData = routeLoader$(async () => {
   const [
@@ -122,7 +114,10 @@ export default component$(() => {
           />
         </Group>
 
-        <Group title="Made with Svelte Kit" href={`/search?framework=svelte-kit`}>
+        <Group
+          title="Made with Svelte Kit"
+          href={`/search?framework=svelte-kit`}
+        >
           <ProjectList
             href={`/search?framework=svelte-kit`}
             projects={homeData.madeWithSvelteKit}
@@ -133,10 +128,7 @@ export default component$(() => {
           <ServiceList />
         </Group>
 
-        <Group
-          title="Rock with Demo Apps"
-          href={`/search?useCase=demo-app`}
-        >
+        <Group title="Rock with Demo Apps" href={`/search?useCase=demo-app`}>
           <ProjectList
             href={`/search?useCase=demo-app`}
             projects={homeData.rockWithDemoApps}
