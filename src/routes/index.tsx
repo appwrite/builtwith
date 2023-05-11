@@ -51,7 +51,7 @@ export const useHomeData = routeLoader$(async () => {
       Query.limit(1),
     ]),
     AppwriteService.countProjects([
-      Query.equal("useCase", "documentation"),
+      Query.equal("useCase", "saas"),
       Query.limit(1),
     ]),
     AppwriteService.countProjects([
