@@ -196,7 +196,7 @@ export default component$(() => {
           </div>
         </div>
         <div style="width:100%;" class="u-flex-vertical u-gap-24">
-          <div class="object-og u-cursor-pointer " style="width: 100%;">
+          <div class="object-og" style="width: 100%;">
             <img
               style="border-radius: var(--border-radius-medium);"
               src={AppwriteService.getProjectThumbnail(

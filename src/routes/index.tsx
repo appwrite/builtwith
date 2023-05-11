@@ -21,8 +21,8 @@ export const useHomeData = routeLoader$(async () => {
     featured,
     newAndShiny,
     trendZone,
-    madeWithReact,
-    rockWithStarterTemplates,
+    madeWithSvelteKit,
+    rockWithDemoApps,
     madeWithTailwind,
     demoAppsTotal,
     startersTotal,
@@ -39,11 +39,11 @@ export const useHomeData = routeLoader$(async () => {
     ]),
     AppwriteService.listProjects([Query.orderDesc("upvotes"), Query.limit(3)]),
     AppwriteService.listProjects([
-      Query.equal("framework", "react"),
+      Query.equal("framework", "svelte-kit"),
       Query.limit(3),
     ]),
     AppwriteService.listProjects([
-      Query.equal("useCase", "starter"),
+      Query.equal("useCase", "demo-app"),
       Query.limit(3),
     ]),
     AppwriteService.listProjects([
@@ -51,7 +51,7 @@ export const useHomeData = routeLoader$(async () => {
       Query.limit(3),
     ]),
     AppwriteService.countProjects([
-      Query.equal("useCase", "demoApp"),
+      Query.equal("useCase", "demo-app"),
       Query.limit(1),
     ]),
     AppwriteService.countProjects([
@@ -76,8 +76,8 @@ export const useHomeData = routeLoader$(async () => {
     featured: featured[0] ?? null,
     newAndShiny,
     trendZone,
-    madeWithReact,
-    rockWithStarterTemplates,
+    madeWithSvelteKit,
+    rockWithDemoApps,
     madeWithTailwind,
     demoAppsTotal,
     startersTotal,
@@ -91,50 +91,6 @@ export const useHomeData = routeLoader$(async () => {
 export default component$(() => {
   const homeDataSignal = useHomeData();
   const homeData = homeDataSignal.value;
-
-  const upvoteContext = useContext(UpvotesContext);
-
-  const seenRecently = useSignal<Project[] | null>(null);
-  const yourPicks = useSignal<Project[] | null>(null);
-
-  const fetchSeenRecently = $(async () => {
-    const seenRecentlyIds = JSON.parse(
-      localStorage.getItem("seenRecently") ?? "[]"
-    );
-    if (seenRecentlyIds.length <= 0) {
-      seenRecently.value = [];
-      return;
-    }
-
-    seenRecently.value = await AppwriteService.listProjects([
-      Query.equal("$id", seenRecentlyIds),
-      Query.limit(3),
-    ]);
-  });
-
-  const yourPickIds = useSignal<string[] | null>([]);
-
-  const fetchYourPicks = $(async () => {
-    if (yourPickIds.value === null || yourPickIds.value.length <= 0) {
-      const upvotes = upvoteContext.value;
-      yourPickIds.value = upvotes.map((upvote) => upvote.projectId);
-    }
-
-    if (yourPickIds.value && yourPickIds.value.length > 0) {
-      yourPicks.value = await AppwriteService.listProjects([
-        Query.equal("$id", yourPickIds.value.slice(0, 3)),
-        Query.limit(3),
-      ]);
-    } else {
-      yourPicks.value = [];
-    }
-  });
-
-  useVisibleTask$(async ({ track }) => {
-    track(() => homeData);
-
-    await Promise.all([fetchSeenRecently(), fetchYourPicks()]);
-  });
 
   return (
     <>
@@ -166,10 +122,10 @@ export default component$(() => {
           />
         </Group>
 
-        <Group title="Made with React" href={`/search?framework=react`}>
+        <Group title="Made with Svelte Kit" href={`/search?framework=svelte-kit`}>
           <ProjectList
-            href={`/search?framework=react`}
-            projects={homeData.madeWithReact}
+            href={`/search?framework=svelte-kit`}
+            projects={homeData.madeWithSvelteKit}
           />
         </Group>
 
@@ -178,12 +134,12 @@ export default component$(() => {
         </Group>
 
         <Group
-          title="Rock with Starter Templates"
-          href={`/search?useCase=starter`}
+          title="Rock with Demo Apps"
+          href={`/search?useCase=demo-app`}
         >
           <ProjectList
-            href={`/search?useCase=starter`}
-            projects={homeData.rockWithStarterTemplates}
+            href={`/search?useCase=demo-app`}
+            projects={homeData.rockWithDemoApps}
           />
         </Group>
 
@@ -202,18 +158,6 @@ export default component$(() => {
             docsTotal={homeData.docsTotal}
           />
         </Group>
-
-        {yourPicks.value !== null && (
-          <Group title="Your Picks">
-            <ProjectList projects={yourPicks.value} />
-          </Group>
-        )}
-
-        {seenRecently.value !== null && (
-          <Group title="Seen Recently">
-            <ProjectList projects={seenRecently.value} />
-          </Group>
-        )}
       </div>
     </>
   );
