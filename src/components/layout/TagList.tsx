@@ -31,10 +31,10 @@ export default component$(
         </li>
         <li>
           <Tag
-            id="documentation"
+            id="saas"
             total={props.docsTotal}
-            name="Documentation"
-            description="Web apps made as docs for framework or app."
+            name="SaaS"
+            description="Cool apps and side projects made for small scale."
           />
         </li>
         <li>
