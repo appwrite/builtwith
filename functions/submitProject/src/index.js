@@ -33,17 +33,10 @@ module.exports = async function (req, res) {
     fileId,
   } = payload;
 
-  if (
-    !useCase ||
-    !framework ||
-    !name ||
-    !tagline ||
-    !description ||
-    !fileId
-  ) {
+  if (!useCase || !framework || !name || !tagline || !description || !fileId) {
     return res.json({
       ok: false,
-      msg: "Please fill in all the defail. Only URLs are optional.",
+      msg: "Please fill in all the details. Only URLs are optional.",
     });
   }
 
