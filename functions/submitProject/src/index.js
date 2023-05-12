@@ -1,4 +1,5 @@
 const sdk = require("node-appwrite");
+const nodemailer = require("nodemailer");
 
 module.exports = async function (req, res) {
   const client = new sdk.Client();
@@ -106,4 +107,49 @@ module.exports = async function (req, res) {
     ok: true,
     msg: "Submission successful. Please allow us some time to review your project.",
   });
+
+  console.log("Sending email to approvers");
+
+  const approverEmails = req.variables["APPROVER_EMAILS"].split(",");
+  if (!approverEmails) {
+    throw new Error("No approver emails provided.");
+  }
+
+  const SMTP_URL = req.variables["SMTP_URL"];
+  const SMTP_PORT = req.variables["SMTP_PORT"];
+  const SMTP_USERNAME = req.variables["SMTP_USERNAME"];
+  const SMTP_PASSWORD = req.variables["SMTP_PASSWORD"];
+  if (!SMTP_URL || !SMTP_PORT || !SMTP_USERNAME || !SMTP_PASSWORD) {
+    throw new Error("Missing SMTP credentials.");
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: SMTP_URL,
+    port: SMTP_PORT,
+    auth: {
+      user: SMTP_USERNAME,
+      pass: SMTP_PASSWORD,
+    },
+    secure: false,
+    tls: {
+      ciphers: "SSLv3",
+    },
+  });
+
+  const link = `https://cloud.appwrite.io/console/project-builtWithAppwrite/databases/database-main/collection-projects/document-${project.$id}`;
+
+  try {
+    await transporter.sendMail({
+      from: SMTP_USERNAME,
+      to: approverEmails,
+      subject: "Project Submission - builtwith.appwrite.io ",
+      text: [
+        `Project '${project.name}' has been submitted.`,
+        `Please review the project and approve or reject it: ${link}.`,
+      ].join("\n"),
+    });
+    console.log("Done");
+  } catch (error) {
+    throw new Error(`Failed to send email: ${error}`);
+  }
 };
