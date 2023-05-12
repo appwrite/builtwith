@@ -25,7 +25,7 @@ export default component$(
           <Tag
             id="starter"
             total={props.startersTotal}
-            name="Stater"
+            name="Starter"
             description="Templates ready to be used when making new project."
           />
         </li>
