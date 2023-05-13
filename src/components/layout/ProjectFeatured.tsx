@@ -1,20 +1,12 @@
 import { component$ } from "@builder.io/qwik";
 import Upvote from "../blocks/Upvote";
 import { AppwriteService, type Project } from "~/AppwriteService";
-import { Config } from "~/Config";
 import { useNavigate } from "@builder.io/qwik-city";
-import TagList from "./TagList";
 import ProjectTags from "./ProjectTags";
 
 export default component$((props: { project: Project }) => {
   const nav = useNavigate();
   const { project } = props;
-
-  const platform = (Config.platforms as any)[project.platform] ?? null;
-  const useCase = (Config.useCases as any)[project.useCase] ?? null;
-  const framework = (Config.frameworks as any)[project.framework ?? ""] ?? null;
-  const uiLibrary =
-    (Config.uiLibraries as any)[project.uiLibrary ?? ""] ?? null;
 
   return (
     <article class="card u-grid u-cross-center u-min-width-100-percent u-flex-shrink-0">
