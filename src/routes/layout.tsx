@@ -195,7 +195,7 @@ export default component$(() => {
 
                                 {getOption(filter.options, id).icon && (
                                   <div
-                                    class="u-flex u-cross-center u-main-center"
+                                    class="u-flex u-cross-center u-main-center c-menu-icon"
                                     dangerouslySetInnerHTML={
                                       getOption(filter.options, id).icon
                                     }
