@@ -92,7 +92,6 @@ module.exports = async function (req, res) {
       imageId: fileId,
       isPublished: false,
       isFeatured: false,
-      randomness: 99,
       hasAuthentication: services.includes("authentication"),
       hasStorage: services.includes("storage"),
       hasRealtime: services.includes("realtime"),

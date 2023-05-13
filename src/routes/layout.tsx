@@ -174,7 +174,12 @@ export default component$(() => {
                               <label
                                 for={id}
                                 key={id}
-                                class="u-flex u-cross-center u-gap-8 c-filter-card u-cursor-pointer"
+                                class={`u-flex u-cross-center u-gap-8 c-filter-card u-cursor-pointer ${
+                                  currentFilter.value.key === filter.id &&
+                                  currentFilter.value.value === id
+                                    ? "c-menu-selected"
+                                    : ""
+                                }`}
                                 style="border-radius: var(--border-radius-xsmall); padding: 0.5rem;"
                               >
                                 <input
@@ -185,7 +190,7 @@ export default component$(() => {
                                   onChange$={() => checkFilter(filter.id, id)}
                                   id={id}
                                   type="radio"
-                                  style="width: 16px; height: 16px;"
+                                  style="width: 16px; height: 16px; display: none;"
                                 />
 
                                 {getOption(filter.options, id).icon && (
@@ -195,6 +200,16 @@ export default component$(() => {
                                       getOption(filter.options, id).icon
                                     }
                                   ></div>
+                                )}
+
+                                {getOption(filter.options, id).iconClass && (
+                                  <span
+                                    class={`c-menu-icon icon-${
+                                      getOption(filter.options, id).iconClass
+                                    }`}
+                                    style="font-size: 1rem;"
+                                    aria-hidden="true"
+                                  ></span>
                                 )}
                                 <p>{getOption(filter.options, id).name}</p>
                               </label>

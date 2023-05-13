@@ -6,7 +6,7 @@ export default component$((props: { title: string; href?: string }) => {
   return (
     <section>
       <div class="u-flex u-cross-center u-main-space-between">
-        <h1 class="eyebrow-heading-2">{props.title}</h1>
+        <h1 class="eyebrow-heading-1">{props.title}</h1>
 
         {props.href && (
           <button

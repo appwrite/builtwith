@@ -204,3 +204,21 @@ input[type="checkbox"]:not(:checked) {
 .theme-dark .prose code {
   color: hsl(var(--color-neutral-25));
 }
+
+.theme-dark .c-menu-selected {
+  background-color: hsl(var(--color-neutral-200));
+  color: hsl(var(--color-neutral-50));
+}
+
+.c-menu-selected {
+  background-color: hsl(var(--color-neutral-30));
+  color: hsl(var(--color-neutral-200));
+}
+
+.theme-dark .c-menu-icon {
+  color: hsl(var(--color-neutral-100));
+}
+
+.c-menu-icon {
+  color: hsl(var(--color-neutral-50));
+}

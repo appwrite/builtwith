@@ -28,7 +28,6 @@ export type Project = {
   urlAppStore?: string;
   urlGooglePlay?: string;
   imageId: string;
-  randomness: number;
   hasAuthentication: boolean;
   hasStorage: boolean;
   hasRealtime: boolean;

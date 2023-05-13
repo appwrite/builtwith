@@ -56,8 +56,6 @@ const generateQueries = (url: URL) => {
 
   if (sort === "latest") {
     queries.push(Query.orderDesc("$createdAt"));
-  } else if (sort === "randomness") {
-    queries.push(Query.orderAsc("randomness"));
   } else if (sort === "upvotes") {
     queries.push(Query.orderDesc("upvotes"));
   }

@@ -569,21 +569,6 @@
     ],
     "functions": [
         {
-            "$id": "rotateRandomness",
-            "name": "rotateRandomness",
-            "runtime": "node-16.0",
-            "path": "functions/rotateRandomness",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [],
-            "events": [],
-            "schedule": "0 9 * * *",
-            "timeout": 60
-        },
-        {
             "$id": "upvoteProject",
             "name": "upvoteProject",
             "runtime": "node-16.0",

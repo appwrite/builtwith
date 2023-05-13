@@ -2,15 +2,19 @@ export const Config = {
   platforms: {
     web: {
       name: "Web",
+      iconClass: "globe"
     },
     flutter: {
       name: "Flutter",
+      iconClass: "flutter"
     },
     apple: {
       name: "Apple",
+      iconClass: "apple"
     },
     android: {
       name: "Android",
+      iconClass: "android"
     },
   },
   services: {

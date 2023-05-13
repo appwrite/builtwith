@@ -13,14 +13,11 @@ export const useHomeData = routeLoader$(async () => {
     featured,
     newAndShiny,
     trendZone,
-    madeWithSvelteKit,
-    rockWithDemoApps,
     madeWithTailwind,
     demoAppsTotal,
     startersTotal,
     docsTotal,
     othersTotal,
-    dailySurprise,
   ] = await Promise.all([
     AppwriteService.listProjects([
       Query.equal("isFeatured", true),
@@ -30,14 +27,6 @@ export const useHomeData = routeLoader$(async () => {
       Query.limit(3), // order applied automatically
     ]),
     AppwriteService.listProjects([Query.orderDesc("upvotes"), Query.limit(3)]),
-    AppwriteService.listProjects([
-      Query.equal("framework", "svelte-kit"),
-      Query.limit(3),
-    ]),
-    AppwriteService.listProjects([
-      Query.equal("useCase", "demo-app"),
-      Query.limit(3),
-    ]),
     AppwriteService.listProjects([
       Query.equal("uiLibrary", "tailwind"),
       Query.limit(3),
@@ -58,24 +47,17 @@ export const useHomeData = routeLoader$(async () => {
       Query.equal("useCase", "other"),
       Query.limit(1),
     ]),
-    AppwriteService.listProjects([
-      Query.orderAsc("randomness"),
-      Query.limit(3),
-    ]),
   ]);
 
   return {
     featured: featured[0] ?? null,
     newAndShiny,
     trendZone,
-    madeWithSvelteKit,
-    rockWithDemoApps,
     madeWithTailwind,
     demoAppsTotal,
     startersTotal,
     docsTotal,
     othersTotal,
-    dailySurprise,
     trackSync: Date.now(),
   };
 });
@@ -93,46 +75,22 @@ export default component$(() => {
           </Group>
         )}
 
-        <Group title="New and Shiny" href={`/search?sort=latest`}>
+        <Group title="New" href={`/search?sort=latest`}>
           <ProjectList
             href={`/search?sort=latest`}
             projects={homeData.newAndShiny}
           />
         </Group>
 
-        <Group title="Trend Zone" href={`/search?sort=upvotes`}>
+        <Group title="Trending" href={`/search?sort=upvotes`}>
           <ProjectList
             href={`/search?sort=upvotes`}
             projects={homeData.trendZone}
           />
         </Group>
 
-        <Group title="Daily Surprise" href={`/search?sort=randomness`}>
-          <ProjectList
-            href={`/search?sort=randomness`}
-            projects={homeData.dailySurprise}
-          />
-        </Group>
-
-        <Group
-          title="Made with Svelte Kit"
-          href={`/search?framework=svelte-kit`}
-        >
-          <ProjectList
-            href={`/search?framework=svelte-kit`}
-            projects={homeData.madeWithSvelteKit}
-          />
-        </Group>
-
-        <Group title="Based on Services">
+        <Group title="Services">
           <ServiceList />
-        </Group>
-
-        <Group title="Rock with Demo Apps" href={`/search?useCase=demo-app`}>
-          <ProjectList
-            href={`/search?useCase=demo-app`}
-            projects={homeData.rockWithDemoApps}
-          />
         </Group>
 
         <Group title="Made with Tailwind" href={`/search?uiLibrary=tailwind`}>
