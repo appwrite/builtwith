@@ -10,17 +10,23 @@ import {
 
 // Manually kept in sync with Appwrite collection attributes
 export type Project = {
+  platform: string;
   name: string;
   tagline: string;
   description: string;
   upvotes: number;
-  framework: string;
-  uiLibrary: string;
+  framework?: string;
+  uiLibrary?: string;
   useCase: string;
   urlWebsite?: string;
   urlArticle?: string;
   urlTwitter?: string;
   urlGitHub?: string;
+  urlWindows?: string;
+  urlMacOs?: string;
+  urlLinux?: string;
+  urlAppStore?: string;
+  urlGooglePlay?: string;
   imageId: string;
   randomness: number;
   hasAuthentication: boolean;

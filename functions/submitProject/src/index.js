@@ -19,6 +19,7 @@ module.exports = async function (req, res) {
   console.log(payload);
 
   const {
+    platform,
     useCase,
     uiLibrary,
     framework,
@@ -30,21 +31,28 @@ module.exports = async function (req, res) {
     urlTwitter,
     urlGitHub,
     urlArticle,
+    urlGooglePlay,
+    urlAppStore,
+    urlLinux,
+    urlMacOs,
+    urlWindows,
     fileId,
   } = payload;
 
-  if (
-    !useCase ||
-    !framework ||
-    !name ||
-    !tagline ||
-    !description ||
-    !fileId
-  ) {
+  if (!platform || !name || !useCase || !tagline || !description || !fileId) {
     return res.json({
       ok: false,
       msg: "Please fill in all the defail. Only URLs are optional.",
     });
+  }
+
+  if (platform === "web") {
+    if (!framework || !uiLibrary) {
+      return res.json({
+        ok: false,
+        msg: "For web apps, framework and UI libraries are required.",
+      });
+    }
   }
 
   if (services.length <= 0) {
@@ -64,6 +72,7 @@ module.exports = async function (req, res) {
     "projects",
     sdk.ID.unique(),
     {
+      platform,
       name,
       tagline,
       description,
@@ -75,14 +84,18 @@ module.exports = async function (req, res) {
       urlTwitter: urlTwitter ? urlTwitter : undefined,
       urlGitHub: urlGitHub ? urlGitHub : undefined,
       urlArticle: urlArticle ? urlArticle : undefined,
+      urlGooglePlay: urlGooglePlay ? urlGooglePlay : undefined,
+      urlAppStore: urlAppStore ? urlAppStore : undefined,
+      urlLinux: urlLinux ? urlLinux : undefined,
+      urlMacOs: urlMacOs ? urlMacOs : undefined,
+      urlWindows: urlWindows ? urlWindows : undefined,
       imageId: fileId,
       isPublished: false,
       isFeatured: false,
       randomness: 99,
-
       hasAuthentication: services.includes("authentication"),
       hasStorage: services.includes("storage"),
-      hasRealtime: services.includes("relatime"),
+      hasRealtime: services.includes("realtime"),
       hasFunctions: services.includes("functions"),
       hasDatabases: services.includes("databases"),
     }

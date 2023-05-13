@@ -26,7 +26,7 @@ export default component$(() => {
   const tagline = useSignal("");
   const description = useSignal("");
 
-  const platform = useSignal("web");
+  const platform = useSignal("");
   const framework = useSignal("");
   const useCase = useSignal("");
   const uiLibrary = useSignal("");
@@ -58,11 +58,10 @@ export default component$(() => {
       if (
         !file.value ||
         !useCase.value ||
-        !uiLibrary.value ||
-        !framework.value ||
         !name.value ||
         !tagline.value ||
-        !description.value
+        !description.value ||
+        !platform.value
       ) {
         throw Error("Please fill in all the defail. Only URLs are optional.");
       }
@@ -92,6 +91,7 @@ export default component$(() => {
       const { $id: fileId } = await AppwriteService.uploadThumbnail(file.value);
 
       const data = {
+        platform: platform.value,
         name: name.value,
         tagline: tagline.value,
         description: description.value,
@@ -102,6 +102,11 @@ export default component$(() => {
         urlTwitter: twitterUrl.value,
         urlGitHub: githubUrl.value,
         urlArticle: articleUrl.value,
+        urlGooglePlay: googlePlayUrl.value,
+        urlAppStore: appStoreUrl.value,
+        urlLinux: linuxUrl.value,
+        urlMacOs: macOsUrl.value,
+        urlWindows: windowsUrl.value,
         services,
         fileId,
       };
@@ -120,6 +125,11 @@ export default component$(() => {
       twitterUrl.value = "";
       githubUrl.value = "";
       articleUrl.value = "";
+      googlePlayUrl.value = "";
+      appStoreUrl.value = "";
+      linuxUrl.value = "";
+      macOsUrl.value = "";
+      windowsUrl.value = "";
       servicesDb.value = false;
       servicesAuth.value = false;
       servicesRealtime.value = false;
@@ -135,7 +145,7 @@ export default component$(() => {
 
   const useCaseElement = (
     <li class="form-item">
-      <label class="label" for="usecase">
+      <label class="label is-required" for="usecase">
         Use Case
       </label>
       <div class="select u-width-full-line">
@@ -188,7 +198,7 @@ export default component$(() => {
               <ul class="form-list">
                 <h3 class="eyebrow-heading-2">1. Project Information</h3>
                 <li class="form-item">
-                  <label class="label" for="name">
+                  <label class="label is-required" for="name">
                     Name
                   </label>
                   <div class="input-text-wrapper">
@@ -202,7 +212,7 @@ export default component$(() => {
                   </div>
                 </li>
                 <li class="form-item">
-                  <label class="label" for="tagline">
+                  <label class="label is-required" for="tagline">
                     Tagline
                   </label>
                   <div class="input-text-wrapper">
@@ -216,29 +226,28 @@ export default component$(() => {
                   </div>
                 </li>
                 <li class="form-item">
-                  <label
-                    class="label u-flex u-main-space-between u-cross-center"
-                    for="description"
-                  >
-                    <p>Description</p>
+                  <div class="u-flex u-main-space-between u-cross-center">
+                    <label class="u-flex label is-required" for="description">
+                      <p>Description</p>
+                    </label>
                     <div class="tag">
                       <span class="icon-info" aria-hidden="true"></span>
                       <span class="text">Supports Markdown</span>
                     </div>
-                  </label>
+                  </div>
+
                   <textarea
                     bind:value={description}
-                    class="input-text"
+                    class="input-text u-margin-block-start-4"
                     id="description"
                     placeholder="Detailed information about project"
                   ></textarea>
                 </li>
 
-
                 {useCaseElement}
 
                 <li class="form-item">
-                  <label class="label" for="previewimage">
+                  <label class="label is-required" for="previewimage">
                     Preview Image
                   </label>
 
@@ -306,7 +315,7 @@ export default component$(() => {
                 </h3>
 
                 <li class="form-item">
-                  <label class="label" for="usecase">
+                  <label class="label is-required" for="usecase">
                     Appwrite Services
                   </label>
                   <div class="u-flex-vertical u-gap-2">
@@ -332,9 +341,9 @@ export default component$(() => {
                     </div>
                   </div>
                 </li>
-                {/* 
+
                 <li class="form-item">
-                  <label class="label" for="platform">
+                  <label class="label is-required" for="platform">
                     Platform
                   </label>
                   <div class="select u-width-full-line">
@@ -347,12 +356,29 @@ export default component$(() => {
                     </select>
                     <span class="icon-cheveron-down" aria-hidden="true"></span>
                   </div>
-                </li> */}
+                </li>
+
+                {platform.value === "" && (
+                  <li class="form-item">
+                    <section class="alert is-info">
+                      <div class="alert-grid">
+                        <span class="icon-info" aria-hidden="true"></span>
+                        <div class="alert-content">
+                          <h6 class="alert-title">Plese select platform.</h6>
+                          <p class="alert-message">
+                            When you select platform, more platform-specific
+                            options will be displayed.
+                          </p>
+                        </div>
+                      </div>
+                    </section>
+                  </li>
+                )}
 
                 {platform.value === "web" && (
                   <>
                     <li class="form-item">
-                      <label class="label" for="framework">
+                      <label class="label is-required" for="framework">
                         Web Framework
                       </label>
                       <div class="select u-width-full-line">
@@ -371,7 +397,7 @@ export default component$(() => {
                       </div>
                     </li>
                     <li class="form-item">
-                      <label class="label" for="uilibrary">
+                      <label class="label is-required" for="uilibrary">
                         Web UI Library
                       </label>
                       <div class="select u-width-full-line">
@@ -402,7 +428,7 @@ export default component$(() => {
                         <input
                           bind:value={googlePlayUrl}
                           id="googlePlay"
-                          placeholder="https://..."
+                          placeholder="https://play.google.com/..."
                           type="text"
                           class="input-text"
                         />
@@ -421,7 +447,7 @@ export default component$(() => {
                         <input
                           bind:value={appStoreUrl}
                           id="appStore"
-                          placeholder="https://..."
+                          placeholder="https://apps.apple.com/..."
                           type="text"
                           class="input-text"
                         />
@@ -440,7 +466,7 @@ export default component$(() => {
                         <input
                           bind:value={googlePlayUrl}
                           id="googlePlay"
-                          placeholder="https://..."
+                          placeholder="https://play.google.com/..."
                           type="text"
                           class="input-text"
                         />
@@ -454,7 +480,7 @@ export default component$(() => {
                         <input
                           bind:value={appStoreUrl}
                           id="appStore"
-                          placeholder="https://..."
+                          placeholder="https://apps.apple.com/..."
                           type="text"
                           class="input-text"
                         />
@@ -468,12 +494,27 @@ export default component$(() => {
                         <input
                           bind:value={macOsUrl}
                           id="macOS"
-                          placeholder="https://..."
+                          placeholder="https://apps.apple.com/..."
                           type="text"
                           class="input-text"
                         />
                       </div>
                     </li>
+                    <li class="form-item">
+                      <label class="label" for="windows">
+                        Microsoft Store URL
+                      </label>
+                      <div class="input-text-wrapper">
+                        <input
+                          bind:value={windowsUrl}
+                          id="windows"
+                          placeholder="https://apps.microsoft.com/..."
+                          type="text"
+                          class="input-text"
+                        />
+                      </div>
+                    </li>
+
                     <li class="form-item">
                       <label class="label" for="linux">
                         Linux App URL
@@ -488,25 +529,11 @@ export default component$(() => {
                         />
                       </div>
                     </li>
-                    <li class="form-item">
-                      <label class="label" for="windows">
-                        Microsoft Store URL
-                      </label>
-                      <div class="input-text-wrapper">
-                        <input
-                          bind:value={windowsUrl}
-                          id="windows"
-                          placeholder="https://..."
-                          type="text"
-                          class="input-text"
-                        />
-                      </div>
-                    </li>
                   </>
                 )}
 
                 <h3 class="eyebrow-heading-2 u-margin-block-start-12">
-                  3. Social Information (optional)
+                  3. Social Information
                 </h3>
 
                 <li class="form-item">

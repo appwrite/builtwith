@@ -111,7 +111,9 @@ export default component$((props: { project: Project | null }) => {
               class="u-cursor-pointer"
               onClick$={async () => await nav(`/projects/${project.$id}`)}
             >
-              <p class="eyebrow-heading-2 c-trim">{project.name}</p>
+              <p class="heading-level-4 c-trim" style="font-size: 1.3rem;">
+                {project.name}
+              </p>
               <p class="u-margin-block-start-4 c-trim-2">{project.tagline}</p>
             </div>
 

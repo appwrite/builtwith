@@ -12,9 +12,14 @@ const generateQueries = (url: URL) => {
   const uiLibrary = url.searchParams.get("uiLibrary");
   const useCase = url.searchParams.get("useCase");
   const service = url.searchParams.get("service");
+  const platform = url.searchParams.get("platform");
 
   if (framework) {
     queries.push(Query.equal("framework", framework.split(",")));
+  }
+
+  if (platform) {
+    queries.push(Query.equal("platform", platform.split(",")));
   }
 
   if (uiLibrary) {

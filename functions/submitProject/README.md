@@ -13,20 +13,20 @@ _Example input:_
 This function expects payload in JSON format with following properties:
 
 ```js
-  const {
-    useCase,
-    uiLibrary,
-    framework,
-    name,
-    tagline,
-    description,
-    services,
-    urlWebsite,
-    urlTwitter,
-    urlGitHub,
-    urlArticle,
-    fileId,
-  } = payload;
+const {
+  useCase,
+  uiLibrary,
+  framework,
+  name,
+  tagline,
+  description,
+  services,
+  urlWebsite,
+  urlTwitter,
+  urlGitHub,
+  urlArticle,
+  fileId,
+} = payload;
 ```
 
 <!-- If input is expected, add example -->

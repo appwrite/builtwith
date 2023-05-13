@@ -2,7 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import { AppwriteService } from "~/AppwriteService";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import * as marked from "marked";
-import { Config } from "~/Config";
+import ProjectTags from "~/components/layout/ProjectTags";
 
 export const useProjectData = routeLoader$(async ({ params }) => {
   return {
@@ -15,29 +15,6 @@ export default component$(() => {
   const projectData = useProjectData();
 
   const html = marked.marked.parse(projectData.value.project.description);
-
-  const services = {
-    databases: {
-      used: projectData.value.project.hasDatabases,
-      name: "Databases",
-    },
-    authentication: {
-      used: projectData.value.project.hasAuthentication,
-      name: "Authentication",
-    },
-    storage: {
-      used: projectData.value.project.hasStorage,
-      name: "Storage",
-    },
-    functions: {
-      used: projectData.value.project.hasFunctions,
-      name: "Functions",
-    },
-    realtime: {
-      used: projectData.value.project.hasRealtime,
-      name: "Realtime",
-    },
-  };
 
   return (
     <>
@@ -60,139 +37,130 @@ export default component$(() => {
             {projectData.value.project.tagline}
           </p>
 
-          <div class="u-flex u-cross-center u-gap-8 u-flex-vertical-mobile">
-            <div class="u-flex u-cross-center u-gap-8">
-              {projectData.value.project.urlGitHub && (
-                <div class="tooltip">
+          {(projectData.value.project.urlGooglePlay ||
+            projectData.value.project.urlAppStore ||
+            projectData.value.project.urlMacOs ||
+            projectData.value.project.urlWindows ||
+            projectData.value.project.urlLinux) && (
+            <div>
+              <h4 class="eyebrow-heading-3">Download the Application</h4>
+
+              <div class="u-flex u-flex-wrap u-cross-center u-gap-8 u-margin-block-start-12">
+                {projectData.value.project.urlGooglePlay && (
+                  <a
+                    href={projectData.value.project.urlGooglePlay}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-google" aria-hidden="true"></span>
+                    <p>Google Play</p>
+                  </a>
+                )}
+
+                {projectData.value.project.urlWindows && (
+                  <a
+                    href={projectData.value.project.urlWindows}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-microsoft" aria-hidden="true"></span>
+                    <p>Microsoft Store</p>
+                  </a>
+                )}
+
+                {projectData.value.project.urlLinux && (
+                  <a
+                    href={projectData.value.project.urlLinux}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-linux" aria-hidden="true"></span>
+                    <p>Linux Store</p>
+                  </a>
+                )}
+
+                {projectData.value.project.urlAppStore && (
+                  <a
+                    href={projectData.value.project.urlAppStore}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-apple" aria-hidden="true"></span>
+                    <p>App Store (iOS)</p>
+                  </a>
+                )}
+
+                {projectData.value.project.urlMacOs && (
+                  <a
+                    href={projectData.value.project.urlMacOs}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-apple" aria-hidden="true"></span>
+                    <p>App Store (macOS)</p>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          {(projectData.value.project.urlWebsite ||
+            projectData.value.project.urlGitHub ||
+            projectData.value.project.urlTwitter ||
+            projectData.value.project.urlArticle) && (
+            <div>
+              <h4 class="eyebrow-heading-3">Stay in Touch</h4>
+
+              <div class="u-flex u-flex-wrap u-cross-center u-gap-8 u-margin-block-start-12">
+                {projectData.value.project.urlWebsite && (
+                  <a
+                    href={projectData.value.project.urlWebsite}
+                    target="_blank"
+                    class="button is-secondary"
+                  >
+                    <span class="icon-external-link" aria-hidden="true"></span>
+                    <p>Visit Website</p>
+                  </a>
+                )}
+
+                {projectData.value.project.urlGitHub && (
                   <a
                     href={projectData.value.project.urlGitHub}
                     target="_blank"
                     class="button is-secondary"
                   >
                     <span class="icon-github" aria-hidden="true"></span>
+                    <p>View on GitHub</p>
                   </a>
-
-                  <span class="tooltip-popup is-bottom" role="tooltip">
-                    View on GitHub
-                  </span>
-                </div>
-              )}
-              {projectData.value.project.urlTwitter && (
-                <div class="tooltip">
+                )}
+                {projectData.value.project.urlTwitter && (
                   <a
                     href={projectData.value.project.urlTwitter}
                     target="_blank"
                     class="button is-secondary"
                   >
                     <span class="icon-twitter" aria-hidden="true"></span>
+                    <p>Follow on Twitter</p>
                   </a>
-                  <span class="tooltip-popup is-bottom" role="tooltip">
-                    Follow on Twitter
-                  </span>
-                </div>
-              )}
+                )}
 
-              {projectData.value.project.urlArticle && (
-                <div class="tooltip">
+                {projectData.value.project.urlArticle && (
                   <a
                     href={projectData.value.project.urlArticle}
                     target="_blank"
                     class="button is-secondary"
                   >
                     <span class="icon-book-open" aria-hidden="true"></span>
+                    <p>Read Article</p>
                   </a>
-                  <span class="tooltip-popup is-bottom" role="tooltip">
-                    Read Article
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {projectData.value.project.urlWebsite && (
-              <div style="width: 100%;">
-                <a
-                  href={projectData.value.project.urlWebsite}
-                  target="_blank"
-                  style="width: 100%;"
-                  class="button u-flex u-main-center"
-                >
-                  <span class="icon-link" aria-hidden="true"></span>
-                  <span class="text">Visit Website</span>
-                </a>
-              </div>
-            )}
-          </div>
-
-          <div class="u-flex u-gap-8 u-flex-wrap u-main-center u-cross-center">
-            <button
-              onClick$={async () =>
-                await nav(
-                  `/search?framework=${projectData.value.project.framework}`
-                )
-              }
-            >
-              <div class="tag is-secondary">
-                <span class="icon-check-circle" aria-hidden="true"></span>
-                <span class="text">
-                  {
-                    (Config.frameworks as any)[
-                      projectData.value.project.framework
-                    ].name
-                  }{" "}
-                </span>
-              </div>
-            </button>
-
-            <button
-              onClick$={async () =>
-                await nav(
-                  `/search?uiLibrary=${projectData.value.project.uiLibrary}`
-                )
-              }
-            >
-              <div class="tag is-secondary">
-                <span class="icon-check-circle" aria-hidden="true"></span>
-                <span class="text">
-                  {
-                    (Config.uiLibraries as any)[
-                      projectData.value.project.uiLibrary
-                    ].name
-                  }{" "}
-                </span>
-              </div>
-            </button>
-
-            <button
-              onClick$={async () =>
-                await nav(
-                  `/search?useCase=${projectData.value.project.useCase}`
-                )
-              }
-            >
-              <div class="tag is-secondary">
-                <span class="icon-check-circle" aria-hidden="true"></span>
-                <span class="text">
-                  {
-                    (Config.useCases as any)[projectData.value.project.useCase]
-                      .name
-                  }
-                </span>
-              </div>
-            </button>
-
-            {Object.keys(services).map((service) => (
-              <button
-                key={service}
-                onClick$={async () => await nav(`/search?service=${service}`)}
-              >
-                {(services as any)[service].used && (
-                  <div class="tag is-success">
-                    <span class="icon-check-circle" aria-hidden="true"></span>
-                    <span class="text">{(services as any)[service].name}</span>
-                  </div>
                 )}
-              </button>
-            ))}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <h4 class="eyebrow-heading-3">Tags</h4>
+            <ProjectTags project={projectData.value.project} />
           </div>
         </div>
         <div style="width:100%;" class="u-flex-vertical u-gap-24">

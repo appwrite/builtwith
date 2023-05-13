@@ -97,6 +97,16 @@ input[type="radio"]:not(:checked) {
   border-color: hsl(var(--color-neutral-150));
 }
 
+.theme-dark input[type="checkbox"]:not(:checked) {
+  background: none;
+  border-color: hsl(var(--color-neutral-150));
+}
+
+input[type="checkbox"]:not(:checked) {
+  background: none;
+  border-color: hsl(var(--color-neutral-150));
+}
+
 .theme-dark .c-service {
   color: hsl(var(--color-neutral-150));
 }

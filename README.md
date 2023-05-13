@@ -37,7 +37,7 @@ Give moderators access to Appwrite Console. When project is good for publication
 
 ## 🚀 Deploy
 
-1. Deploy frontend on root domain such as `myapp.com` 
+1. Deploy frontend on root domain such as `myapp.com`
 2. Add custom subdomain to Appwrite Project, such as `appwrite.myapp.com`
 3. Add frontend domain as a platform in Appwrite project
 

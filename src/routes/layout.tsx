@@ -59,12 +59,17 @@ export default component$(() => {
         break;
       }
       if (openedFilter.value === null) {
-        openedFilter.value = "service";
+        openedFilter.value = "platform";
       }
     }
   });
 
   const filters = [
+    {
+      id: "platform",
+      name: "Platform",
+      options: Config.platforms,
+    },
     {
       id: "service",
       name: "Service",
