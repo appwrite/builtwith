@@ -40,7 +40,7 @@ module.exports = async function (req, res) {
     fileId,
   } = payload;
 
-  if (!platform || !framework || !name || !tagline || !description || !fileId) {
+  if (!useCase || !framework || !name || !tagline || !description || !fileId) {
     return res.json({
       ok: false,
       msg: "Please fill in all the details. Only URLs are optional.",
