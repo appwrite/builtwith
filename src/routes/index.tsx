@@ -100,7 +100,7 @@ export default component$(() => {
           />
         </Group>
 
-        <Group title="Common Use Cases">
+        <Group title="Use Cases">
           <TagList
             startersTotal={homeData.startersTotal}
             demoAppsTotal={homeData.demoAppsTotal}
