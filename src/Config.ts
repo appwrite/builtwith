@@ -2,7 +2,7 @@ export const Config = {
   platforms: {
     web: {
       name: "Web",
-      iconClass: "globe"
+      iconClass: "code"
     },
     flutter: {
       name: "Flutter",
