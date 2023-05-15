@@ -34,13 +34,14 @@ export default component$(() => {
           </button>
 
           <div class="u-flex u-gap-24">
-            <div class="u-flex-vertical u-gap-12 u-flex-shrink-1 u-margin-block-start-12">
+            <div class="u-flex-vertical u-gap-8 u-margin-block-start-12">
+              <h5 class="eyebrow-heading-3">Upvote</h5>
               <Upvote
                 projectId={projectData.value.project.$id}
                 votes={projectData.value.project.upvotes}
               />
             </div>
-            <div class="u-flex-vertical u-gap-24" style="flex: 1;">
+            <div class="u-flex-vertical u-gap-24">
               <h2 class="heading-level-2">{projectData.value.project.name}</h2>
               <p style="font-size: 1.2rem; margin-top: -1rem;">
                 {projectData.value.project.tagline}
