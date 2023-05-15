@@ -40,7 +40,7 @@ module.exports = async function (req, res) {
     fileId,
   } = payload;
 
-  if (!useCase || !framework || !name || !tagline || !description || !fileId) {
+  if (!platform || !name || !useCase || !tagline || !description || !fileId) {
     return res.json({
       ok: false,
       msg: "Please fill in all the details. Only URLs are optional.",
@@ -78,8 +78,8 @@ module.exports = async function (req, res) {
       tagline,
       description,
       upvotes: 0,
-      framework: framework ? framework : "",
-      uiLibrary: uiLibrary ? uiLibrary : "",
+      framework: framework ? framework : undefined,
+      uiLibrary: uiLibrary ? uiLibrary : undefined,
       useCase,
       urlWebsite: urlWebsite ? urlWebsite : undefined,
       urlTwitter: urlTwitter ? urlTwitter : undefined,

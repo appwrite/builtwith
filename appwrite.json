@@ -61,7 +61,7 @@
                     "key": "framework",
                     "type": "string",
                     "status": "available",
-                    "required": true,
+                    "required": false,
                     "array": false,
                     "size": 255,
                     "default": null
@@ -70,7 +70,7 @@
                     "key": "uiLibrary",
                     "type": "string",
                     "status": "available",
-                    "required": true,
+                    "required": false,
                     "array": false,
                     "size": 255,
                     "default": null
@@ -143,16 +143,6 @@
                     "status": "available",
                     "required": true,
                     "array": false,
-                    "default": null
-                },
-                {
-                    "key": "randomness",
-                    "type": "double",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "min": -1.7976931348623157e+308,
-                    "max": 1.7976931348623157e+308,
                     "default": null
                 },
                 {
@@ -341,19 +331,6 @@
                     ]
                 },
                 {
-                    "key": "index_8",
-                    "type": "key",
-                    "status": "available",
-                    "attributes": [
-                        "randomness",
-                        "$createdAt"
-                    ],
-                    "orders": [
-                        "ASC",
-                        "ASC"
-                    ]
-                },
-                {
                     "key": "index_9",
                     "type": "key",
                     "status": "available",
@@ -428,49 +405,6 @@
                     ],
                     "orders": [
                         "ASC",
-                        "ASC"
-                    ]
-                }
-            ]
-        },
-        {
-            "$id": "projectServices",
-            "$permissions": [
-                "read(\"any\")"
-            ],
-            "databaseId": "main",
-            "name": "Project - Services",
-            "enabled": true,
-            "documentSecurity": false,
-            "attributes": [
-                {
-                    "key": "projectId",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                },
-                {
-                    "key": "service",
-                    "type": "string",
-                    "status": "available",
-                    "required": true,
-                    "array": false,
-                    "size": 255,
-                    "default": null
-                }
-            ],
-            "indexes": [
-                {
-                    "key": "index_1",
-                    "type": "key",
-                    "status": "available",
-                    "attributes": [
-                        "projectId"
-                    ],
-                    "orders": [
                         "ASC"
                     ]
                 }
