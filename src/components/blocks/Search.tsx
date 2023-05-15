@@ -1,10 +1,8 @@
 import {
-  $,
   component$,
   useContext,
   useSignal,
   useStore,
-  useStylesScoped$,
   useTask$,
   useVisibleTask$,
 } from "@builder.io/qwik";
@@ -39,28 +37,28 @@ export default component$(() => {
     };
   });
 
-  const onKeyDown = $(function onKeyDown(e: KeyboardEvent) {
-    const results = state.searchResults.length ? state.searchResults : [];
-    if (!searchModal.isOpen.value) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      state.selectedResult = Math.min(
-        state.selectedResult + 1,
-        results.length - 1
-      );
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      state.selectedResult = Math.max(state.selectedResult - 1, -1);
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      const result = results[state.selectedResult];
-      if (!result) return;
-      window.location.href = result.url;
-    }
-  });
-
   useVisibleTask$(() => {
+    const onKeyDown = function onKeyDown(e: KeyboardEvent) {
+      const results = state.searchResults;
+      if (!searchModal.isOpen.value) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        state.selectedResult = Math.min(
+          state.selectedResult + 1,
+          results.length - 1
+        );
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        state.selectedResult = Math.max(state.selectedResult - 1, -1);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        const result = results[state.selectedResult];
+        if (!result) return;
+        window.location.href = `/projects/${result.$id}`;
+      }
+    };
+
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   });
@@ -69,35 +67,6 @@ export default component$(() => {
     const isOpen = track(() => searchModal.isOpen.value);
     if (isOpen) inputRef.value?.focus();
   });
-
-  useStylesScoped$(`
-    .search-item {
-      display: flex;
-      flex-direction: column;
-      border-radius: var(--border-radius-small);
-      padding: 8px 12px;
-
-     
-    }
-
-    .search-item:hover,
-    .search-item.selected {
-      background-color: hsl(var(--color-neutral-200));
-
-      :global(.theme-light) & {
-        background-color: hsl(var(--color-neutral-10));
-      }
-    }
-
-    .results {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      overflow: auto;
-      max-height: 100%;
-      margin-top: 16px;
-    }
-  `);
 
   return (
     <div
@@ -126,7 +95,7 @@ export default component$(() => {
         </button>
       </div>
       {state.searchResults && (
-        <div class="box results">
+        <div class="box search-results">
           {state.searchResults.map((result, index) => {
             return (
               <a
