@@ -3,6 +3,7 @@ import { AppwriteService } from "~/AppwriteService";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import * as marked from "marked";
 import ProjectTags from "~/components/layout/ProjectTags";
+import Upvote from "~/components/blocks/Upvote";
 
 export const useProjectData = routeLoader$(async ({ params }) => {
   return {
@@ -32,10 +33,20 @@ export default component$(() => {
             <span class="text">Back to Projects</span>
           </button>
 
-          <h2 class="heading-level-2">{projectData.value.project.name}</h2>
-          <p style="font-size: 1.2rem; margin-top: -1rem;">
-            {projectData.value.project.tagline}
-          </p>
+          <div class="u-flex u-gap-24">
+            <div class="u-flex-vertical u-gap-12 u-flex-shrink-1 u-margin-block-start-12">
+              <Upvote
+                projectId={projectData.value.project.$id}
+                votes={projectData.value.project.upvotes}
+              />
+            </div>
+            <div class="u-flex-vertical u-gap-24" style="flex: 1;">
+              <h2 class="heading-level-2">{projectData.value.project.name}</h2>
+              <p style="font-size: 1.2rem; margin-top: -1rem;">
+                {projectData.value.project.tagline}
+              </p>
+            </div>
+          </div>
 
           {(projectData.value.project.urlGooglePlay ||
             projectData.value.project.urlAppStore ||
