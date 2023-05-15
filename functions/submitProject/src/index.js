@@ -68,6 +68,9 @@ module.exports = async function (req, res) {
 
   console.log("Creating project");
 
+  // Build combined string for full-text search index
+  const search = `${name} ${tagline} ${framework} ${uiLibrary} ${useCase}`;
+
   const project = await databases.createDocument(
     "main",
     "projects",
@@ -77,6 +80,7 @@ module.exports = async function (req, res) {
       name,
       tagline,
       description,
+      search,
       upvotes: 0,
       framework: framework ? framework : undefined,
       uiLibrary: uiLibrary ? uiLibrary : undefined,

@@ -132,6 +132,15 @@ export const AppwriteService = {
 
     return projects;
   },
+  searchProjects: async (searchQuery: string) => {
+    const { documents: projects } = await databases.listDocuments<Project>(
+      "main",
+      "projects",
+      [Query.search("search", searchQuery)]
+    );
+
+    return projects.filter((project) => project.isPublished);
+  },
   getProjectThumbnail: (fileId: string, width = 1280) => {
     return storage
       .getFilePreview(

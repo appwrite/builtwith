@@ -1,3 +1,5 @@
+import type { QRL } from "@builder.io/qwik";
+import { useStore } from "@builder.io/qwik";
 import {
   $,
   component$,
@@ -15,6 +17,7 @@ import type { Models } from "appwrite";
 import type { ProjectUpvote } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Config } from "~/Config";
+import Search from "~/components/blocks/Search";
 import Footer from "~/components/layout/Footer";
 import Header from "~/components/layout/Header";
 
@@ -25,6 +28,12 @@ export const UpvotesContext = createContextId<Signal<ProjectUpvote[]>>(
 export const AccountContext = createContextId<Signal<null | Models.User<any>>>(
   "app.account-context"
 );
+
+export const SearchModalContext = createContextId<{
+  open: QRL<() => void>;
+  close: QRL<() => void>;
+  isOpen: Signal<boolean>;
+}>("app.search-modal-context");
 
 export const useAccount = routeLoader$(async () => {
   return {
@@ -39,8 +48,43 @@ export default component$(() => {
   const location = useLocation();
   const nav = useNavigate();
 
+  const searchIsOpen = useSignal<boolean>(false);
+  const searchModal = useStore({
+    isOpen: searchIsOpen,
+    open: $(function () {
+      searchIsOpen.value = true;
+      document.documentElement.style.overflow = "hidden";
+    }),
+    close: $(function () {
+      searchIsOpen.value = false;
+      // Reverted back to auto, overlay is not supported in Safari, Firefox (https://caniuse.com/css-overflow-overlay)
+      document.documentElement.style.overflow = "auto";
+    }),
+  });
+
+  useContextProvider(SearchModalContext, searchModal);
+
   const upvotes = useSignal<ProjectUpvote[]>([]);
   useContextProvider(UpvotesContext, upvotes);
+
+  const searchModalRef = useSignal<HTMLDialogElement>();
+  useVisibleTask$(() => {
+    searchModalRef?.value?.addEventListener("click", (e) => {
+      if (e.target === searchModalRef.value) {
+        searchModal.close();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        searchModal.close();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        searchModal.open();
+      }
+    });
+  });
 
   useVisibleTask$(async () => {
     account.value = await AppwriteService.getAccount();
@@ -126,6 +170,13 @@ export default component$(() => {
 
   return (
     <>
+      <dialog
+        open={searchIsOpen.value}
+        style="position: fixed; z-index: 10000; background-color: #00000080; color: hsl(var(--search-color)); top: 0; left: 0; width: 100%; height: 100%;"
+        ref={searchModalRef}
+      >
+        <Search />
+      </dialog>
       <div
         class={
           location.url.pathname === "/" ||

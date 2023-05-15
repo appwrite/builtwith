@@ -1,12 +1,16 @@
 import type { Signal } from "@builder.io/qwik";
+import { useContext } from "@builder.io/qwik";
 import { $, component$, useSignal } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
 import type { Models } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
+import { SearchModalContext } from "~/routes/layout";
 
 export default component$(
   (props: { account: Signal<null | Models.User<any>> }) => {
     const nav = useNavigate();
+
+    const searchModal = useContext(SearchModalContext);
 
     const links = [
       { name: "Home", url: "/" },
@@ -102,6 +106,31 @@ export default component$(
             class={`main-header-end u-margin-inline-end-16 menu-right TODO-MENU-RIGHT-ONLY-IF-SIGNED-IN`}
           >
             <ul class="buttons-list is-with-padding">
+              <li class="buttons-list-item">
+                <button
+                  class="input-text u-flex u-cross-center u-padding-inline-8 u-border-radius-8"
+                  style="padding-block: 0.32rem;"
+                  id="search-btn"
+                  aria-label="search"
+                  onClick$={() => {
+                    searchModal.open();
+                  }}
+                >
+                  <span class="icon-search" aria-hidden="true"></span>
+                  <span
+                    class="text u-margin-inline-start-4 is-not-mobile"
+                    aria-hidden="true"
+                  >
+                    search
+                  </span>
+                  <div class="u-flex u-cross-center u-gap-4 u-margin-inline-start-32 is-not-mobile">
+                    <kbd id="meta" class="kbd">
+                      ⌘
+                    </kbd>
+                    <kbd class="kbd">K</kbd>
+                  </div>
+                </button>
+              </li>
               <li class="buttons-list-item u-padding-inline-0">
                 <div class="tooltip" aria-label="Toggle Dark Theme">
                   {isDark.value ? (
