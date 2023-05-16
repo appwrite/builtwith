@@ -1,4 +1,4 @@
-import type { QRL } from "@builder.io/qwik";
+import type { QRL, QwikKeyboardEvent, QwikMouseEvent } from "@builder.io/qwik";
 import { useStore } from "@builder.io/qwik";
 import {
   $,
@@ -68,22 +68,18 @@ export default component$(() => {
   useContextProvider(UpvotesContext, upvotes);
 
   const searchModalRef = useSignal<HTMLDialogElement>();
-  useVisibleTask$(() => {
-    searchModalRef?.value?.addEventListener("click", (e) => {
-      if (e.target === searchModalRef.value) {
-        searchModal.close();
-      }
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        searchModal.close();
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-        e.preventDefault();
-        searchModal.open();
-      }
-    });
+  const onKeyDown = $((e: QwikKeyboardEvent) => {
+    if (e.key === "Escape") {
+      searchModal.close();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+      searchModal.open();
+    }
+  });
+  const onClick = $((e: QwikMouseEvent) => {
+    if (e.target === searchModalRef.value) {
+      searchModal.close();
+    }
   });
 
   useVisibleTask$(async () => {
@@ -174,6 +170,8 @@ export default component$(() => {
         open={searchIsOpen.value}
         style="position: fixed; z-index: 10000; background-color: #00000080; color: hsl(var(--search-color)); top: 0; left: 0; width: 100%; height: 100%;"
         ref={searchModalRef}
+        document:onKeyDown$={onKeyDown}
+        document:onClick$={onClick}
       >
         <Search />
       </dialog>

@@ -1,4 +1,5 @@
 import {
+  $,
   component$,
   useContext,
   useSignal,
@@ -27,7 +28,6 @@ export default component$(() => {
       state.searchResults = await AppwriteService.listProjects([]);
       return;
     }
-
     const timer = setTimeout(async () => {
       state.searchResults = await AppwriteService.searchProjects(searchInput);
     }, 200);
@@ -37,28 +37,28 @@ export default component$(() => {
     };
   });
 
+  const onKeyDown = $((e: KeyboardEvent) => {
+    const results = state.searchResults;
+    if (!searchModal.isOpen.value) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      state.selectedResult = Math.min(
+        state.selectedResult + 1,
+        results.length - 1
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      state.selectedResult = Math.max(state.selectedResult - 1, -1);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const result = results[state.selectedResult];
+      if (!result) return;
+      window.location.href = `/projects/${result.$id}`;
+    }
+  });
+
   useVisibleTask$(() => {
-    const onKeyDown = function onKeyDown(e: KeyboardEvent) {
-      const results = state.searchResults;
-      if (!searchModal.isOpen.value) return;
-
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        state.selectedResult = Math.min(
-          state.selectedResult + 1,
-          results.length - 1
-        );
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        state.selectedResult = Math.max(state.selectedResult - 1, -1);
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        const result = results[state.selectedResult];
-        if (!result) return;
-        window.location.href = `/projects/${result.$id}`;
-      }
-    };
-
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   });
