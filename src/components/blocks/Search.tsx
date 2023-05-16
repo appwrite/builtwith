@@ -63,6 +63,28 @@ export default component$(() => {
     return () => window.removeEventListener("keydown", onKeyDown);
   });
 
+  const resultsEl = useSignal<HTMLDivElement>();
+  useVisibleTask$(async ({ track }) => {
+    const selectedResultEl = track(() =>
+      resultsEl.value?.querySelector<HTMLAnchorElement>(
+        `a:nth-child(${state.selectedResult + 1})`
+      )
+    );
+
+    if (!selectedResultEl || !resultsEl.value) return;
+
+    const inView =
+      selectedResultEl.offsetTop >= resultsEl.value.scrollTop &&
+      selectedResultEl.offsetTop + selectedResultEl.offsetHeight <=
+        resultsEl.value.scrollTop + resultsEl.value.offsetHeight;
+
+    if (inView) return;
+    resultsEl.value.scrollTo({
+      top: selectedResultEl.offsetTop - resultsEl.value.offsetHeight / 2,
+      behavior: "smooth",
+    });
+  });
+
   useVisibleTask$(async ({ track }) => {
     const isOpen = track(() => searchModal.isOpen.value);
     if (isOpen) inputRef.value?.focus();
@@ -92,7 +114,7 @@ export default component$(() => {
         </button>
       </div>
       {state.searchResults && (
-        <div class="box search-results">
+        <div class="box search-results" ref={resultsEl}>
           {state.searchResults.map((result, index) => {
             return (
               <a
