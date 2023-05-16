@@ -6,7 +6,7 @@
             "$id": "main",
             "name": "Main",
             "$createdAt": "2023-05-05T17:03:31.534+00:00",
-            "$updatedAt": "2023-05-05T17:03:31.534+00:00"
+            "$updatedAt": "2023-05-13T19:07:13.583+00:00"
         }
     ],
     "collections": [
@@ -405,6 +405,17 @@
                     ],
                     "orders": [
                         "ASC",
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "search",
+                    "type": "fulltext",
+                    "status": "available",
+                    "attributes": [
+                        "search"
+                    ],
+                    "orders": [
                         "ASC"
                     ]
                 }

@@ -222,3 +222,51 @@ input[type="checkbox"]:not(:checked) {
 .c-menu-icon {
   color: hsl(var(--color-neutral-50));
 }
+
+.search-modal {
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 600px;
+  max-width: calc(100% - 2rem);
+  height: 400px;
+  max-height: calc(100% - 2rem);
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: auto;
+  max-height: 100%;
+  margin-top: 16px;
+}
+
+.search-item {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius-small);
+  padding: 8px 12px;
+}
+
+.search-item.selected,
+.search-item:hover {
+  background-color: hsl(var(--color-neutral-30));
+}
+
+.theme-dark .search-item.selected,
+.theme-dark .search-item:hover {
+  background-color: hsl(var(--color-neutral-150));
+}
+
+.share-links-item {
+  border-radius: var(--border-radius-xsmall);
+  background-color: hsl(var(--color-primary-300));
+}
+
+.share-links-item > * {
+  display: grid;
+  place-content: center;
+  inline-size: 3.125rem;
+  block-size: 3.125rem;
+}

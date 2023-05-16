@@ -3,6 +3,8 @@ import { AppwriteService } from "~/AppwriteService";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import * as marked from "marked";
 import ProjectTags from "~/components/layout/ProjectTags";
+import Upvote from "~/components/blocks/Upvote";
+import Socials from "~/components/blocks/Socials";
 
 export const useProjectData = routeLoader$(async ({ params }) => {
   return {
@@ -32,7 +34,15 @@ export default component$(() => {
             <span class="text">Back to Projects</span>
           </button>
 
-          <h2 class="heading-level-2">{projectData.value.project.name}</h2>
+          <div class="u-flex u-gap-16" style="align-items: center;">
+            <h2 class="heading-level-2">{projectData.value.project.name}</h2>
+            <Upvote
+              projectId={projectData.value.project.$id}
+              votes={projectData.value.project.upvotes}
+              inline
+            />
+          </div>
+
           <p style="font-size: 1.2rem; margin-top: -1rem;">
             {projectData.value.project.tagline}
           </p>
@@ -161,6 +171,18 @@ export default component$(() => {
           <div>
             <h4 class="eyebrow-heading-3">Tags</h4>
             <ProjectTags project={projectData.value.project} />
+          </div>
+
+          <div
+            class="u-flex-vertical u-gap-8 u-position-sticky"
+            style="--inset-block-start: 5em"
+          >
+            <h4 class="eyebrow-heading-3">Share</h4>
+            <Socials
+              url={`https://builtwith.appwrite.io/projects/${projectData.value.project.$id}`}
+              title={`Built with Appwrite: ${projectData.value.project.name}`}
+              body={projectData.value.project.tagline}
+            />
           </div>
         </div>
         <div style="width:100%;" class="u-flex-vertical u-gap-24">
