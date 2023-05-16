@@ -258,3 +258,15 @@ input[type="checkbox"]:not(:checked) {
 .theme-dark .search-item:hover {
   background-color: hsl(var(--color-neutral-150));
 }
+
+.share-links-item {
+  border-radius: var(--border-radius-xsmall);
+  background-color: hsl(var(--color-primary-300));
+}
+
+.share-links-item > * {
+  display: grid;
+  place-content: center;
+  inline-size: 3.125rem;
+  block-size: 3.125rem;
+}

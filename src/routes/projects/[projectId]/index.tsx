@@ -4,6 +4,7 @@ import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import * as marked from "marked";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
+import Socials from "~/components/blocks/Socials";
 
 export const useProjectData = routeLoader$(async ({ params }) => {
   return {
@@ -170,6 +171,18 @@ export default component$(() => {
           <div>
             <h4 class="eyebrow-heading-3">Tags</h4>
             <ProjectTags project={projectData.value.project} />
+          </div>
+
+          <div
+            class="u-flex-vertical u-gap-8 u-position-sticky"
+            style="--inset-block-start: 5em"
+          >
+            <h4 class="eyebrow-heading-3">Share</h4>
+            <Socials
+              url={`https://builtwith.appwrite.io/projects/${projectData.value.project.$id}`}
+              title={`Built with Appwrite: ${projectData.value.project.name}`}
+              body={projectData.value.project.tagline}
+            />
           </div>
         </div>
         <div style="width:100%;" class="u-flex-vertical u-gap-24">
