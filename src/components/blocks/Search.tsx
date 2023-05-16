@@ -4,7 +4,6 @@ import {
   useContext,
   useSignal,
   useStore,
-  useTask$,
   useVisibleTask$,
 } from "@builder.io/qwik";
 import type { Project } from "~/AppwriteService";
@@ -21,7 +20,7 @@ export default component$(() => {
     selectedResult: -1,
   });
 
-  useTask$(async ({ track }) => {
+  useVisibleTask$(async ({ track }) => {
     const searchInput = track(() => input.value.trim());
 
     if (!searchInput) {
