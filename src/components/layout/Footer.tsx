@@ -52,7 +52,7 @@ function SocialLinks() {
 
 function PolicyLink({href, title}: LinkItemProps) {
   return (
-      <li className="inline-links-item">
+      <li class="inline-links-item">
         <LinkItem href={href} title={title}/>
       </li>
   );
@@ -61,9 +61,9 @@ function PolicyLink({href, title}: LinkItemProps) {
 function LinkItem({href, title, spanClassName, ariaLabel}: LinkItemProps) {
   return (
       <a href={href} target="_blank" rel="noreferrer">
-        {title && <span className="text">{title}</span>}
+        {title && <span class="text">{title}</span>}
         {spanClassName && ariaLabel && (
-            <span className={spanClassName} aria-hidden="true" aria-label={ariaLabel}></span>
+            <span class={spanClassName} aria-hidden="true" aria-label={ariaLabel}></span>
         )}
       </a>
   );
