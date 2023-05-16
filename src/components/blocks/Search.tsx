@@ -69,10 +69,7 @@ export default component$(() => {
   });
 
   return (
-    <div
-      class="card u-position-absolute u-flex u-flex-vertical u-overflow-hidden"
-      style="top: 50%; left: 50%; translate: -50% -50%; width: 600px; max-width: calc(100% - 2rem); height: 400px; max-height: calc(100% - 2rem);"
-    >
+    <div class="card u-position-absolute u-flex u-flex-vertical u-overflow-hidden search-modal">
       <div class="input-text-wrapper is-with-end-button">
         <input
           type="search"
