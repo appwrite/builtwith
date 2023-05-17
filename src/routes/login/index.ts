@@ -2,15 +2,6 @@ import type { RequestHandler } from "@builder.io/qwik-city";
 import * as setCookie from "set-cookie-parser";
 import { APPWRITE_ENDPOINT, APPWRITE_PROJECT } from "~/AppwriteService";
 
-function isRelativeUrl(url: string): boolean {
-  try {
-    new URL(url);
-    return false;
-  } catch (error) {
-    return true;
-  }
-}
-
 export const onPost: RequestHandler = async (requestEvent) => {
   try {
     const uri = new URL(`${APPWRITE_ENDPOINT}/account/sessions/oauth2/github`);
