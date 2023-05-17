@@ -1,5 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { AppwriteService } from "~/AppwriteService";
+import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import * as marked from "marked";
 import ProjectTags from "~/components/layout/ProjectTags";
@@ -11,6 +12,28 @@ export const useProjectData = routeLoader$(async ({ params }) => {
     project: await AppwriteService.getProject(params.projectId),
   };
 });
+
+export const head: DocumentHead = ({ resolveValue }) => {
+  const projectData = resolveValue(useProjectData);
+
+  return {
+    title: `${projectData.project.name} | Built with Appwrite`,
+    meta: [
+      {
+        name: "description",
+        content: projectData.project.tagline,
+      },
+      {
+        name: "og:title",
+        content: `${projectData.project.name} | Built with Appwrite`,
+      },
+      {
+        name: "og:description",
+        content: projectData.project.tagline,
+      },
+    ],
+  };
+};
 
 export default component$(() => {
   const nav = useNavigate();
