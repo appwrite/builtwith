@@ -47,11 +47,9 @@ export type ProjectUpvote = {
 
 const client = new Client();
 
-export const APPWRITE_ENDPOINT = "https://cloud.appwrite.io/v1";
-export const APPWRITE_PROJECT = "builtWithAppwrite";
-export const APPWRITE_HOSTNAME = "cloud.appwrite.io";
-
-client.setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT);
+client
+  .setEndpoint("https://cloud.appwrite.io/v1")
+  .setProject("builtWithAppwrite");
 
 const account = new Account(client);
 const storage = new Storage(client);
@@ -59,36 +57,18 @@ const databases = new Databases(client);
 const functions = new Functions(client);
 
 export const AppwriteService = {
-  signIn: async () => {
-    const response = await fetch("/login", {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      throw new Error("Unexpected error occured.");
-    }
-
-    try {
-      return await account.get();
-    } catch (err) {
-      console.log(err);
-      return null;
-    }
+  signIn: () => {
+    const redirectUrl = window.location.href;
+    account.createOAuth2Session("github", redirectUrl, redirectUrl);
   },
   signOut: async () => {
     await account.deleteSession("current");
-  },
-  setSession: (hash: string) => {
-    const authCookies: any = {};
-    authCookies[`a_session_${APPWRITE_PROJECT.toLowerCase()}`] = hash;
-    client.headers["X-Fallback-Cookies"] = JSON.stringify(authCookies);
   },
   getAccount: async () => {
     try {
       return await account.get();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return null;
     }
   },
