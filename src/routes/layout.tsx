@@ -8,13 +8,14 @@ import {
   Slot,
   useContextProvider,
   useSignal,
-  useVisibleTask$,
   useComputed$,
   useTask$,
 } from "@builder.io/qwik";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import type { Models } from "appwrite";
 import type { ProjectUpvote } from "~/AppwriteService";
+import { APPWRITE_ENDPOINT } from "~/AppwriteService";
+import { APPWRITE_PROJECT } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Config } from "~/Config";
 import Search from "~/components/blocks/Search";
@@ -35,9 +36,52 @@ export const SearchModalContext = createContextId<{
   isOpen: Signal<boolean>;
 }>("app.search-modal-context");
 
-export const useAccount = routeLoader$(async () => {
+export const useAccount = routeLoader$(async ({ cookie }) => {
+  const sessionNames = [
+    `a_session_${APPWRITE_PROJECT.toLowerCase()}`,
+    `a_session_${APPWRITE_PROJECT.toLowerCase()}_legacy`,
+  ];
+
+  const hash =
+    cookie.get(sessionNames[0])?.value ??
+    cookie.get(sessionNames[1])?.value ??
+    "";
+
+  AppwriteService.setSession(hash);
+
+  // let account;
+  // try {
+  //   account = await AppwriteService.getAccount();
+  // } catch (err) {
+  //   console.log(err);
+  //   account = null;
+  // }
+
+  // Neccessary fix row now, until "XMLHttpRequest is not defined" is fixed
+  const authCookies: any = {};
+  authCookies[`a_session_${APPWRITE_PROJECT.toLowerCase()}`] = hash;
+  let account;
+  try {
+    const response = await fetch(`${APPWRITE_ENDPOINT}/account`, {
+      method: "GET",
+      headers: {
+        "x-appwrite-project": APPWRITE_PROJECT,
+        "x-fallback-cookies": JSON.stringify(authCookies),
+      },
+    });
+
+    if (response.status >= 400) {
+      throw new Error(await response.text());
+    }
+
+    account = await response.json();
+  } catch (err) {
+    console.log(err);
+    account = null;
+  }
+
   return {
-    account: await AppwriteService.getAccount(),
+    account,
   };
 });
 
@@ -82,9 +126,7 @@ export default component$(() => {
     }
   });
 
-  useVisibleTask$(async () => {
-    account.value = await AppwriteService.getAccount();
-
+  useTask$(async () => {
     if (account.value) {
       upvotes.value = await AppwriteService.listUserUpvotes(account.value.$id);
     }
@@ -183,7 +225,7 @@ export default component$(() => {
             : "u-flex-vertical u-full-screen-height"
         }
       >
-        <Header account={account} />
+        <Header />
         <main class="main-content u-flex u-flex-vertical u-main-space-between">
           <div class="container hero-top-container">
             <Slot />
