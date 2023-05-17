@@ -1,4 +1,5 @@
 import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
 import { Query } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
@@ -70,6 +71,24 @@ export const useSearchData = routeLoader$(async ({ url }) => {
   return {
     projects,
   };
+});
+
+export const head: DocumentHead = () => ({
+  title: "Search | Built with Appwrite",
+  meta: [
+    {
+      name: "description",
+      content: "Search popular projects built with Appwrite.",
+    },
+    {
+      name: "og:title",
+      content: "Search | Built with Appwrite",
+    },
+    {
+      name: "og:description",
+      content: "Search popular projects built with Appwrite.",
+    },
+  ],
 });
 
 export default component$(() => {

@@ -28,8 +28,14 @@ export default component$((props: { project: Project }) => {
           class="u-flex-basis-50-percent u-flex u-flex-vertical u-main-space-between"
           style="min-height: 100%;"
         >
-          <div>
-            <div class="">
+          <div class="u-flex-vertical u-gap-8">
+            <div class="u-flex u-main-space-between u-cross-center">
+              <button
+                onClick$={async () => await nav(`/projects/${project.$id}`)}
+                class="heading-level-3 u-trim u-margin-block-start-12 c-trim"
+              >
+                {project.name}
+              </button>
               <Upvote
                 projectId={project.$id}
                 inline={true}
@@ -37,12 +43,6 @@ export default component$((props: { project: Project }) => {
               />
             </div>
 
-            <button
-              onClick$={async () => await nav(`/projects/${project.$id}`)}
-              class="heading-level-3 u-trim u-margin-block-start-12 c-trim"
-            >
-              {project.name}
-            </button>
             <p class="u-margin-block-start-4 c-trim-2" style="font-size: 1rem;">
               {project.tagline}
             </p>

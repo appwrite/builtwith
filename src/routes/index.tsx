@@ -4,6 +4,7 @@ import Group from "~/components/layout/Group";
 import ProjectList from "~/components/layout/ProjectList";
 import ServiceList from "~/components/layout/ServiceList";
 import TagList from "~/components/layout/TagList";
+import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { AppwriteService } from "~/AppwriteService";
 import { Query } from "appwrite";
@@ -62,13 +63,32 @@ export const useHomeData = routeLoader$(async () => {
   };
 });
 
+export const head: DocumentHead = () => ({
+  title: "Built with Appwrite",
+  meta: [
+    {
+      name: "description",
+      content: "Explore popular projects built with Appwrite.",
+    },
+    {
+      name: "og:title",
+      content: "Built with Appwrite",
+    },
+    {
+      name: "og:description",
+      content: "Explore popular projects built with Appwrite.",
+    },
+  ],
+});
+
 export default component$(() => {
   const homeDataSignal = useHomeData();
   const homeData = homeDataSignal.value;
 
   return (
     <>
-      <div class="u-flex-vertical u-gap-32">
+      <div class="u-flex-vertical u-gap-32 u-margin-block-start-16">
+        <h1 class="heading-level-1">Built with Appwrite</h1>
         {homeData.featured && (
           <Group title="Loved by Appwrite">
             <ProjectFeatured project={homeData.featured}></ProjectFeatured>

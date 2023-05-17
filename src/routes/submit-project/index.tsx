@@ -5,8 +5,28 @@ import {
   noSerialize,
   useSignal,
 } from "@builder.io/qwik";
+import type { DocumentHead } from "@builder.io/qwik-city";
 import { AppwriteService } from "~/AppwriteService";
 import { Config } from "~/Config";
+
+export const head: DocumentHead = () => ({
+  title: "Submit Project | Built with Appwrite",
+  meta: [
+    {
+      name: "description",
+      content: "Submit your project to Built with Appwrite.",
+    },
+    {
+      name: "og:title",
+      content: "Submit Project | Built with Appwrite",
+    },
+    {
+      name: "og:description",
+      content: "Submit your project to Built with Appwrite.",
+    },
+  ],
+});
+
 export default component$(() => {
   const file = useSignal<NoSerialize<File> | null>(null);
 
