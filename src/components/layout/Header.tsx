@@ -160,6 +160,14 @@ export default component$(
                   </span>
                 </div>
               </li>
+              <li class="buttons-list-item u-padding-inline-0">
+                <button
+                  onClick$={async () => await nav("/submit-project")}
+                  class="button is-text"
+                >
+                  <span class="text">Submit</span>
+                </button>
+              </li>
               {props.account.value === null ? (
                 <li class="buttons-list-item u-flex u-cross-center">
                   <button
@@ -174,14 +182,6 @@ export default component$(
                 </li>
               ) : (
                 <>
-                  <li class="buttons-list-item u-padding-inline-0">
-                    <button
-                      onClick$={async () => await nav("/submit-project")}
-                      class="button is-text"
-                    >
-                      <span class="text">Submit</span>
-                    </button>
-                  </li>
                   <li class="buttons-list-item u-padding-inline-0">
                     <button onClick$={signOut} class="button is-text">
                       <svg
