@@ -87,7 +87,8 @@ export default component$(() => {
 
   return (
     <>
-      <div class="u-flex-vertical u-gap-32">
+      <div class="u-flex-vertical u-gap-32 u-margin-block-start-16">
+        <h1 class="heading-level-1">Built with Appwrite</h1>
         {homeData.featured && (
           <Group title="Loved by Appwrite">
             <ProjectFeatured project={homeData.featured}></ProjectFeatured>

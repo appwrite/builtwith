@@ -108,16 +108,26 @@ export default component$((props: { project: Project | null }) => {
             style="width: 100%;"
           >
             <div
-              class="u-cursor-pointer"
+              class="u-cursor-pointer u-stretch u-flex-vertical u-gap-16"
               onClick$={async () => await nav(`/projects/${project.$id}`)}
             >
-              <p class="heading-level-4 c-trim" style="font-size: 1.3rem;">
-                {project.name}
+              <div class="u-flex u-main-space-between u-cross-center">
+                <p class="heading-level-4 c-trim" style="font-size: 1.3rem;">
+                  {project.name}
+                </p>
+                <Upvote
+                  projectId={project.$id}
+                  votes={project.upvotes}
+                  inline
+                />
+              </div>
+              <p
+                class="u-margin-block-start-4 c-trim-2"
+                style="min-height: 3em;"
+              >
+                {project.tagline}
               </p>
-              <p class="u-margin-block-start-4 c-trim-2">{project.tagline}</p>
             </div>
-
-            <Upvote projectId={project.$id} votes={project.upvotes} />
           </div>
         </div>
 
