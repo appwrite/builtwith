@@ -94,6 +94,13 @@ aside {
   padding-top: var(--container-padding-block, 1.25rem);
 }
 
+.theme-dark aside {
+  --p-body-text-color: var(--color-neutral-50);
+  --p-body-bg-color: var(--color-neutral-500);
+  color: hsl(var(--p-body-text-color));
+  background-color: hsl(var(--p-body-bg-color));
+}
+
 .tag {
   background-color: hsl(var(--color-neutral-0)) !important;
   border-color: hsl(var(--color-neutral-30)) !important;
