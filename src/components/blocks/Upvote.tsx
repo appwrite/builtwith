@@ -1,3 +1,4 @@
+import type { QwikMouseEvent } from "@builder.io/qwik";
 import {
   $,
   component$,
@@ -5,14 +6,11 @@ import {
   useContext,
   useSignal,
 } from "@builder.io/qwik";
-import { useLocation, useNavigate } from "@builder.io/qwik-city";
 import { AppwriteService } from "~/AppwriteService";
 import { AccountContext, UpvotesContext } from "~/routes/layout";
 
 export default component$(
   (props: { projectId: string; votes: number; inline?: boolean }) => {
-    const location = useLocation();
-    const nav = useNavigate();
     const upvoteContext = useContext(UpvotesContext);
     const accountContext = useContext(AccountContext);
     const isUpvoted = useComputed$(() => {
@@ -27,7 +25,8 @@ export default component$(
 
     const isLoading = useSignal(false);
 
-    const upvoteProject = $(async () => {
+    const upvoteProject = $(async (e: QwikMouseEvent) => {
+      e.stopPropagation();
       isLoading.value = true;
       try {
         const res = await AppwriteService.upvoteProject(props.projectId);
@@ -40,9 +39,6 @@ export default component$(
 
         votes.value = res.votes;
         // isUpvoted.value = res.isUpvoted;
-
-        const navUrl = location.url.pathname + location.url.search;
-        await nav(navUrl, true);
       } catch (err: any) {
         if (err.code && err.code === 401) {
           alert("Please sign in first.");
