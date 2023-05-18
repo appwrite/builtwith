@@ -30,6 +30,13 @@
   font-display: swap;
 }
 
+.theme-dark .main-content {
+  --p-body-text-color: var(--color-neutral-50);
+  --p-body-bg-color: var(--color-neutral-500);
+  color: hsl(var(--p-body-text-color));
+  background-color: hsl(var(--p-body-bg-color));
+}
+
 .separator-start {
   border-block-start: solid 0.0625rem hsl(var(--color-border));
 }

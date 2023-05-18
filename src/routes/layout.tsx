@@ -29,21 +29,39 @@ export const AccountContext = createContextId<Signal<null | Models.User<any>>>(
   "app.account-context"
 );
 
+export const ThemeContext =
+  createContextId<Signal<"light" | "dark">>("app.theme-context");
+
 export const SearchModalContext = createContextId<{
   open: QRL<() => void>;
   close: QRL<() => void>;
   isOpen: Signal<boolean>;
 }>("app.search-modal-context");
 
-export const useAccount = routeLoader$(async () => {
+export const useAccountLoader = routeLoader$(async () => {
   return {
     account: await AppwriteService.getAccount(),
   };
 });
 
+export const useThemeLoader = routeLoader$<{ theme: "light" | "dark" }>(
+  async (requestEvent) => {
+    const cookieValue = requestEvent.cookie.get(
+      "theme_buildwithappwrite"
+    )?.value;
+    return {
+      theme: cookieValue === "dark" ? "dark" : "light",
+    };
+  }
+);
+
 export default component$(() => {
   const account = useSignal<null | Models.User<any>>(null);
   useContextProvider(AccountContext, account);
+
+  const themeData = useThemeLoader();
+  const theme = useSignal(themeData.value.theme);
+  useContextProvider(ThemeContext, theme);
 
   const location = useLocation();
   const nav = useNavigate();
@@ -164,15 +182,21 @@ export default component$(() => {
     };
   });
 
+  const sidebarPage = useComputed$(() => {
+    return (
+      location.url.pathname === "/" ||
+      location.url.pathname.startsWith("/search")
+    );
+  });
+
   return (
     <>
       <div
-        class={
-          location.url.pathname === "/" ||
-          location.url.pathname.startsWith("/search")
-            ? "grid-with-side"
-            : "u-flex-vertical u-full-screen-height"
-        }
+        class={{
+          "grid-with-side": sidebarPage.value,
+          "u-flex-vertical u-full-screen-height": !sidebarPage.value,
+          "theme-dark": theme.value === "dark",
+        }}
       >
         <dialog
           open={searchIsOpen.value}

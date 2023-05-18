@@ -31,7 +31,7 @@ export default component$(() => {
         />
         <RouterHead />
       </head>
-      <body lang="en" class="theme-dark">
+      <body lang="en">
         <RouterOutlet />
         <ServiceWorkerRegister />
       </body>
