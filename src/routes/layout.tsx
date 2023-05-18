@@ -38,20 +38,12 @@ export const SearchModalContext = createContextId<{
   isOpen: Signal<boolean>;
 }>("app.search-modal-context");
 
-export const useAccountLoader = routeLoader$(async () => {
-  return {
-    account: await AppwriteService.getAccount(),
-  };
-});
-
-export const useThemeLoader = routeLoader$<{ theme: "light" | "dark" }>(
+export const useThemeLoader = routeLoader$<"light" | "dark">(
   async (requestEvent) => {
     const cookieValue = requestEvent.cookie.get(
       "theme_buildwithappwrite"
     )?.value;
-    return {
-      theme: cookieValue === "dark" ? "dark" : "light",
-    };
+    return cookieValue === "dark" ? "dark" : "light";
   }
 );
 
@@ -60,7 +52,7 @@ export default component$(() => {
   useContextProvider(AccountContext, account);
 
   const themeData = useThemeLoader();
-  const theme = useSignal(themeData.value.theme);
+  const theme = useSignal(themeData.value ?? "dark");
   useContextProvider(ThemeContext, theme);
 
   const location = useLocation();
