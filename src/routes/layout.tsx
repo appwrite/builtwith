@@ -166,15 +166,6 @@ export default component$(() => {
 
   return (
     <>
-      <dialog
-        open={searchIsOpen.value}
-        style="position: fixed; z-index: 10000; background-color: #00000080; color: hsl(var(--search-color)); top: 0; left: 0; width: 100%; height: 100%;"
-        ref={searchModalRef}
-        document:onKeyDown$={onKeyDown}
-        document:onClick$={onClick}
-      >
-        <Search />
-      </dialog>
       <div
         class={
           location.url.pathname === "/" ||
@@ -183,6 +174,15 @@ export default component$(() => {
             : "u-flex-vertical u-full-screen-height"
         }
       >
+        <dialog
+          open={searchIsOpen.value}
+          style="position: fixed; z-index: 10000; background-color: #00000080; color: hsl(var(--search-color)); top: 0; left: 0; width: 100%; height: 100%;"
+          ref={searchModalRef}
+          document:onKeyDown$={onKeyDown}
+          document:onClick$={onClick}
+        >
+          <Search />
+        </dialog>
         <Header account={account} />
         <main class="main-content u-flex u-flex-vertical u-main-space-between">
           <div class="container hero-top-container">
