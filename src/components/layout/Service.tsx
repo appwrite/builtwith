@@ -6,8 +6,8 @@ export default component$((props: { id: string; name: string }) => {
 
   return (
     <button
-      class="card u-flex-vertical u-cross-center u-main-space u-overflow-hidden"
-      style="padding: 0px; width: 100%;"
+      class="card u-flex-vertical u-cross-center u-main-space u-overflow-hidden u-width-full-line"
+      style="padding: 0px;"
       onClick$={async () => await nav("/search?service=" + props.id)}
     >
       <div class="c-service-container u-stretch">

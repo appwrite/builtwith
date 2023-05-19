@@ -210,8 +210,8 @@ export default component$(() => {
             />
           </div>
         </div>
-        <div style="width:100%;" class="u-flex-vertical u-gap-24">
-          <div class="object-og" style="width: 100%;">
+        <div class="u-flex-vertical u-gap-24 u-width-full-line">
+          <div class="object-og u-width-full-line">
             <img
               style="border-radius: var(--border-radius-medium);"
               src={AppwriteService.getProjectThumbnail(

@@ -190,9 +190,7 @@ export default component$(() => {
                   {isLoading.value ? (
                     <div class="loader"></div>
                   ) : (
-                    <span class="text" style="width: 100%;">
-                      Load More
-                    </span>
+                    <span class="text u-width-full-line">Load More</span>
                   )}
                 </button>
               </div>
