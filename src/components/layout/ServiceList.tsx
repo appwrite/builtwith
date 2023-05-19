@@ -10,7 +10,7 @@ export default component$(() => {
   return (
     <ul
       class="grid-box"
-      style="--grid-gap:1rem; --grid-item-size:10rem; --grid-item-size-small-screens:8rem;"
+      style="--grid-gap:1rem; --grid-item-size:12rem; --grid-item-size-small-screens:9rem;"
     >
       <li>
         <Service id="databases" name="Databases">
