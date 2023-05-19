@@ -200,7 +200,7 @@ export default component$(() => {
           <Search />
         </dialog>
         <Header account={account} />
-        <main class="main-content u-flex u-flex-vertical u-main-space-between">
+        <main class="main-content u-main-space-between">
           <div class="container hero-top-container">
             <Slot />
           </div>

@@ -30,11 +30,13 @@
   font-display: swap;
 }
 
-.theme-dark .main-content {
-  --p-body-text-color: var(--color-neutral-50);
+.theme-dark.grid-with-side {
   --p-body-bg-color: var(--color-neutral-500);
-  color: hsl(var(--p-body-text-color));
   background-color: hsl(var(--p-body-bg-color));
+}
+
+.grid-with-side {
+  min-height: 100vh;
 }
 
 .separator-start {
@@ -44,6 +46,7 @@
 .object-og {
   aspect-ratio: 1.8 / 1;
   width: 100%;
+  height: 100%;
 }
 
 .object-og img {
