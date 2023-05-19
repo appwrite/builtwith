@@ -193,7 +193,9 @@ export default component$(() => {
 
           <div>
             <h4 class="eyebrow-heading-3">Tags</h4>
-            <ProjectTags project={projectData.value.project} />
+            <div class="u-flex u-flex-wrap u-gap-8 u-margin-block-start-12">
+              <ProjectTags project={projectData.value.project} />
+            </div>
           </div>
 
           <div
