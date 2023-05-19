@@ -23,7 +23,7 @@ export default component$((props: { project: Project }) => {
           </button>
         </div>
 
-        <div class="u-flex u-flex-vertical u-gap-8">
+        <div class="u-flex u-flex-vertical u-stretch u-gap-8">
           <div class="u-flex u-main-space-between u-cross-center">
             <button
               onClick$={async () => await nav(`/projects/${project.$id}`)}
