@@ -219,8 +219,7 @@ export default component$(() => {
                       <div class="drop-list-item" key={filter.name}>
                         <button
                           onClick$={() => toggleFilter(filter.id)}
-                          style="width: 100%;"
-                          class="u-flex u-main-space-between u-cross-center"
+                          class="u-flex u-main-space-between u-cross-center u-width-full-line"
                         >
                           <h4 class="eyebrow-heading-3">{filter.name}</h4>
                           <span

@@ -1,11 +1,9 @@
 import { component$ } from "@builder.io/qwik";
 
-export default component$((props: { active: boolean; disabled?: boolean }) => {
+export default component$(() => {
   return (
     <svg
-      class={`c-service ${
-        props.disabled ? "is-disabled" : props.active ? "is-active" : ""
-      }`}
+      class="c-service is-active"
       width="24"
       height="24"
       viewBox="0 0 24 24"

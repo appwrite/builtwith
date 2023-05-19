@@ -140,7 +140,8 @@ module.exports = async function (req, res) {
     },
   });
 
-  const link = `https://cloud.appwrite.io/console/project-builtWithAppwrite/databases/database-main/collection-projects/document-${project.$id}`;
+  const previewLink = `https://builtwith.appwrite.io/projects/${project.$id}`;
+  const reviewLink = `https://cloud.appwrite.io/console/project-builtWithAppwrite/databases/database-main/collection-projects/document-${project.$id}`;
 
   try {
     await transporter.sendMail({
@@ -148,8 +149,9 @@ module.exports = async function (req, res) {
       to: approverEmails,
       subject: "Project Submission - builtwith.appwrite.io ",
       text: [
-        `Project '${project.name}' has been submitted.`,
-        `Please review the project and approve or reject it: ${link}.`,
+        `Project "${project.name}" has been submitted.`,
+        `Preview: ${previewLink}`,
+        `Approve or reject it: ${reviewLink}.`,
       ].join("\n"),
     });
     console.log("Done");

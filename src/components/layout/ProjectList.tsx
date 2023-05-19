@@ -12,7 +12,7 @@ export default component$(
     const project3 = props.projects[2] ?? null;
 
     return (
-      <div class="u-flex u-flex-wrap u-flex-vertical-mobile u-gap-16">
+      <div class="project-list u-gap-16">
         <div style="flex-basis: calc(33.33% - 1rem)">
           <Project project={project1} />
         </div>
@@ -51,13 +51,11 @@ export default component$(
         {props.projects.length >= 1 && props.href && (
           <button
             onClick$={async () => await nav(props.href)}
-            class="is-only-mobile button is-secondary"
+            class="is-only-mobile button is-secondary u-width-full-line"
             type="button"
-            style="width: 100%; text-align: center;"
+            style="text-align: center;"
           >
-            <span class="text" style="width: 100%;">
-              See More
-            </span>
+            <span class="text u-width-full-line">See More</span>
           </button>
         )}
       </div>

@@ -193,7 +193,9 @@ export default component$(() => {
 
           <div>
             <h4 class="eyebrow-heading-3">Tags</h4>
-            <ProjectTags project={projectData.value.project} />
+            <div class="u-flex u-flex-wrap u-gap-8 u-margin-block-start-12">
+              <ProjectTags project={projectData.value.project} />
+            </div>
           </div>
 
           <div
@@ -208,8 +210,8 @@ export default component$(() => {
             />
           </div>
         </div>
-        <div style="width:100%;" class="u-flex-vertical u-gap-24">
-          <div class="object-og" style="width: 100%;">
+        <div class="u-flex-vertical u-gap-24 u-width-full-line">
+          <div class="object-og u-width-full-line">
             <img
               style="border-radius: var(--border-radius-medium);"
               src={AppwriteService.getProjectThumbnail(
