@@ -207,6 +207,18 @@ input[type="checkbox"]:not(:checked) {
   background: hsl(var(--color-neutral-400));
 }
 
+.c-service-background {
+  display: grid;
+  place-content: center;
+  padding: 2rem;
+  width: 100%;
+  background-color: hsl(var(--color-neutral-30));
+}
+
+.theme-dark .c-service-background {
+  background-color: hsl(var(--color-neutral-150));
+}
+
 .c-empty-card {
   background: white;
 }
