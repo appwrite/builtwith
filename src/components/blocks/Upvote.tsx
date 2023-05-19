@@ -6,6 +6,7 @@ import {
   useContext,
   useSignal,
 } from "@builder.io/qwik";
+import { AppwriteException } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 import { AccountContext, UpvotesContext } from "~/routes/layout";
 
@@ -22,11 +23,9 @@ export default component$((props: Props) => {
   const isLoading = useSignal(false);
 
   const isUpvotedServer = useComputed$(() => {
-    return upvoteContext.value.find(
+    return !!upvoteContext.value.find(
       (upvote) => upvote.projectId === props.projectId
-    )
-      ? true
-      : false;
+    );
   });
   const isUpvotedClient = useSignal(isUpvotedServer.value);
   const isUpvoted = useComputed$(() => {
@@ -57,11 +56,11 @@ export default component$((props: Props) => {
         );
       }
       votesServer.value = res.votes;
-    } catch (err: any) {
-      if (err.code && err.code === 401) {
+    } catch (error: unknown) {
+      if (error instanceof AppwriteException && error.code === 401) {
         alert("Please sign in first.");
       } else {
-        alert(err.message || "An unexpected error occurred.");
+        alert("An unexpected error occurred.");
       }
     } finally {
       isUpvotedClient.value = isUpvotedServer.value;
