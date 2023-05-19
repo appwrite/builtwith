@@ -30,6 +30,10 @@
   font-display: swap;
 }
 
+.grid-with-side {
+  min-height: 100vh;
+}
+
 .theme-dark.grid-with-side {
   --p-body-text-color: var(--color-neutral-50);
   --p-body-bg-color: var(--color-neutral-500);
@@ -37,8 +41,11 @@
   background-color: hsl(var(--p-body-bg-color));
 }
 
-.grid-with-side {
-  min-height: 100vh;
+.theme-dark .main-content {
+  --p-body-text-color: var(--color-neutral-50);
+  --p-body-bg-color: var(--color-neutral-500);
+  color: hsl(var(--p-body-text-color));
+  background-color: hsl(var(--p-body-bg-color));
 }
 
 .separator-start {
@@ -84,6 +91,11 @@
 
 .theme-dark .upvote-button.is-primary {
   color: hsl(var(--color-neutral-50));
+}
+
+.theme-dark .card {
+  background: hsl(var(--color-neutral-200));
+  border: 1px solid hsl(var(--color-neutral-150));
 }
 
 .upvote-button.is-primary {
