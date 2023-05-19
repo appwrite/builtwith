@@ -220,7 +220,7 @@ input[type="checkbox"]:not(:checked) {
 }
 
 .c-service-container svg {
-  width: 36px;
+  width: 2.25rem;
   height: 100%;
 }
 
