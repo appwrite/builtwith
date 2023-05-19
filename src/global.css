@@ -97,6 +97,11 @@
   color: hsl(var(--color-neutral-50));
 }
 
+:not(.theme-dark) .card {
+  background: hsl(var(--color-neutral-0));
+  border: 1px solid hsl(var(--color-neutral-30));
+}
+
 .theme-dark .card {
   background: hsl(var(--color-neutral-200));
   border: 1px solid hsl(var(--color-neutral-150));
