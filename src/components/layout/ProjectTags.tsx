@@ -35,7 +35,7 @@ export default component$((props: { project: Project }) => {
   };
 
   return (
-    <div class="u-flex u-gap-8 u-flex-wrap u-margin-block-start-12">
+    <>
       <button
         onClick$={async () =>
           await nav(`/search?platform=${props.project.platform}`)
@@ -104,6 +104,6 @@ export default component$((props: { project: Project }) => {
           )}
         </button>
       ))}
-    </div>
+    </>
   );
 });

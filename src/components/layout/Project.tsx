@@ -18,10 +18,7 @@ export default component$((props: { project: Project | null }) => {
         class="u-flex u-cross-center u-main-center"
         style="padding: var(--p-card-padding); width: 100%; height: 100%;"
       >
-        <div
-          class="u-flex u-cross-center u-main-space-between"
-          style="width: 100%;"
-        >
+        <div class="u-flex u-cross-center u-main-center" style="width: 100%;">
           <div
             style="width: 100%;"
             class="u-flex-vertical u-gap-12 u-main-center u-cross-center"
@@ -86,8 +83,8 @@ export default component$((props: { project: Project | null }) => {
       </div>
 
       <div
-        class="u-flex u-cross-center u-gap-8 u-flex-wrap"
-        style="padding: var(--p-card-padding); width: 100%; margin-top: auto;"
+        class="u-flex u-main-start u-cross-start u-gap-4 u-flex-wrap u-stretch"
+        style="padding: var(--p-card-padding); width: 100%; align-content: flex-start;"
       >
         <ProjectTags project={project} />
       </div>
