@@ -44,10 +44,7 @@ export default component$(() => {
   return (
     <>
       <ul class="u-flex u-gap-24 u-flex-vertical-mobile">
-        <div
-          class="u-flex-vertical u-gap-24 u-flex-shrink-0"
-          style="flex-basis: 50%;"
-        >
+        <div class="u-flex-vertical u-gap-24 u-flex-shrink-0 u-flex-basis-50-percent">
           <button
             style="padding: 0px;"
             onClick$={() => nav("/")}
@@ -57,7 +54,7 @@ export default component$(() => {
             <span class="text">Back to Projects</span>
           </button>
 
-          <div class="u-flex u-gap-16" style="align-items: center;">
+          <div class="u-flex u-gap-16 u-cross-center">
             <h2 class="heading-level-2">{projectData.value.project.name}</h2>
             <Upvote
               projectId={projectData.value.project.$id}

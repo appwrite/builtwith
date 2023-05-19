@@ -51,9 +51,8 @@ export default component$(
         {props.projects.length >= 1 && props.href && (
           <button
             onClick$={async () => await nav(props.href)}
-            class="is-only-mobile button is-secondary u-width-full-line"
+            class="is-only-mobile button is-secondary u-width-full-line u-text-center"
             type="button"
-            style="text-align: center;"
           >
             <span class="text u-width-full-line">See More</span>
           </button>

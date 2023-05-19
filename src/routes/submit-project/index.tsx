@@ -275,7 +275,7 @@ export default component$(() => {
                     id="previewimage"
                     accept=".jpg,.png,.jpeg"
                     type="file"
-                    style="display: none;"
+                    class="u-hide"
                     onChange$={(event) => filePicked(event)}
                   />
                   <div class="upload-box box is-border-dashed is-no-shadow u-padding-24">

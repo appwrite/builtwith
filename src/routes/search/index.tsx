@@ -183,9 +183,9 @@ export default component$(() => {
               <div class="u-flex u-main-center">
                 <button
                   onClick$={loadNextPage}
-                  class="button is-secondary"
+                  class="button is-secondary u-text-center"
                   type="button"
-                  style="text-align: center; padding: 1rem;"
+                  style="padding: 1rem;"
                 >
                   {isLoading.value ? (
                     <div class="loader"></div>
