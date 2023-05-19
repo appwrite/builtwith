@@ -4,7 +4,8 @@ import { $, component$, useSignal } from "@builder.io/qwik";
 import { useNavigate } from "@builder.io/qwik-city";
 import type { Models } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
-import { SearchModalContext } from "~/routes/layout";
+import { SearchModalContext, ThemeContext } from "~/routes/layout";
+import Cookies from "js-cookie";
 
 export default component$(
   (props: { account: Signal<null | Models.User<any>> }) => {
@@ -17,21 +18,19 @@ export default component$(
       { name: "Timeline", url: "/search?sort=latest" },
     ];
 
-    const isDark = useSignal(true);
+    const theme = useContext(ThemeContext);
     const isMenuOpened = useSignal(false);
 
     const toggleMenu = $(() => {
       isMenuOpened.value = !isMenuOpened.value;
     });
 
-    const toggleTheme = $(() => {
-      if (isDark.value) {
-        document.body.classList.remove("theme-dark");
-      } else {
-        document.body.classList.add("theme-dark");
-      }
-
-      isDark.value = document.body.classList.contains("theme-dark");
+    const setTheme = $((newTheme: "light" | "dark") => {
+      theme.value = newTheme;
+      Cookies.set("theme_buildwithappwrite", newTheme, {
+        sameSite: "strict",
+        expires: 365,
+      });
     });
 
     const signOut = $(async () => {
@@ -133,11 +132,11 @@ export default component$(
               </li>
               <li class="buttons-list-item u-padding-inline-0">
                 <div class="tooltip" aria-label="Toggle Dark Theme">
-                  {isDark.value ? (
+                  {theme.value === "dark" ? (
                     <>
                       <button
                         class="button is-only-icon is-text"
-                        onClick$={toggleTheme}
+                        onClick$={() => setTheme("light")}
                         aria-label="Replace to Dark Mode Theme"
                       >
                         <span class="icon-sun" aria-hidden="true"></span>
@@ -147,7 +146,7 @@ export default component$(
                     <>
                       <button
                         class="button is-only-icon is-text"
-                        onClick$={toggleTheme}
+                        onClick$={() => setTheme("dark")}
                         aria-label="Replace to Light Mode Theme"
                       >
                         <span class="icon-moon" aria-hidden="true"></span>

@@ -29,21 +29,31 @@ export const AccountContext = createContextId<Signal<null | Models.User<any>>>(
   "app.account-context"
 );
 
+export const ThemeContext =
+  createContextId<Signal<"light" | "dark">>("app.theme-context");
+
 export const SearchModalContext = createContextId<{
   open: QRL<() => void>;
   close: QRL<() => void>;
   isOpen: Signal<boolean>;
 }>("app.search-modal-context");
 
-export const useAccount = routeLoader$(async () => {
-  return {
-    account: await AppwriteService.getAccount(),
-  };
-});
+export const useThemeLoader = routeLoader$<"light" | "dark">(
+  async (requestEvent) => {
+    const cookieValue = requestEvent.cookie.get(
+      "theme_buildwithappwrite"
+    )?.value;
+    return cookieValue === "dark" ? "dark" : "light";
+  }
+);
 
 export default component$(() => {
   const account = useSignal<null | Models.User<any>>(null);
   useContextProvider(AccountContext, account);
+
+  const themeData = useThemeLoader();
+  const theme = useSignal(themeData.value ?? "dark");
+  useContextProvider(ThemeContext, theme);
 
   const location = useLocation();
   const nav = useNavigate();
@@ -164,15 +174,21 @@ export default component$(() => {
     };
   });
 
+  const sidebarPage = useComputed$(() => {
+    return (
+      location.url.pathname === "/" ||
+      location.url.pathname.startsWith("/search")
+    );
+  });
+
   return (
     <>
       <div
-        class={
-          location.url.pathname === "/" ||
-          location.url.pathname.startsWith("/search")
-            ? "grid-with-side"
-            : "u-flex-vertical u-full-screen-height"
-        }
+        class={{
+          "grid-with-side": sidebarPage.value,
+          "u-flex-vertical u-full-screen-height": !sidebarPage.value,
+          "theme-dark": theme.value === "dark",
+        }}
       >
         <dialog
           open={searchIsOpen.value}
@@ -184,7 +200,7 @@ export default component$(() => {
           <Search />
         </dialog>
         <Header account={account} />
-        <main class="main-content u-flex u-flex-vertical u-main-space-between">
+        <main class="main-content u-main-space-between">
           <div class="container hero-top-container">
             <Slot />
           </div>

@@ -107,12 +107,13 @@ export default component$((props: { project: Project | null }) => {
             class="u-flex u-cross-center u-gap-8 u-main-space-between"
             style="width: 100%;"
           >
-            <div
-              class="u-cursor-pointer u-stretch u-flex-vertical u-gap-16"
-              onClick$={async () => await nav(`/projects/${project.$id}`)}
-            >
+            <div class="u-stretch u-flex-vertical u-gap-16">
               <div class="u-flex u-main-space-between u-cross-center">
-                <p class="heading-level-4 c-trim" style="font-size: 1.3rem;">
+                <p
+                  class="heading-level-4 c-trim u-cursor-pointer "
+                  style="font-size: 1.3rem;"
+                  onClick$={async () => await nav(`/projects/${project.$id}`)}
+                >
                   {project.name}
                 </p>
                 <Upvote
@@ -122,8 +123,9 @@ export default component$((props: { project: Project | null }) => {
                 />
               </div>
               <p
-                class="u-margin-block-start-4 c-trim-2"
+                class="u-margin-block-start-4 c-trim-2 u-cursor-pointer "
                 style="min-height: 3em;"
+                onClick$={async () => await nav(`/projects/${project.$id}`)}
               >
                 {project.tagline}
               </p>

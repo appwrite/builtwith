@@ -1,3 +1,4 @@
+import type { QwikMouseEvent } from "@builder.io/qwik";
 import {
   $,
   component$,
@@ -5,84 +6,80 @@ import {
   useContext,
   useSignal,
 } from "@builder.io/qwik";
-import { useLocation, useNavigate } from "@builder.io/qwik-city";
+import { AppwriteException } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 import { AccountContext, UpvotesContext } from "~/routes/layout";
 
-export default component$(
-  (props: { projectId: string; votes: number; inline?: boolean }) => {
-    const location = useLocation();
-    const nav = useNavigate();
-    const upvoteContext = useContext(UpvotesContext);
-    const accountContext = useContext(AccountContext);
-    const isUpvoted = useComputed$(() => {
-      return upvoteContext.value.find(
-        (upvote) => upvote.projectId === props.projectId
-      )
-        ? true
-        : false;
-    });
+type Props = {
+  projectId: string;
+  votes: number;
+  inline?: boolean;
+};
 
-    const votes = useSignal(props.votes);
+export default component$((props: Props) => {
+  const upvoteContext = useContext(UpvotesContext);
+  const accountContext = useContext(AccountContext);
 
-    const isLoading = useSignal(false);
+  const isLoading = useSignal(false);
 
-    const upvoteProject = $(async () => {
-      isLoading.value = true;
-      try {
-        const res = await AppwriteService.upvoteProject(props.projectId);
-
-        if (accountContext.value) {
-          upvoteContext.value = await AppwriteService.listUserUpvotes(
-            accountContext.value.$id
-          );
-        }
-
-        votes.value = res.votes;
-        // isUpvoted.value = res.isUpvoted;
-
-        const navUrl = location.url.pathname + location.url.search;
-        await nav(navUrl, true);
-      } catch (err: any) {
-        if (err.code && err.code === 401) {
-          alert("Please sign in first.");
-        } else {
-          alert(err.message);
-        }
-      } finally {
-        isLoading.value = false;
-      }
-    });
-
-    let isPrimary = true;
-
-    if (isUpvoted.value === false || isLoading.value === true) {
-      isPrimary = false;
-    }
-
-    return (
-      <button
-        preventdefault:click
-        onClick$={upvoteProject}
-        class={`button upvote-button ${props.inline ? "" : "vertical-button"} ${
-          isPrimary ? "is-primary" : "is-secondary"
-        }`}
-        aria-label="Upvote"
-      >
-        {isLoading.value === true ? (
-          <>
-            <div style="transform: scale(0.8); height: 20px;">
-              <div class="loader"></div>
-            </div>
-            <span class="text">{votes}</span>
-          </>
-        ) : (
-          <>
-            <span class="icon-heart" aria-hidden="true"></span>
-            <span class="text">{votes}</span>
-          </>
-        )}
-      </button>
+  const isUpvotedServer = useComputed$(() => {
+    return !!upvoteContext.value.find(
+      (upvote) => upvote.projectId === props.projectId
     );
-  }
-);
+  });
+  const isUpvotedClient = useSignal(isUpvotedServer.value);
+  const isUpvoted = useComputed$(() => {
+    return isLoading.value ? isUpvotedClient.value : isUpvotedServer.value;
+  });
+
+  const votesServer = useSignal(props.votes);
+  const votes = useComputed$(() => {
+    if (isLoading.value) {
+      return isUpvotedClient.value
+        ? votesServer.value + 1
+        : votesServer.value - 1;
+    }
+    return votesServer.value;
+  });
+
+  const upvoteProject = $(async (e: QwikMouseEvent) => {
+    e.stopPropagation();
+
+    isUpvotedClient.value = !isUpvotedServer.value;
+    isLoading.value = true;
+
+    try {
+      const res = await AppwriteService.upvoteProject(props.projectId);
+      if (accountContext.value) {
+        upvoteContext.value = await AppwriteService.listUserUpvotes(
+          accountContext.value.$id
+        );
+      }
+      votesServer.value = res.votes;
+    } catch (error: unknown) {
+      if (error instanceof AppwriteException && error.code === 401) {
+        alert("Please sign in first.");
+      } else {
+        alert("An unexpected error occurred.");
+      }
+    } finally {
+      isUpvotedClient.value = isUpvotedServer.value;
+      isLoading.value = false;
+    }
+  });
+
+  return (
+    <button
+      preventdefault:click
+      onClick$={upvoteProject}
+      class={`button upvote-button ${props.inline ? "" : "vertical-button"} ${
+        isUpvoted.value ? "is-primary" : "is-secondary"
+      }`}
+      aria-label="Upvote"
+      aria-pressed={isUpvoted.value}
+    >
+      <span class="icon-heart" aria-hidden="true"></span>
+      <span class="text">{votes.value}</span>
+    </button>
+  );
+});
