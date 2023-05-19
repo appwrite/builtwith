@@ -12,7 +12,7 @@ export default component$(
     const project3 = props.projects[2] ?? null;
 
     return (
-      <div class="u-flex u-flex-wrap u-flex-vertical-mobile u-gap-16">
+      <div class="project-list u-gap-16">
         <div style="flex-basis: calc(33.33% - 1rem)">
           <Project project={project1} />
         </div>

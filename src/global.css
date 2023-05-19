@@ -34,6 +34,11 @@
   min-height: 100vh;
 }
 
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
 .theme-dark.grid-with-side {
   --p-body-text-color: var(--color-neutral-50);
   --p-body-bg-color: var(--color-neutral-500);

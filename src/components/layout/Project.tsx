@@ -46,56 +46,50 @@ export default component$((props: { project: Project | null }) => {
       </div>
     </div>
   ) : (
-    <div>
-      <div
-        class="card u-flex-vertical u-cross-center u-main-center"
-        style="padding: 0px;"
-      >
-        <div style="padding: var(--p-card-padding); width: 100%;">
-          <div
-            class="u-flex u-cross-center u-gap-8 u-main-space-between"
-            style="width: 100%;"
-          >
-            <div class="u-stretch u-flex-vertical u-gap-16">
-              <div class="u-flex u-main-space-between u-cross-center">
-                <p
-                  class="heading-level-4 c-trim u-cursor-pointer "
-                  style="font-size: 1.3rem;"
-                  onClick$={async () => await nav(`/projects/${project.$id}`)}
-                >
-                  {project.name}
-                </p>
-                <Upvote
-                  projectId={project.$id}
-                  votes={project.upvotes}
-                  inline
-                />
-              </div>
+    <div
+      class="card u-flex-vertical u-cross-center u-main-center"
+      style="padding: 0px; height: 100%;"
+    >
+      <div style="padding: var(--p-card-padding); width: 100%;">
+        <div
+          class="u-flex u-cross-center u-gap-8 u-main-space-between"
+          style="width: 100%;"
+        >
+          <div class="u-stretch u-flex-vertical u-gap-16">
+            <div class="u-flex u-main-space-between u-cross-center">
               <p
-                class="u-margin-block-start-4 c-trim-2 u-cursor-pointer "
-                style="min-height: 3em;"
+                class="heading-level-4 c-trim u-cursor-pointer "
+                style="font-size: 1.3rem;"
                 onClick$={async () => await nav(`/projects/${project.$id}`)}
               >
-                {project.tagline}
+                {project.name}
               </p>
+              <Upvote projectId={project.$id} votes={project.upvotes} inline />
             </div>
+            <p
+              class="u-margin-block-start-4 c-trim-2 u-cursor-pointer "
+              style="min-height: 3em;"
+              onClick$={async () => await nav(`/projects/${project.$id}`)}
+            >
+              {project.tagline}
+            </p>
           </div>
         </div>
+      </div>
 
-        <div
-          class="object-og u-cursor-pointer"
-          onClick$={async () => await nav(`/projects/${project.$id}`)}
-          style="height: 200px;"
-        >
-          <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
-        </div>
+      <div
+        class="object-og u-cursor-pointer"
+        style="height: 200px;"
+        onClick$={async () => await nav(`/projects/${project.$id}`)}
+      >
+        <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
+      </div>
 
-        <div
-          class="u-flex u-cross-center u-gap-8 u-flex-wrap"
-          style="padding: var(--p-card-padding); width: 100%;"
-        >
-          <ProjectTags project={project} />
-        </div>
+      <div
+        class="u-flex u-cross-center u-gap-8 u-flex-wrap"
+        style="padding: var(--p-card-padding); width: 100%; margin-top: auto;"
+      >
+        <ProjectTags project={project} />
       </div>
     </div>
   );
