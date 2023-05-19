@@ -1,13 +1,9 @@
 import { component$ } from "@builder.io/qwik";
-import Auth from "../icons/Auth";
-import Storage from "../icons/Storage";
-import Databases from "../icons/Databases";
-import Function from "../icons/Function";
-import Upvote from "../blocks/Upvote";
-import Realtime from "../icons/Realtime";
 import { useNavigate } from "@builder.io/qwik-city";
 import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
+import Upvote from "../blocks/Upvote";
+import ProjectTags from "./ProjectTags";
 
 export default component$((props: { project: Project | null }) => {
   const { project } = props;
@@ -47,53 +43,6 @@ export default component$((props: { project: Project | null }) => {
           src="/images/project-placeholder-light.png"
           alt=""
         />
-      </div>
-
-      <div style="padding: 1.5rem var(--p-card-padding) 1.5rem var(--p-card-padding); width: 100%;">
-        <div
-          class="u-flex u-cross-center"
-          style="width: 100%; justify-content: space-around;"
-        >
-          <button
-            class="button is-text is-only-icon"
-            style="--button-size:1.5rem;"
-            aria-label="Remove item"
-          >
-            <Auth disabled={true} active={false} />
-          </button>
-
-          <button
-            class="button is-text is-only-icon"
-            style="--button-size:1.5rem;"
-            aria-label="Remove item"
-          >
-            <Databases disabled={true} active={false} />
-          </button>
-
-          <button
-            class="button is-text is-only-icon"
-            style="--button-size:1.5rem;"
-            aria-label="Remove item"
-          >
-            <Storage disabled={true} active={false} />
-          </button>
-
-          <button
-            class="button is-text is-only-icon"
-            style="--button-size:1.5rem;"
-            aria-label="Remove item"
-          >
-            <Function disabled={true} active={false} />
-          </button>
-
-          <button
-            class="button is-text is-only-icon"
-            style="--button-size:1.5rem;"
-            aria-label="Remove item"
-          >
-            <Realtime disabled={true} active={false} />
-          </button>
-        </div>
       </div>
     </div>
   ) : (
@@ -141,83 +90,11 @@ export default component$((props: { project: Project | null }) => {
           <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
         </div>
 
-        <div style="padding: 1.5rem var(--p-card-padding) 1.5rem var(--p-card-padding); width: 100%;">
-          <div
-            class="u-flex u-cross-center"
-            style="width: 100%; justify-content: space-around;"
-          >
-            <div class="tooltip">
-              <button
-                onClick$={async () => await nav(`/search?service=databases`)}
-                class="button is-text is-only-icon"
-                style="--button-size:1.5rem;"
-                aria-label="Remove item"
-              >
-                <Databases active={project.hasDatabases} />
-              </button>
-              <span class="tooltip-popup is-bottom" role="tooltip">
-                Appwrite Databases
-              </span>
-            </div>
-
-            <div class="tooltip">
-              <button
-                class="button is-text is-only-icon"
-                style="--button-size:1.5rem;"
-                aria-label="Remove item"
-                onClick$={async () =>
-                  await nav(`/search?service=authentication`)
-                }
-              >
-                <Auth active={project.hasAuthentication} />
-              </button>
-              <span class="tooltip-popup is-bottom" role="tooltip">
-                Appwrite Authentication
-              </span>
-            </div>
-
-            <div class="tooltip">
-              <button
-                class="button is-text is-only-icon"
-                style="--button-size:1.5rem;"
-                aria-label="Remove item"
-                onClick$={async () => await nav(`/search?service=storage`)}
-              >
-                <Storage active={project.hasStorage} />
-              </button>
-              <span class="tooltip-popup is-bottom" role="tooltip">
-                Appwrite Storage
-              </span>
-            </div>
-
-            <div class="tooltip">
-              <button
-                class="button is-text is-only-icon"
-                style="--button-size:1.5rem;"
-                aria-label="Remove item"
-                onClick$={async () => await nav(`/search?service=functions`)}
-              >
-                <Function active={project.hasFunctions} />
-              </button>
-              <span class="tooltip-popup is-bottom" role="tooltip">
-                Appwrite Functions
-              </span>
-            </div>
-
-            <div class="tooltip">
-              <button
-                class="button is-text is-only-icon"
-                style="--button-size:1.5rem;"
-                aria-label="Remove item"
-                onClick$={async () => await nav(`/search?service=realtime`)}
-              >
-                <Realtime active={project.hasRealtime} />
-              </button>
-              <span class="tooltip-popup is-bottom" role="tooltip">
-                Appwrite Realtime
-              </span>
-            </div>
-          </div>
+        <div
+          class="u-flex u-cross-center u-gap-8 u-flex-wrap"
+          style="padding: var(--p-card-padding); width: 100%;"
+        >
+          <ProjectTags project={project} />
         </div>
       </div>
     </div>
