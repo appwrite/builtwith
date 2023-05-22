@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
@@ -40,6 +40,21 @@ export default component$(() => {
   const projectData = useProjectData();
 
   const html = marked.marked.parse(projectData.value.project.description);
+
+  useVisibleTask$(async () => {
+    const visitedProjects = JSON.parse(
+      localStorage.getItem("visitedProjects") ?? "[]"
+    ) as string[];
+
+    visitedProjects.unshift(projectData.value.project.$id);
+
+    const visitedProjectsUnique = [...new Set(visitedProjects)];
+
+    localStorage.setItem(
+      "visitedProjects",
+      JSON.stringify(visitedProjectsUnique)
+    );
+  });
 
   return (
     <>
