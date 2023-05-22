@@ -1,4 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import {
+  component$,
+  useContext,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import ProjectFeatured from "~/components/layout/ProjectFeatured";
 import Group from "~/components/layout/Group";
 import ProjectList from "~/components/layout/ProjectList";
@@ -6,8 +11,11 @@ import ServiceList from "~/components/layout/ServiceList";
 import TagList from "~/components/layout/TagList";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
+import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Query } from "appwrite";
+import { AccountContext } from "./layout";
+import { UpvotesContext } from "./layout";
 
 export const useHomeData = routeLoader$(async () => {
   const [
@@ -82,8 +90,21 @@ export const head: DocumentHead = () => ({
 });
 
 export default component$(() => {
+  const account = useContext(AccountContext);
+  const upvotes = useContext(UpvotesContext);
   const homeDataSignal = useHomeData();
   const homeData = homeDataSignal.value;
+
+  const yourPicks = useSignal<Project[] | undefined>([]);
+
+  useVisibleTask$(async () => {
+    if (!account || upvotes.value.length < 3) return;
+    yourPicks.value = await Promise.all([
+      AppwriteService.getProject(upvotes.value[0].projectId),
+      AppwriteService.getProject(upvotes.value[1].projectId),
+      AppwriteService.getProject(upvotes.value[2].projectId),
+    ]);
+  });
 
   return (
     <>
@@ -128,6 +149,12 @@ export default component$(() => {
             docsTotal={homeData.docsTotal}
           />
         </Group>
+
+        {account.value && yourPicks.value && (
+          <Group title="Your Picks">
+            <ProjectList projects={yourPicks.value} />
+          </Group>
+        )}
       </div>
     </>
   );
