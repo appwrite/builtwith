@@ -64,6 +64,36 @@ const generateQueries = (url: URL) => {
   return queries;
 };
 
+const generateTitle = (url: URL) => {
+  const framework = url.searchParams.get("framework");
+  const platform = url.searchParams.get("platform");
+  const uiLibrary = url.searchParams.get("uiLibrary");
+  const useCase = url.searchParams.get("useCase");
+  const service = url.searchParams.get("service");
+
+  if (framework) {
+    return `Made with ${framework}`;
+  }
+
+  if (platform) {
+    return `Built for ${platform}`;
+  }
+
+  if (uiLibrary) {
+    return `Designed with ${uiLibrary}`;
+  }
+
+  if (useCase) {
+    return `${useCase} projects`;
+  }
+
+  if (service) {
+    return `Using ${service}`;
+  }
+
+  return "Search";
+};
+
 export const useSearchData = routeLoader$(async ({ url }) => {
   const queries = generateQueries(url);
   const projects = await AppwriteService.listProjects(queries);
@@ -104,6 +134,8 @@ export default component$(() => {
   );
   const showPagination = useSignal(lastId.value !== null);
   const isLoading = useSignal(false);
+
+  const title = generateTitle(location.url);
 
   const loadNextPage = $(async () => {
     const queries = generateQueries(location.url);
@@ -146,7 +178,7 @@ export default component$(() => {
   return (
     <>
       <div class="u-flex-vertical u-gap-32">
-        <Group title="Search Results">
+        <Group title={title}>
           <div class="u-flex-vertical u-gap-32">
             {projects.value.length === 0 && (
               <article class="card u-grid u-cross-center u-min-width-100-percent u-flex-shrink-0 common-section">
