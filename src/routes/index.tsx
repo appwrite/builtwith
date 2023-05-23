@@ -98,11 +98,12 @@ export default component$(() => {
   const yourPicks = useSignal<Project[] | undefined>([]);
   useVisibleTask$(async () => {
     if (!account.value || upvotes.value.length < 3) return;
-    yourPicks.value = await Promise.all(
-      upvotes.value
-        .slice(0, 3)
-        .map(async (upvote) => AppwriteService.getProject(upvote.projectId))
-    );
+    yourPicks.value = await AppwriteService.listProjects([
+      Query.equal(
+        "$id",
+        upvotes.value.slice(0, 3).map((upvote) => upvote.projectId)
+      ),
+    ]);
   });
 
   const recentlyVisited = useSignal<Project[] | undefined>([]);
@@ -112,11 +113,9 @@ export default component$(() => {
     ) as string[];
     if (visitedProjects.length < 3) return;
 
-    recentlyVisited.value = await Promise.all(
-      visitedProjects
-        .slice(0, 3)
-        .map(async (id) => AppwriteService.getProject(id))
-    );
+    recentlyVisited.value = await AppwriteService.listProjects([
+      Query.equal("$id", visitedProjects.slice(0, 3)),
+    ]);
   });
 
   return (
