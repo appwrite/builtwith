@@ -7,21 +7,11 @@ export default component$(
   (props: { href?: string; projects: ProjectType[] }) => {
     const nav = useNavigate();
 
-    const project1 = props.projects[0] ?? null;
-    const project2 = props.projects[1] ?? null;
-    const project3 = props.projects[2] ?? null;
-
     return (
       <div class="project-list u-gap-16">
-        <div style="flex-basis: calc(33.33% - 1rem)">
-          <Project project={project1} />
-        </div>
-        <div style="flex-basis: calc(33.33% - 1rem)">
-          <Project project={project2} />
-        </div>
-        <div style="flex-basis: calc(33.33% - 1rem)">
-          <Project project={project3} />
-        </div>
+        {props.projects.slice(0, 3).map((project) => (
+          <Project key={project.$id} project={project} />
+        ))}
 
         {props.projects.length === 0 && (
           <article class="is-only-mobile card u-grid u-cross-center u-min-width-100-percent u-flex-shrink-0 common-section">

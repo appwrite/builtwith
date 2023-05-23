@@ -97,7 +97,7 @@ export default component$(() => {
 
   const yourPicks = useSignal<Project[] | undefined>([]);
   useVisibleTask$(async () => {
-    if (!account.value || upvotes.value.length < 3) return;
+    if (!account.value || upvotes.value.length === 0) return;
     yourPicks.value = await AppwriteService.listProjects([
       Query.equal(
         "$id",
@@ -111,7 +111,7 @@ export default component$(() => {
     const visitedProjects = JSON.parse(
       localStorage.getItem("visitedProjects") ?? "[]"
     ) as string[];
-    if (visitedProjects.length < 3) return;
+    if (visitedProjects.length === 0) return;
 
     recentlyVisited.value = await AppwriteService.listProjects([
       Query.equal("$id", visitedProjects.slice(0, 3)),
@@ -162,13 +162,13 @@ export default component$(() => {
           />
         </Group>
 
-        {yourPicks.value && yourPicks.value.length >= 3 && (
+        {yourPicks.value && yourPicks.value.length > 0 && (
           <Group title="Your Picks">
             <ProjectList projects={yourPicks.value} />
           </Group>
         )}
 
-        {recentlyVisited.value && recentlyVisited.value.length >= 3 && (
+        {recentlyVisited.value && recentlyVisited.value.length > 0 && (
           <Group title="Recently Visited">
             <ProjectList projects={recentlyVisited.value} />
           </Group>
