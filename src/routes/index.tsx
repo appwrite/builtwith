@@ -1,4 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import {
+  component$,
+  useContext,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import ProjectFeatured from "~/components/layout/ProjectFeatured";
 import Group from "~/components/layout/Group";
 import ProjectList from "~/components/layout/ProjectList";
@@ -6,8 +11,11 @@ import ServiceList from "~/components/layout/ServiceList";
 import TagList from "~/components/layout/TagList";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$ } from "@builder.io/qwik-city";
+import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Query } from "appwrite";
+import { AccountContext } from "./layout";
+import { UpvotesContext } from "./layout";
 
 export const useHomeData = routeLoader$(async () => {
   const [
@@ -82,8 +90,33 @@ export const head: DocumentHead = () => ({
 });
 
 export default component$(() => {
+  const account = useContext(AccountContext);
+  const upvotes = useContext(UpvotesContext);
   const homeDataSignal = useHomeData();
   const homeData = homeDataSignal.value;
+
+  const yourPicks = useSignal<Project[] | undefined>([]);
+  useVisibleTask$(async () => {
+    if (!account.value || upvotes.value.length === 0) return;
+    yourPicks.value = await AppwriteService.listProjects([
+      Query.equal(
+        "$id",
+        upvotes.value.slice(0, 3).map((upvote) => upvote.projectId)
+      ),
+    ]);
+  });
+
+  const recentlyVisited = useSignal<Project[] | undefined>([]);
+  useVisibleTask$(async () => {
+    const visitedProjects = JSON.parse(
+      localStorage.getItem("visitedProjects") ?? "[]"
+    ) as string[];
+    if (visitedProjects.length === 0) return;
+
+    recentlyVisited.value = await AppwriteService.listProjects([
+      Query.equal("$id", visitedProjects.slice(0, 3)),
+    ]);
+  });
 
   return (
     <>
@@ -128,6 +161,18 @@ export default component$(() => {
             docsTotal={homeData.docsTotal}
           />
         </Group>
+
+        {yourPicks.value && yourPicks.value.length > 0 && (
+          <Group title="Your Picks">
+            <ProjectList projects={yourPicks.value} />
+          </Group>
+        )}
+
+        {recentlyVisited.value && recentlyVisited.value.length > 0 && (
+          <Group title="Recently Visited">
+            <ProjectList projects={recentlyVisited.value} />
+          </Group>
+        )}
       </div>
     </>
   );

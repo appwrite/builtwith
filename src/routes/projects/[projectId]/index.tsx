@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
@@ -41,13 +41,25 @@ export default component$(() => {
 
   const html = marked.marked.parse(projectData.value.project.description);
 
+  useVisibleTask$(async () => {
+    const visitedProjects = JSON.parse(
+      localStorage.getItem("visitedProjects") ?? "[]"
+    ) as string[];
+
+    visitedProjects.unshift(projectData.value.project.$id);
+
+    const visitedProjectsUnique = [...new Set(visitedProjects)];
+
+    localStorage.setItem(
+      "visitedProjects",
+      JSON.stringify(visitedProjectsUnique)
+    );
+  });
+
   return (
     <>
       <ul class="u-flex u-gap-24 u-flex-vertical-mobile">
-        <div
-          class="u-flex-vertical u-gap-24 u-flex-shrink-0"
-          style="flex-basis: 50%;"
-        >
+        <div class="u-flex-vertical u-gap-24 u-flex-shrink-0 u-flex-basis-50-percent">
           <button
             style="padding: 0px;"
             onClick$={() => nav("/")}
@@ -57,7 +69,7 @@ export default component$(() => {
             <span class="text">Back to Projects</span>
           </button>
 
-          <div class="u-flex u-gap-16" style="align-items: center;">
+          <div class="u-flex u-gap-16 u-cross-center">
             <h2 class="heading-level-2">{projectData.value.project.name}</h2>
             <Upvote
               projectId={projectData.value.project.$id}

@@ -254,7 +254,8 @@ export default component$(() => {
                                   onChange$={() => checkFilter(filter.id, id)}
                                   id={id}
                                   type="radio"
-                                  style="width: 16px; height: 16px; display: none;"
+                                  class="u-hide"
+                                  style="width: 16px; height: 16px;"
                                 />
 
                                 {getOption(filter.options, id).icon && (
