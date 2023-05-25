@@ -91,7 +91,7 @@ const generateTitle = (url: URL) => {
     return `Using ${service}`;
   }
 
-  return "Search";
+  return "Search Results";
 };
 
 export const useSearchData = routeLoader$(async ({ url }) => {
