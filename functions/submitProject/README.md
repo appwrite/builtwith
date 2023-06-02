@@ -4,7 +4,7 @@ Welcome to the documentation of this function 👋 We strongly recommend keeping
 
 ## 🤖 Documentation
 
-A function to submit project by an user. Project is marked as `isPublished=false`, so it needs moderator to approve it manually before it's public.
+A function to submit project by an user. Project is marked as `isPublished=false`, so it needs moderator to approve it manually before it's public. An email is sent to approvers to notify them about the new project.
 
 <!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
 
@@ -54,7 +54,11 @@ _Example output:_
 List of environment variables used by this cloud function:
 
 - **APPWRITE_FUNCTION_API_KEY** - Appwrite API Key
-<!-- Add your custom environment variables -->
+- **SMTP_HOST** - SMTP host
+- **SMTP_PORT** - SMTP port
+- **SMTP_USERNAME** - SMTP username
+- **SMTP_PASSWORD** - SMTP password
+- **APPROVER_EMAILS** - A comma seperated list of email addresses who are allowed sent approval emails
 
 ## 🚀 Deployment
 
