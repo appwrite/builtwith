@@ -102,6 +102,7 @@ module.exports = async function (req, res) {
       hasRealtime: services.includes("realtime"),
       hasFunctions: services.includes("functions"),
       hasDatabases: services.includes("databases"),
+      userId,
     }
   );
 
