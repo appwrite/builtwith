@@ -256,6 +256,15 @@
                     "array": false,
                     "size": 255,
                     "default": null
+                },
+                {
+                    "key": "rejectionReason",
+                    "type": "string",
+                    "status": "available",
+                    "required": false,
+                    "array": false,
+                    "size": 100000,
+                    "default": null
                 }
             ],
             "indexes": [
@@ -562,6 +571,21 @@
                 "users"
             ],
             "events": [],
+            "schedule": "",
+            "timeout": 15
+        },
+        {
+            "$id": "rejectProject",
+            "name": "rejectProject",
+            "runtime": "node-16.0",
+            "path": "functions/rejectProject",
+            "entrypoint": "src/index.js",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "execute": [],
+            "events": ["databases.main.collections.projects.documents.*.update"],
             "schedule": "",
             "timeout": 15
         }
