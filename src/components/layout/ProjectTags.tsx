@@ -94,12 +94,13 @@ export default component$((props: { project: Project }) => {
         </button>
       )}
 
-      {Object.keys(services).map((service) => (
-        <button
-          key={service}
-          onClick$={async () => await nav(`/search?service=${service}`)}
-        >
-          {(services as any)[service].used && (
+      {Object.keys(services)
+        .filter((service) => (services as any)[service].used)
+        .map((service) => (
+          <button
+            key={service}
+            onClick$={async () => await nav(`/search?service=${service}`)}
+          >
             <div class="tag is-secondary">
               <span
                 class={`icon-${(services as any)[service].icon}`}
@@ -107,9 +108,8 @@ export default component$((props: { project: Project }) => {
               ></span>
               <span class="text">{(services as any)[service].name}</span>
             </div>
-          )}
-        </button>
-      ))}
+          </button>
+        ))}
     </>
   );
 });
