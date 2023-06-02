@@ -42,6 +42,12 @@ export default component$((props: { project: Project }) => {
         }
       >
         <div class="tag is-secondary">
+          <span
+            class={`icon-${
+              (Config.platforms as any)[props.project.platform].iconClass
+            }`}
+            aria-hidden="true"
+          ></span>
           <span class="text">
             {(Config.platforms as any)[props.project.platform].name}
           </span>
@@ -68,7 +74,7 @@ export default component$((props: { project: Project }) => {
         >
           <div class="tag is-secondary">
             <span class="text">
-              {(Config.frameworks as any)[props.project.framework].name}{" "}
+              {(Config.frameworks as any)[props.project.framework].name}
             </span>
           </div>
         </button>
@@ -82,7 +88,7 @@ export default component$((props: { project: Project }) => {
         >
           <div class="tag is-secondary">
             <span class="text">
-              {(Config.uiLibraries as any)[props.project.uiLibrary].name}{" "}
+              {(Config.uiLibraries as any)[props.project.uiLibrary].name}
             </span>
           </div>
         </button>
