@@ -368,11 +368,16 @@ export default component$(() => {
                   </label>
                   <div class="select u-width-full-line">
                     <select bind:value={platform} id="platform">
-                      <option value="">Select option</option>
+                      <option value="" disabled selected>
+                        Select option
+                      </option>
                       <option value="web">Web</option>
+                      <option value="desktop">Desktop</option>
+                      <option value="cli">CLI</option>
                       <option value="flutter">Flutter</option>
                       <option value="apple">Apple</option>
                       <option value="android">Android</option>
+                      <option value="other">Other</option>
                     </select>
                     <span class="icon-cheveron-down" aria-hidden="true"></span>
                   </div>

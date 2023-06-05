@@ -2,7 +2,7 @@ import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
-import * as marked from "marked";
+import { marked } from "marked";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
@@ -39,7 +39,10 @@ export default component$(() => {
   const nav = useNavigate();
   const projectData = useProjectData();
 
-  const html = marked.marked.parse(projectData.value.project.description);
+  const html = marked(projectData.value.project.description, {
+    mangle: false,
+    headerIds: false,
+  });
 
   useVisibleTask$(async () => {
     const visitedProjects = JSON.parse(

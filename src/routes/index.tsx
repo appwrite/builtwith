@@ -155,10 +155,10 @@ export default component$(() => {
 
         <Group title="Use Cases">
           <TagList
-            startersTotal={homeData.startersTotal}
-            demoAppsTotal={homeData.demoAppsTotal}
-            othersTotal={homeData.othersTotal}
-            docsTotal={homeData.docsTotal}
+            startersTotal={homeData.startersTotal ?? 0}
+            demoAppsTotal={homeData.demoAppsTotal ?? 0}
+            othersTotal={homeData.othersTotal ?? 0}
+            docsTotal={homeData.docsTotal ?? 0}
           />
         </Group>
 

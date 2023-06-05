@@ -34,19 +34,27 @@ export default component$((props: { project: Project }) => {
     },
   };
 
+  const platform = (Config.platforms as any)[props.project.platform];
+
   return (
     <>
-      <button
-        onClick$={async () =>
-          await nav(`/search?platform=${props.project.platform}`)
-        }
-      >
-        <div class="tag is-secondary">
-          <span class="text">
-            {(Config.platforms as any)[props.project.platform].name}
-          </span>
-        </div>
-      </button>
+      {platform && (
+        <button
+          onClick$={async () =>
+            await nav(`/search?platform=${props.project.platform}`)
+          }
+        >
+          <div class="tag is-secondary">
+            {platform.iconClass && (
+              <span
+                class={`icon-${platform.iconClass}`}
+                aria-hidden="true"
+              ></span>
+            )}
+            {platform.name && <span class="text">{platform.name}</span>}
+          </div>
+        </button>
+      )}
 
       <button
         onClick$={async () =>
@@ -68,7 +76,7 @@ export default component$((props: { project: Project }) => {
         >
           <div class="tag is-secondary">
             <span class="text">
-              {(Config.frameworks as any)[props.project.framework].name}{" "}
+              {(Config.frameworks as any)[props.project.framework].name}
             </span>
           </div>
         </button>
@@ -82,18 +90,19 @@ export default component$((props: { project: Project }) => {
         >
           <div class="tag is-secondary">
             <span class="text">
-              {(Config.uiLibraries as any)[props.project.uiLibrary].name}{" "}
+              {(Config.uiLibraries as any)[props.project.uiLibrary].name}
             </span>
           </div>
         </button>
       )}
 
-      {Object.keys(services).map((service) => (
-        <button
-          key={service}
-          onClick$={async () => await nav(`/search?service=${service}`)}
-        >
-          {(services as any)[service].used && (
+      {Object.keys(services)
+        .filter((service) => (services as any)[service].used)
+        .map((service) => (
+          <button
+            key={service}
+            onClick$={async () => await nav(`/search?service=${service}`)}
+          >
             <div class="tag is-secondary">
               <span
                 class={`icon-${(services as any)[service].icon}`}
@@ -101,9 +110,8 @@ export default component$((props: { project: Project }) => {
               ></span>
               <span class="text">{(services as any)[service].name}</span>
             </div>
-          )}
-        </button>
-      ))}
+          </button>
+        ))}
     </>
   );
 });

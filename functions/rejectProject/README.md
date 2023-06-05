@@ -1,51 +1,24 @@
-# submitProject
+# rejectProject
 
 Welcome to the documentation of this function 👋 We strongly recommend keeping this file in sync with your function's logic to make sure anyone can easily understand your function in the future. If you don't need documentation, you can remove this file.
 
 ## 🤖 Documentation
 
-A function to submit project by an user. Project is marked as `isPublished=false`, so it needs moderator to approve it manually before it's public. An email is sent to approvers to notify them about the new project.
+A function to send a project rejection email once a rejection reason is entered. After the email is sent, the project is deleted from the database.
 
 <!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
 
 _Example input:_
 
-This function expects payload in JSON format with following properties:
-
-```js
-const {
-  useCase,
-  uiLibrary,
-  framework,
-  name,
-  tagline,
-  description,
-  services,
-  urlWebsite,
-  urlTwitter,
-  urlGitHub,
-  urlArticle,
-  fileId,
-} = payload;
-```
+This function expects no input
 
 <!-- If input is expected, add example -->
 
 _Example output:_
 
-<!-- Update with your expected output -->
-
 ```json
 {
-  "ok": true,
-  "msg": "Submission successful. Please allow us some time to review your project."
-}
-```
-
-```json
-{
-  "ok": false,
-  "msg": "Please fill in all the defail. Only URLs are optional."
+ "ok": true
 }
 ```
 
@@ -53,12 +26,13 @@ _Example output:_
 
 List of environment variables used by this cloud function:
 
+- **APPWRITE_FUNCTION_ENDPOINT** - Endpoint of Appwrite project
 - **APPWRITE_FUNCTION_API_KEY** - Appwrite API Key
 - **SMTP_HOST** - SMTP host
 - **SMTP_PORT** - SMTP port
 - **SMTP_USERNAME** - SMTP username
 - **SMTP_PASSWORD** - SMTP password
-- **APPROVER_EMAILS** - A comma seperated list of email addresses who are sent approval emails
+- **APPROVER_EMAILS** - A comma seperated list of email addresses who are sent bcc'd all rejection emails
 
 ## 🚀 Deployment
 
