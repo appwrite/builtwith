@@ -377,6 +377,7 @@ export default component$(() => {
                       <option value="flutter">Flutter</option>
                       <option value="apple">Apple</option>
                       <option value="android">Android</option>
+                      <option value="other">Other</option>
                     </select>
                     <span class="icon-cheveron-down" aria-hidden="true"></span>
                   </div>

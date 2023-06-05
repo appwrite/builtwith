@@ -34,25 +34,27 @@ export default component$((props: { project: Project }) => {
     },
   };
 
+  const platform = (Config.platforms as any)[props.project.platform];
+
   return (
     <>
-      <button
-        onClick$={async () =>
-          await nav(`/search?platform=${props.project.platform}`)
-        }
-      >
-        <div class="tag is-secondary">
-          <span
-            class={`icon-${
-              (Config.platforms as any)[props.project.platform].iconClass
-            }`}
-            aria-hidden="true"
-          ></span>
-          <span class="text">
-            {(Config.platforms as any)[props.project.platform].name}
-          </span>
-        </div>
-      </button>
+      {platform && (
+        <button
+          onClick$={async () =>
+            await nav(`/search?platform=${props.project.platform}`)
+          }
+        >
+          <div class="tag is-secondary">
+            {platform.iconClass && (
+              <span
+                class={`icon-${platform.iconClass}`}
+                aria-hidden="true"
+              ></span>
+            )}
+            {platform.name && <span class="text">{platform.name}</span>}
+          </div>
+        </button>
+      )}
 
       <button
         onClick$={async () =>

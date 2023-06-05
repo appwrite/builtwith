@@ -24,6 +24,9 @@ export const Config = {
       name: "Android",
       iconClass: "android",
     },
+    other: {
+      name: "Other",
+    },
   },
   services: {
     databases: {
