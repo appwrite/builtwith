@@ -26,6 +26,7 @@ export const Config = {
     },
     other: {
       name: "Other",
+      iconClass: "cube",
     },
   },
   services: {

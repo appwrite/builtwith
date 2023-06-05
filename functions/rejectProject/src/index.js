@@ -1,26 +1,6 @@
 const sdk = require("node-appwrite");
 const nodemailer = require("nodemailer");
-
-const EVENT_REGEX =
-  /(databases\.main\.collections\.projects\.documents\.)[a-zA-Z0-9]+(\.update)/;
-
-function rejectionTemplate(project) {
-  return `Hey 👋,
-Thank you for submitting your project "${project.name}" to Built With Appwrite.
-
-Unfortunately, we have decided to reject it for the following reason:
-> ${project.rejectionReason}
-Don't sweat it, though! This is all part of the process and an opportunity for growth. 🌱
-After addressing the reason for rejection, feel free to submit your project again. We'd be excited to see your improved version! 🚀
-
-Your Project:
-Name: ${project.name}
-Description: ${project.description}
-Tagline: ${project.tagline}
-
-Keep on coding and creating awesome stuff! 💻🔥
-The Built With Appwrite Team`;
-}
+const template = require("./template");
 
 module.exports = async function (req, res) {
   const client = new sdk.Client();
@@ -34,8 +14,7 @@ module.exports = async function (req, res) {
   client
     .setEndpoint("https://cloud.appwrite.io/v1")
     .setProject(req.variables["APPWRITE_FUNCTION_PROJECT_ID"])
-    .setKey(req.variables["APPWRITE_FUNCTION_API_KEY"])
-    .setSelfSigned(true);
+    .setKey(req.variables["APPWRITE_FUNCTION_API_KEY"]);
 
   const SMTP_URL = req.variables["SMTP_URL"];
   const SMTP_PORT = req.variables["SMTP_PORT"];
@@ -45,18 +24,13 @@ module.exports = async function (req, res) {
     throw new Error("Missing SMTP credentials.");
   }
 
-  const event = req.variables["APPWRITE_FUNCTION_EVENT"];
   const project = JSON.parse(req.variables["APPWRITE_FUNCTION_EVENT_DATA"]);
-  if (
-    !EVENT_REGEX.test(event) ||
-    !project ||
-    !project.userId ||
-    !project.name
-  ) {
+  if (!project || !project.userId || !project.name) {
     throw new Error("Invalid project update event.");
   }
 
   if (!project.rejectionReason || project.isPublished) {
+    console.log("Project has no rejection reason or is already published.");
     res.json({ ok: true });
     return;
   }
@@ -86,8 +60,9 @@ module.exports = async function (req, res) {
     await transporter.sendMail({
       from: SMTP_USERNAME,
       to: author.email,
+      bcc: req.variables["APPROVER_EMAILS"],
       subject: "Project Review - builtwith.appwrite.io ",
-      text: rejectionTemplate(project),
+      text: template(project),
     });
     console.log("Done");
   } catch (error) {
