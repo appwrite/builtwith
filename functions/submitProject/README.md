@@ -58,7 +58,7 @@ List of environment variables used by this cloud function:
 - **SMTP_PORT** - SMTP port
 - **SMTP_USERNAME** - SMTP username
 - **SMTP_PASSWORD** - SMTP password
-- **APPROVER_EMAILS** - A comma seperated list of email addresses who are allowed sent approval emails
+- **APPROVER_EMAILS** - A comma seperated list of email addresses who are sent approval emails
 
 ## 🚀 Deployment
 
