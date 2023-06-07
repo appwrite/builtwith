@@ -59,25 +59,37 @@
 
 .object-og {
   width: 100%;
-  height: 100%;
+  position: relative;
 }
 
 .object-og img {
+  display: block;
   width: 100%;
   object-fit: cover;
   object-position: center;
   aspect-ratio: 16 / 9;
 }
 
-.object-square {
-  aspect-ratio: 1 / 1;
-  width: 100%;
-}
-
-.object-square img {
+.object-og::after {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  box-shadow: inset 0 0 0.5rem rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+
+.theme-dark .object-og::after {
+  box-shadow: inset 0 0 0.5rem rgba(255, 255, 255, 0.1);
+}
+
+.object-og-rounded {
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+  display: inline-block;
 }
 
 .vertical-button {
