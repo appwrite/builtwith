@@ -70,7 +70,6 @@ export default component$((props: { project: Project | null }) => {
 
       <div
         class="object-og u-cursor-pointer"
-        style="height: 200px;"
         onClick$={async () => await nav(`/projects/${project.$id}`)}
       >
         <img src={AppwriteService.getProjectThumbnail(project.imageId)} />

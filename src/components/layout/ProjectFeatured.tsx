@@ -14,11 +14,10 @@ export default component$((props: { project: Project }) => {
         <div class="u-flex-basis-50-percent u-flex-shrink-0">
           <button
             onClick$={async () => await nav(`/projects/${project.$id}`)}
-            class="object-og"
+            class="object-og object-og-rounded"
           >
             <img
               src={AppwriteService.getProjectThumbnail(project.imageId, 1920)}
-              style="border-radius: var(--border-radius-medium);"
             />
           </button>
         </div>
