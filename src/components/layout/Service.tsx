@@ -1,14 +1,12 @@
 import { Slot, component$ } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
 
 export default component$((props: { id: string; name: string }) => {
-  const nav = useNavigate();
-
   return (
-    <button
+    <Link
+      href={`/search?service=${props.id}`}
       class="card u-flex-vertical u-cross-center u-main-space u-overflow-hidden u-width-full-line"
       style="padding: 0px;"
-      onClick$={async () => await nav("/search?service=" + props.id)}
     >
       <div class="c-service-container u-stretch">
         <Slot />
@@ -19,6 +17,6 @@ export default component$((props: { id: string; name: string }) => {
           {props.name}
         </p>
       </div>
-    </button>
+    </Link>
   );
 });

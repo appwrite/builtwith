@@ -1,12 +1,10 @@
 import { component$ } from "@builder.io/qwik";
 import Project from "./Project";
 import type { Project as ProjectType } from "~/AppwriteService";
-import { useNavigate } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
 
 export default component$(
   (props: { href?: string; projects: ProjectType[] }) => {
-    const nav = useNavigate();
-
     return (
       <div class="project-list u-gap-16">
         {props.projects.slice(0, 3).map((project) => (
@@ -26,26 +24,21 @@ export default component$(
                 </p>
               </div>
               <div class="u-flex u-gap-16 u-main-center">
-                <button
-                  onClick$={async () => await nav("/submit-project")}
-                  class="button is-secondary"
-                  type="button"
-                >
+                <Link href="/submit-project" class="button is-secondary">
                   <span class="text">Submit Project</span>
-                </button>
+                </Link>
               </div>
             </div>
           </article>
         )}
 
         {props.projects.length >= 1 && props.href && (
-          <button
-            onClick$={async () => await nav(props.href)}
+          <Link
+            href={props.href}
             class="is-only-mobile button is-secondary u-width-full-line u-text-center"
-            type="button"
           >
             <span class="text u-width-full-line">See More</span>
-          </button>
+          </Link>
         )}
       </div>
     );

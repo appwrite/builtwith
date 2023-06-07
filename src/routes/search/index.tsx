@@ -1,6 +1,7 @@
 import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
+import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import { Query } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 import Group from "~/components/layout/Group";
@@ -124,8 +125,6 @@ export const head: DocumentHead = () => ({
 export default component$(() => {
   const searchData = useSearchData();
 
-  const nav = useNavigate();
-
   const projects = useSignal(searchData.value.projects);
   const location = useLocation();
 
@@ -195,13 +194,9 @@ export default component$(() => {
                     </p>
                   </div>
                   <div class="u-flex u-gap-16 u-main-center">
-                    <button
-                      onClick$={async () => await nav("/submit-project")}
-                      class="button is-secondary"
-                      type="button"
-                    >
+                    <Link href="/submit-project" class="button is-secondary">
                       <span class="text">Submit Project</span>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </article>

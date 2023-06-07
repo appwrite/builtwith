@@ -1,7 +1,7 @@
 import type { Signal } from "@builder.io/qwik";
 import { useContext } from "@builder.io/qwik";
 import { $, component$, useSignal } from "@builder.io/qwik";
-import { useNavigate } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
 import type { Models } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 import { SearchModalContext, ThemeContext } from "~/routes/layout";
@@ -9,8 +9,6 @@ import Cookies from "js-cookie";
 
 export default component$(
   (props: { account: Signal<null | Models.User<any>> }) => {
-    const nav = useNavigate();
-
     const searchModal = useContext(SearchModalContext);
 
     const links = [
@@ -52,8 +50,8 @@ export default component$(
               <span aria-hidden="true" class="icon-menu"></span>
             )}
           </button>
-          <button
-            onClick$={async () => await nav("/")}
+          <Link
+            href="/"
             class="u-flex u-cross-center u-gap-8 u-margin-inline-end-8"
           >
             <svg
@@ -80,7 +78,7 @@ export default component$(
                 fill="#F02E65"
               />
             </svg>
-          </button>
+          </Link>
           <div class="logo is-not-mobile">
             <ul class="buttons-list is-with-padding">
               {/* <li></li> */}
@@ -90,12 +88,9 @@ export default component$(
                   key={link.name}
                   class="buttons-list-item u-padding-inline-0"
                 >
-                  <button
-                    onClick$={async () => await nav(link.url)}
-                    class="button is-text"
-                  >
+                  <Link href={link.url} class="button is-text">
                     {link.name}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -174,12 +169,9 @@ export default component$(
               ) : (
                 <>
                   <li class="buttons-list-item u-padding-inline-0">
-                    <button
-                      onClick$={async () => await nav("/submit-project")}
-                      class="button is-text"
-                    >
+                    <Link href="/submit-project" class="button is-text">
                       <span class="text">Submit</span>
-                    </button>
+                    </Link>
                   </li>
                   <li class="buttons-list-item u-padding-inline-0">
                     <button onClick$={signOut} class="button is-text">
@@ -216,13 +208,13 @@ export default component$(
                   <ul class="drop-list">
                     {links.map((link) => (
                       <li key={link.name} class="drop-list-item">
-                        <button
-                          onClick$={async () => await nav(link.url)}
+                        <Link
+                          href={link.url}
                           class="drop-button u-capitalize u-small u-bold"
                           aria-current="page"
                         >
                           <span>{link.name}</span>
-                        </button>
+                        </Link>
                       </li>
                     ))}
                   </ul>
