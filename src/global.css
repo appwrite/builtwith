@@ -82,10 +82,6 @@
   pointer-events: none;
 }
 
-.theme-dark .object-og::after {
-  box-shadow: inset 0 0 0.5rem rgba(255, 255, 255, 0.1);
-}
-
 .object-og-rounded {
   border-radius: var(--border-radius-medium);
   overflow: hidden;
