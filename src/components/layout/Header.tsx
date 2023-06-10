@@ -201,7 +201,8 @@ export default component$(
         </header>
 
         {isMenuOpened.value && (
-          <aside class="main-side u-block" style="padding-top: 0;">
+          /* style="display: block;" required over u-block for specifity */
+          <aside class="main-side" style="display: block; padding-top: 0;">
             <nav class="side-nav">
               <div class="side-nav-main">
                 <section class="drop-section">
