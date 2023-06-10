@@ -1,35 +1,34 @@
 import { component$ } from "@builder.io/qwik";
 import Upvote from "../blocks/Upvote";
 import { AppwriteService, type Project } from "~/AppwriteService";
-import { useNavigate } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
 import ProjectTags from "./ProjectTags";
 
 export default component$((props: { project: Project }) => {
-  const nav = useNavigate();
   const { project } = props;
 
   return (
     <article class="card u-min-width-100-percent">
       <div class="u-flex u-flex-vertical-mobile u-gap-24">
         <div class="u-flex-basis-50-percent u-flex-shrink-0">
-          <button
-            onClick$={async () => await nav(`/projects/${project.$id}`)}
+          <Link
+            href={`/projects/${project.$id}`}
             class="object-og object-og-rounded"
           >
             <img
               src={AppwriteService.getProjectThumbnail(project.imageId, 1920)}
             />
-          </button>
+          </Link>
         </div>
 
         <div class="u-flex u-flex-vertical u-stretch u-gap-8">
           <div class="u-flex u-main-space-between u-cross-center">
-            <button
-              onClick$={async () => await nav(`/projects/${project.$id}`)}
+            <Link
+              href={`/projects/${project.$id}`}
               class="heading-level-3 u-margin-block-start-12 c-trim"
             >
               {project.name}
-            </button>
+            </Link>
             <Upvote
               projectId={project.$id}
               inline={true}

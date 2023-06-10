@@ -1,7 +1,7 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { routeLoader$, useNavigate } from "@builder.io/qwik-city";
+import { routeLoader$, Link } from "@builder.io/qwik-city";
 import { marked } from "marked";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
@@ -36,7 +36,6 @@ export const head: DocumentHead = ({ resolveValue }) => {
 };
 
 export default component$(() => {
-  const nav = useNavigate();
   const projectData = useProjectData();
 
   const html = marked(projectData.value.project.description, {
@@ -63,14 +62,10 @@ export default component$(() => {
     <>
       <ul class="u-flex u-gap-24 u-flex-vertical-mobile">
         <div class="u-flex-vertical u-gap-24 u-flex-shrink-0 u-flex-basis-50-percent">
-          <button
-            style="padding: 0px;"
-            onClick$={() => nav("/")}
-            class="button is-text"
-          >
+          <Link href="/" style="padding: 0px;" class="button is-text">
             <span class="icon-cheveron-left" aria-hidden="true"></span>
             <span class="text">Back to Projects</span>
-          </button>
+          </Link>
 
           <div class="u-flex u-gap-16 u-cross-center">
             <h2 class="heading-level-2">{projectData.value.project.name}</h2>
