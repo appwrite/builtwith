@@ -43,7 +43,7 @@ export default component$((props: { project: Project | null }) => {
       <div class="u-width-full-line" style="padding: var(--p-card-padding);">
         <div class="u-flex u-cross-center u-gap-8 u-main-space-between u-width-full-line">
           <div class="u-stretch u-flex-vertical u-gap-16">
-            <div class="u-flex u-main-space-between u-cross-center">
+            <div class="u-flex u-main-space-between u-cross-center u-gap-8">
               <Link href={`/projects/${project.$id}`}>
                 <p class="heading-level-4 c-trim" style="font-size: 1.3rem;">
                   {project.name}

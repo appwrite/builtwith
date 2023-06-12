@@ -22,7 +22,7 @@ export default component$((props: { project: Project }) => {
         </div>
 
         <div class="u-flex u-flex-vertical u-stretch u-gap-8">
-          <div class="u-flex u-main-space-between u-cross-center">
+          <div class="u-flex u-main-space-between u-cross-center u-gap-8">
             <Link
               href={`/projects/${project.$id}`}
               class="heading-level-3 u-margin-block-start-12 c-trim"
