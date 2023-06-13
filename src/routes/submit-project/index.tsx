@@ -591,7 +591,7 @@ export default component$(() => {
                 </li>
                 <li class="form-item">
                   <label class="label" for="twitter">
-                    Twitter URL
+                    Your Twitter Profile URL
                   </label>
                   <div class="input-text-wrapper">
                     <input
