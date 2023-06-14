@@ -190,8 +190,7 @@ export default component$(() => {
           <div class="alert-content">
             <h6 class="alert-title">Project submissions need reviews.</h6>
             <p class="alert-message">
-              We review projects manually to keep the list professional. Please
-              take your time when filling submission.
+              We review projects manually to keep the list professional.  We kindly request that you take your time when submitting your project information.
             </p>
           </div>
         </div>
@@ -577,7 +576,7 @@ export default component$(() => {
                 </li>
                 <li class="form-item">
                   <label class="label" for="github">
-                    GitHub URL
+                    GitHub Repository URL
                   </label>
                   <div class="input-text-wrapper">
                     <input
