@@ -6,25 +6,44 @@ import { marked } from "marked";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
+import { AppwriteException } from "appwrite";
 
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
     return {
       project: await AppwriteService.getProject(params.projectId),
+      error: null,
     };
-  } catch {
-    status(404);
-    return { project: null };
+  } catch (error) {
+    if (error instanceof AppwriteException) {
+      status(error.code);
+      return { project: null, error };
+    }
   }
+
+  return {
+    project: null,
+    error: {
+      code: 500,
+      message: "Internal Server Error",
+    },
+  };
 });
 
 export const head: DocumentHead = ({ resolveValue }) => {
-  const { project } = resolveValue(useProjectData);
+  const { project, error } = resolveValue(useProjectData);
 
-  if (!project)
+  if (error?.code === 500) {
+    return {
+      title: "Something went wrong | Built with Appwrite",
+    };
+  }
+
+  if (!project) {
     return {
       title: "Project not found | Built with Appwrite",
     };
+  }
 
   return {
     title: `${project.name} | Built with Appwrite`,
@@ -46,9 +65,9 @@ export const head: DocumentHead = ({ resolveValue }) => {
 };
 
 export default component$(() => {
-  const { project } = useProjectData().value;
+  const { project, error } = useProjectData().value;
 
-  if (!project) {
+  if (error) {
     return (
       <ul class="u-flex u-gap-24 u-flex-vertical-mobile">
         <div class="u-flex-vertical u-gap-24 u-flex-shrink-0 u-flex-basis-50-percent">
@@ -56,11 +75,10 @@ export default component$(() => {
             <span class="icon-cheveron-left" aria-hidden="true"></span>
             <span class="text">Back to Projects</span>
           </Link>
-
           <div>
-            <h2 class="heading-level-2">Not Found</h2>
+            <h2 class="heading-level-2">{error.code}</h2>
             <p class="u-margin-block-start-16" style="font-size: 1rem;">
-              This project does not exist.
+              {error.message}
             </p>
           </div>
         </div>
