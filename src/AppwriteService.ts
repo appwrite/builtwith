@@ -73,7 +73,6 @@ export const AppwriteService = {
     }
   },
   countProjects: async (queries: string[]) => {
-    console.log("Counting projects...");
     const hasIsPublished = queries.find((query) =>
       query.startsWith('equal("isPublished')
     );
@@ -90,17 +89,14 @@ export const AppwriteService = {
     if (!hasCreatedAtSort) {
       queries.push(Query.orderDesc("$createdAt"));
     }
-    try {
-      const response = await databases.listDocuments<Project>(
-        "main",
-        "projects",
-        queries
-      );
 
-      return response.total;
-    } catch (error) {
-      console.error(`Error counting projects: ${error}`);
-    }
+    const response = await databases.listDocuments<Project>(
+      "main",
+      "projects",
+      queries
+    );
+
+    return response.total;
   },
   getProject: async (projectId: string) => {
     const project = await databases.getDocument<Project>(
@@ -111,7 +107,6 @@ export const AppwriteService = {
     return project;
   },
   listProjects: async (queries: string[]) => {
-    console.log("Listing projects...");
     const hasIsPublished = queries.find((query) =>
       query.startsWith('equal("isPublished')
     );
@@ -129,18 +124,13 @@ export const AppwriteService = {
       queries.push(Query.orderDesc("$createdAt"));
     }
 
-    try {
-      const { documents: projects } = await databases.listDocuments<Project>(
-        "main",
-        "projects",
-        queries
-      );
+    const { documents: projects } = await databases.listDocuments<Project>(
+      "main",
+      "projects",
+      queries
+    );
 
-      return projects;
-    } catch (error) {
-      console.error("Listing projects failed: " + error);
-      return [];
-    }
+    return projects;
   },
   searchProjects: async (searchQuery: string) => {
     const { documents: projects } = await databases.listDocuments<Project>(
