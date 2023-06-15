@@ -7,38 +7,70 @@ import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
 
-export const useProjectData = routeLoader$(async ({ params }) => {
-  return {
-    project: await AppwriteService.getProject(params.projectId),
-  };
+export const useProjectData = routeLoader$(async ({ params, status }) => {
+  try {
+    return {
+      project: await AppwriteService.getProject(params.projectId),
+    };
+  } catch {
+    status(404);
+    return { project: null };
+  }
 });
 
 export const head: DocumentHead = ({ resolveValue }) => {
-  const projectData = resolveValue(useProjectData);
+  const { project } = resolveValue(useProjectData);
+
+  if (!project)
+    return {
+      title: "Project not found | Built with Appwrite",
+    };
 
   return {
-    title: `${projectData.project.name} | Built with Appwrite`,
+    title: `${project.name} | Built with Appwrite`,
     meta: [
       {
         name: "description",
-        content: projectData.project.tagline,
+        content: project.tagline,
       },
       {
         name: "og:title",
-        content: `${projectData.project.name} | Built with Appwrite`,
+        content: `${project.name} | Built with Appwrite`,
       },
       {
         name: "og:description",
-        content: projectData.project.tagline,
+        content: project.tagline,
       },
     ],
   };
 };
 
 export default component$(() => {
-  const projectData = useProjectData();
+  const { project } = useProjectData().value;
 
-  const html = marked(projectData.value.project.description, {
+  if (!project) {
+    return (
+      <>
+        <ul class="u-flex u-gap-24 u-flex-vertical-mobile">
+          <div class="u-flex-vertical u-gap-24 u-flex-shrink-0 u-flex-basis-50-percent">
+            <Link href="/" style="padding: 0px;" class="button is-text">
+              <span class="icon-cheveron-left" aria-hidden="true"></span>
+              <span class="text">Back to Projects</span>
+            </Link>
+
+            <div>
+              <h2 class="heading-level-2">Not Found</h2>
+              <p class="u-margin-block-start-16" style="font-size: 1rem;">
+                This project does not exist.
+              </p>
+            </div>
+          </div>
+        </ul>
+      </>
+    );
+  }
+
+  const html = marked(project.description, {
     mangle: false,
     headerIds: false,
   });
@@ -48,7 +80,7 @@ export default component$(() => {
       localStorage.getItem("visitedProjects") ?? "[]"
     ) as string[];
 
-    visitedProjects.unshift(projectData.value.project.$id);
+    visitedProjects.unshift(project.$id);
 
     const visitedProjectsUnique = [...new Set(visitedProjects)];
 
@@ -68,30 +100,24 @@ export default component$(() => {
           </Link>
 
           <div class="u-flex u-gap-16 u-cross-center">
-            <h2 class="heading-level-2">{projectData.value.project.name}</h2>
-            <Upvote
-              projectId={projectData.value.project.$id}
-              votes={projectData.value.project.upvotes}
-              inline
-            />
+            <h2 class="heading-level-2">{project.name}</h2>
+            <Upvote projectId={project.$id} votes={project.upvotes} inline />
           </div>
 
-          <p style="font-size: 1.2rem; margin-top: -1rem;">
-            {projectData.value.project.tagline}
-          </p>
+          <p style="font-size: 1.2rem; margin-top: -1rem;">{project.tagline}</p>
 
-          {(projectData.value.project.urlGooglePlay ||
-            projectData.value.project.urlAppStore ||
-            projectData.value.project.urlMacOs ||
-            projectData.value.project.urlWindows ||
-            projectData.value.project.urlLinux) && (
+          {(project.urlGooglePlay ||
+            project.urlAppStore ||
+            project.urlMacOs ||
+            project.urlWindows ||
+            project.urlLinux) && (
             <div>
               <h4 class="eyebrow-heading-3">Download the Application</h4>
 
               <div class="u-flex u-flex-wrap u-cross-center u-gap-8 u-margin-block-start-12">
-                {projectData.value.project.urlGooglePlay && (
+                {project.urlGooglePlay && (
                   <a
-                    href={projectData.value.project.urlGooglePlay}
+                    href={project.urlGooglePlay}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -100,9 +126,9 @@ export default component$(() => {
                   </a>
                 )}
 
-                {projectData.value.project.urlWindows && (
+                {project.urlWindows && (
                   <a
-                    href={projectData.value.project.urlWindows}
+                    href={project.urlWindows}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -111,9 +137,9 @@ export default component$(() => {
                   </a>
                 )}
 
-                {projectData.value.project.urlLinux && (
+                {project.urlLinux && (
                   <a
-                    href={projectData.value.project.urlLinux}
+                    href={project.urlLinux}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -122,9 +148,9 @@ export default component$(() => {
                   </a>
                 )}
 
-                {projectData.value.project.urlAppStore && (
+                {project.urlAppStore && (
                   <a
-                    href={projectData.value.project.urlAppStore}
+                    href={project.urlAppStore}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -133,9 +159,9 @@ export default component$(() => {
                   </a>
                 )}
 
-                {projectData.value.project.urlMacOs && (
+                {project.urlMacOs && (
                   <a
-                    href={projectData.value.project.urlMacOs}
+                    href={project.urlMacOs}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -147,17 +173,17 @@ export default component$(() => {
             </div>
           )}
 
-          {(projectData.value.project.urlWebsite ||
-            projectData.value.project.urlGitHub ||
-            projectData.value.project.urlTwitter ||
-            projectData.value.project.urlArticle) && (
+          {(project.urlWebsite ||
+            project.urlGitHub ||
+            project.urlTwitter ||
+            project.urlArticle) && (
             <div>
               <h4 class="eyebrow-heading-3">Stay in Touch</h4>
 
               <div class="u-flex u-flex-wrap u-cross-center u-gap-8 u-margin-block-start-12">
-                {projectData.value.project.urlWebsite && (
+                {project.urlWebsite && (
                   <a
-                    href={projectData.value.project.urlWebsite}
+                    href={project.urlWebsite}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -166,9 +192,9 @@ export default component$(() => {
                   </a>
                 )}
 
-                {projectData.value.project.urlGitHub && (
+                {project.urlGitHub && (
                   <a
-                    href={projectData.value.project.urlGitHub}
+                    href={project.urlGitHub}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -176,9 +202,9 @@ export default component$(() => {
                     <p>View on GitHub</p>
                   </a>
                 )}
-                {projectData.value.project.urlTwitter && (
+                {project.urlTwitter && (
                   <a
-                    href={projectData.value.project.urlTwitter}
+                    href={project.urlTwitter}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -187,9 +213,9 @@ export default component$(() => {
                   </a>
                 )}
 
-                {projectData.value.project.urlArticle && (
+                {project.urlArticle && (
                   <a
-                    href={projectData.value.project.urlArticle}
+                    href={project.urlArticle}
                     target="_blank"
                     class="button is-secondary"
                   >
@@ -204,7 +230,7 @@ export default component$(() => {
           <div>
             <h4 class="eyebrow-heading-3">Tags</h4>
             <div class="u-flex u-flex-wrap u-gap-8 u-margin-block-start-12">
-              <ProjectTags project={projectData.value.project} />
+              <ProjectTags project={project} />
             </div>
           </div>
 
@@ -214,20 +240,16 @@ export default component$(() => {
           >
             <h4 class="eyebrow-heading-3">Share</h4>
             <Socials
-              url={`https://builtwith.appwrite.io/projects/${projectData.value.project.$id}`}
-              title={`Built with Appwrite: ${projectData.value.project.name}`}
-              body={projectData.value.project.tagline}
+              url={`https://builtwith.appwrite.io/projects/${project.$id}`}
+              title={`Built with Appwrite: ${project.name}`}
+              body={project.tagline}
             />
           </div>
         </div>
 
         <div>
           <div class="object-og object-og-rounded">
-            <img
-              src={AppwriteService.getProjectThumbnail(
-                projectData.value.project.imageId
-              )}
-            />
+            <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
           </div>
         </div>
       </ul>
