@@ -49,7 +49,7 @@ export default component$((props: { project: Project | null }) => {
                   {project.name}
                 </p>
               </Link>
-              <Upvote projectId={project.$id} votes={project.upvotes} inline />
+              <Upvote projectId={project.$id} votes={project.upvotes} />
             </div>
             <Link href={`/projects/${project.$id}`}>
               <p

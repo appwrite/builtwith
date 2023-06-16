@@ -117,7 +117,7 @@ export default component$(() => {
 
           <div class="u-flex u-gap-16 u-cross-center">
             <h2 class="heading-level-2">{project.name}</h2>
-            <Upvote projectId={project.$id} votes={project.upvotes} inline />
+            <Upvote projectId={project.$id} votes={project.upvotes} />
           </div>
 
           <p style="font-size: 1.2rem; margin-top: -1rem;">{project.tagline}</p>

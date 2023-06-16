@@ -29,11 +29,7 @@ export default component$((props: { project: Project }) => {
             >
               {project.name}
             </Link>
-            <Upvote
-              projectId={project.$id}
-              inline={true}
-              votes={project.upvotes}
-            />
+            <Upvote projectId={project.$id} votes={project.upvotes} />
           </div>
 
           <div class="u-stretch">

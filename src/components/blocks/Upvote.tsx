@@ -13,17 +13,16 @@ import { AccountContext, UpvotesContext } from "~/routes/layout";
 type Props = {
   projectId: string;
   votes: number;
-  inline?: boolean;
 };
 
 export default component$((props: Props) => {
-  const upvoteContext = useContext(UpvotesContext);
-  const accountContext = useContext(AccountContext);
+  const upvotes = useContext(UpvotesContext);
+  const account = useContext(AccountContext);
 
   const isLoading = useSignal(false);
 
   const isUpvotedServer = useComputed$(() => {
-    return !!upvoteContext.value.find(
+    return !!upvotes.value.find(
       (upvote) => upvote.projectId === props.projectId
     );
   });
@@ -32,14 +31,14 @@ export default component$((props: Props) => {
     return isLoading.value ? isUpvotedClient.value : isUpvotedServer.value;
   });
 
-  const votesServer = useSignal(props.votes);
-  const votes = useComputed$(() => {
+  const countServer = useSignal(props.votes);
+  const count = useComputed$(() => {
     if (isLoading.value) {
       return isUpvotedClient.value
-        ? votesServer.value + 1
-        : votesServer.value - 1;
+        ? countServer.value + 1
+        : countServer.value - 1;
     }
-    return votesServer.value;
+    return countServer.value;
   });
 
   const upvoteProject = $(async (e: QwikMouseEvent) => {
@@ -50,12 +49,12 @@ export default component$((props: Props) => {
 
     try {
       const res = await AppwriteService.upvoteProject(props.projectId);
-      if (accountContext.value) {
-        upvoteContext.value = await AppwriteService.listUserUpvotes(
-          accountContext.value.$id
+      if (account.value) {
+        upvotes.value = await AppwriteService.listUserUpvotes(
+          account.value.$id
         );
       }
-      votesServer.value = res.votes;
+      countServer.value = res.votes;
     } catch (error: unknown) {
       if (error instanceof AppwriteException && error.code === 401) {
         alert("Please sign in first.");
@@ -72,14 +71,14 @@ export default component$((props: Props) => {
     <button
       preventdefault:click
       onClick$={upvoteProject}
-      class={`button upvote-button ${props.inline ? "" : "vertical-button"} ${
+      class={`button upvote-button vertical-button ${
         isUpvoted.value ? "is-primary" : "is-secondary"
       }`}
       aria-label="Upvote"
       aria-pressed={isUpvoted.value}
     >
       <span class="icon-heart" aria-hidden="true"></span>
-      <span class="text">{votes.value}</span>
+      <span class="text">{count.value}</span>
     </button>
   );
 });

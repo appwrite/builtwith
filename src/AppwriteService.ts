@@ -190,7 +190,6 @@ export const AppwriteService = {
   listUserUpvotes: async (userId: string) => {
     return (
       await databases.listDocuments<ProjectUpvote>("main", "projectUpvotes", [
-        Query.limit(100),
         Query.equal("userId", userId),
         Query.orderDesc("$createdAt"),
       ])
