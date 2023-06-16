@@ -1,9 +1,16 @@
-import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useComputed$,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import { Query } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
+import { useUpvotes } from "~/components/hooks/useUpvotes";
 import Group from "~/components/layout/Group";
 import ProjectFeatured from "~/components/layout/ProjectFeatured";
 
@@ -126,6 +133,13 @@ export default component$(() => {
   const searchData = useSearchData();
 
   const projects = useSignal(searchData.value.projects);
+
+  const projectIds = useComputed$(() =>
+    projects.value.map((project) => project.$id)
+  );
+
+  useUpvotes(projectIds);
+
   const location = useLocation();
 
   const lastId = useSignal<string | null>(

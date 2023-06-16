@@ -13,20 +13,19 @@ import {
   useTask$,
 } from "@builder.io/qwik";
 import { routeLoader$, useLocation, useNavigate } from "@builder.io/qwik-city";
-import type { Models } from "appwrite";
-import type { ProjectUpvote } from "~/AppwriteService";
+import { type Models } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 import { Config } from "~/Config";
 import Search from "~/components/blocks/Search";
 import Footer from "~/components/layout/Footer";
 import Header from "~/components/layout/Header";
 
-export const UpvotesContext = createContextId<Signal<ProjectUpvote[]>>(
-  "app.upvotes-context"
-);
-
 export const AccountContext = createContextId<Signal<null | Models.User<any>>>(
   "app.account-context"
+);
+
+export const UpvotesContext = createContextId<Record<string, boolean>>(
+  "app.upvotes-context"
 );
 
 export const ThemeContext =
@@ -51,6 +50,9 @@ export default component$(() => {
   const account = useSignal<null | Models.User<any>>(null);
   useContextProvider(AccountContext, account);
 
+  const upvotes = useStore<Record<string, boolean>>({}, { deep: true });
+  useContextProvider(UpvotesContext, upvotes);
+
   const themeData = useThemeLoader();
   const theme = useSignal(themeData.value ?? "dark");
   useContextProvider(ThemeContext, theme);
@@ -71,11 +73,7 @@ export default component$(() => {
       document.documentElement.style.overflow = "auto";
     }),
   });
-
   useContextProvider(SearchModalContext, searchModal);
-
-  const upvotes = useSignal<ProjectUpvote[]>([]);
-  useContextProvider(UpvotesContext, upvotes);
 
   const searchModalRef = useSignal<HTMLDialogElement>();
   const onKeyDown = $((e: QwikKeyboardEvent) => {
@@ -94,10 +92,6 @@ export default component$(() => {
 
   useVisibleTask$(async () => {
     account.value = await AppwriteService.getAccount();
-
-    if (account.value) {
-      upvotes.value = await AppwriteService.listUserUpvotes(account.value.$id);
-    }
   });
 
   const openedFilter = useSignal<string | null>(null);
