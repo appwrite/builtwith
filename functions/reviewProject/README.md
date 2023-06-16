@@ -1,10 +1,10 @@
-# rejectProject
+# rewiiewProject
 
 Welcome to the documentation of this function 👋 We strongly recommend keeping this file in sync with your function's logic to make sure anyone can easily understand your function in the future. If you don't need documentation, you can remove this file.
 
 ## 🤖 Documentation
 
-A function to send a project rejection email once a rejection reason is entered. After the email is sent, the project is deleted from the database.
+A function to send an email once a project is approved or rejected. A project is approved when `isPublished` is set to `true` and rejected when any `rejectionReason` is entered. After rejection, the project is also deleted from the database.
 
 <!-- Update with your description, for example 'Create Stripe payment and return payment URL' -->
 

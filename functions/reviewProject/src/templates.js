@@ -60,4 +60,15 @@ Keep on coding and creating awesome stuff! 💻🔥
 The Built With Appwrite Team`;
 }
 
-module.exports = rejectionTemplate;
+function approvalTemplate(project) {
+  return `Hey 👋,
+Thank you for submitting your project "${project.name}" to Built With Appwrite.
+
+We have reviewed your project, made any neccessary changes and decided to approve it! 🎉
+You can now find it on our website: https://builtwith.appwrite.io/projects/${project.$id}
+
+Keep on coding and creating awesome stuff! 💻🔥
+The Built With Appwrite Team`;
+}
+
+module.exports = { rejection: rejectionTemplate, approval: approvalTemplate };
