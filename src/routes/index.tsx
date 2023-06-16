@@ -95,15 +95,16 @@ export default component$(() => {
   const homeDataSignal = useHomeData();
   const homeData = homeDataSignal.value;
 
-  const allProjects = [
+  const allProjects = useComputed$(() => [
     ...(homeData.featured ? [homeData.featured] : []),
     ...(homeData.newAndShiny ?? []),
     ...(homeData.trendZone ?? []),
     ...(homeData.madeWithTailwind ?? []),
-  ];
-
+    ...(yourPicks.value ?? []),
+    ...(recentlyVisited.value ?? []),
+  ]);
   const projectIds = useComputed$(() =>
-    allProjects.map((project) => project.$id)
+    allProjects.value.map((project) => project.$id)
   );
   useUpvotes(projectIds);
 
