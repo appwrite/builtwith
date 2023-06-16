@@ -50,6 +50,7 @@ Thank you for submitting your project "${project.name}" to Built With Appwrite.
 
 Unfortunately, we have decided to reject it for the following reason:
 > ${project.rejectionReason}
+
 Don't sweat it, though! This is all part of the process and an opportunity for growth. 🌱
 After addressing the reason for rejection, feel free to submit the project again. We'd be excited to see your improved version! 🚀
 
@@ -64,7 +65,7 @@ function approvalTemplate(project) {
   return `Hey 👋,
 Thank you for submitting your project "${project.name}" to Built With Appwrite.
 
-We have reviewed your project, made any neccessary changes and decided to approve it! 🎉
+After reviewing your project, we have decided to approve it! 🎉
 You can now find it on our website: https://builtwith.appwrite.io/projects/${project.$id}
 
 Keep on coding and creating awesome stuff! 💻🔥
