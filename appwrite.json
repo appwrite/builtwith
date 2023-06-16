@@ -575,10 +575,10 @@
             "timeout": 15
         },
         {
-            "$id": "rejectProject",
-            "name": "rejectProject",
+            "$id": "reviewProject",
+            "name": "reviewProject",
             "runtime": "node-16.0",
-            "path": "functions/rejectProject",
+            "path": "functions/reviewProject",
             "entrypoint": "src/index.js",
             "ignore": [
                 "node_modules",
