@@ -6,7 +6,6 @@ import {
   useContext,
   useSignal,
 } from "@builder.io/qwik";
-import { AppwriteException } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
 import { AccountContext, UpvotesContext } from "~/routes/layout";
 
@@ -22,9 +21,8 @@ export default component$((props: Props) => {
   const isLoading = useSignal(false);
 
   const isUpvotedServer = useComputed$(() => {
-    return !!upvotes.value.find(
-      (upvote) => upvote.projectId === props.projectId
-    );
+    console.log("isUpvotedServer", props.projectId, upvotes[props.projectId]);
+    return upvotes[props.projectId];
   });
   const isUpvotedClient = useSignal(isUpvotedServer.value);
   const isUpvoted = useComputed$(() => {
@@ -44,23 +42,20 @@ export default component$((props: Props) => {
   const upvoteProject = $(async (e: QwikMouseEvent) => {
     e.stopPropagation();
 
+    if (!account.value) {
+      alert("Please sign in first.");
+      return;
+    }
+
     isUpvotedClient.value = !isUpvotedServer.value;
     isLoading.value = true;
 
     try {
-      const res = await AppwriteService.upvoteProject(props.projectId);
-      if (account.value) {
-        upvotes.value = await AppwriteService.listUserUpvotes(
-          account.value.$id
-        );
-      }
-      countServer.value = res.votes;
+      const response = await AppwriteService.upvoteProject(props.projectId);
+      upvotes[props.projectId] = response.isUpvoted;
+      countServer.value = response.votes;
     } catch (error: unknown) {
-      if (error instanceof AppwriteException && error.code === 401) {
-        alert("Please sign in first.");
-      } else {
-        alert("An unexpected error occurred.");
-      }
+      alert("An unexpected error occurred.");
     } finally {
       isUpvotedClient.value = isUpvotedServer.value;
       isLoading.value = false;
@@ -71,7 +66,7 @@ export default component$((props: Props) => {
     <button
       preventdefault:click
       onClick$={upvoteProject}
-      class={`button upvote-button vertical-button ${
+      class={`button upvote-button ${
         isUpvoted.value ? "is-primary" : "is-secondary"
       }`}
       aria-label="Upvote"

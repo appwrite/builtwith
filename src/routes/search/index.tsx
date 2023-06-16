@@ -1,9 +1,16 @@
-import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useComputed$,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import { routeLoader$, useLocation } from "@builder.io/qwik-city";
 import { Query } from "appwrite";
 import { AppwriteService } from "~/AppwriteService";
+import { useUpvotes } from "~/components/hooks/useUpvotes";
 import Group from "~/components/layout/Group";
 import ProjectFeatured from "~/components/layout/ProjectFeatured";
 
@@ -126,6 +133,13 @@ export default component$(() => {
   const searchData = useSearchData();
 
   const projects = useSignal(searchData.value.projects);
+
+  const projectIds = useComputed$(() =>
+    projects.value.map((project) => project.$id)
+  );
+
+  useUpvotes(projectIds);
+
   const location = useLocation();
 
   const lastId = useSignal<string | null>(
@@ -151,7 +165,19 @@ export default component$(() => {
       const nextProjects = await AppwriteService.listProjects(queries);
 
       const oldLength = projects.value.length;
-      projects.value = [...new Set([...projects.value, ...nextProjects])];
+
+      const projectsMap = new Map();
+
+      [...projects.value, ...nextProjects].forEach((project) => {
+        if (!projectsMap.has(project.$id)) {
+          projectsMap.set(project.$id, project);
+        } else {
+          projectsMap.set(project.$id, project);
+        }
+      });
+
+      projects.value = Array.from(projectsMap.values());
+
       const newLength = projects.value.length;
 
       lastId.value = projects.value[projects.value.length - 1]?.$id ?? null;

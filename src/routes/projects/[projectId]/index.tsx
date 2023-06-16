@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useComputed$, useVisibleTask$ } from "@builder.io/qwik";
 import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
@@ -7,6 +7,7 @@ import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
 import { AppwriteException } from "appwrite";
+import { useUpvotes } from "~/components/hooks/useUpvotes";
 
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
@@ -90,6 +91,9 @@ export default component$(() => {
     mangle: false,
     headerIds: false,
   });
+
+  const projectIds = useComputed$(() => [project.$id]);
+  useUpvotes(projectIds);
 
   useVisibleTask$(async () => {
     const visitedProjects = JSON.parse(

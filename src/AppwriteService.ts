@@ -187,12 +187,20 @@ export const AppwriteService = {
       )
     ).documents;
   },
-  listUserUpvotes: async (userId: string) => {
+  listUserUpvotes: async (userId: string, queries: string[] = []) => {
+    const defaultQueries = [
+      Query.equal("userId", userId),
+      Query.orderDesc("$createdAt"),
+    ];
+
+    queries = [...queries, ...defaultQueries];
+
     return (
-      await databases.listDocuments<ProjectUpvote>("main", "projectUpvotes", [
-        Query.equal("userId", userId),
-        Query.orderDesc("$createdAt"),
-      ])
+      await databases.listDocuments<ProjectUpvote>(
+        "main",
+        "projectUpvotes",
+        queries
+      )
     ).documents;
   },
   uploadThumbnail: async (file: File) => {

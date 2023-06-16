@@ -1,5 +1,6 @@
 import {
   component$,
+  useComputed$,
   useContext,
   useSignal,
   useVisibleTask$,
@@ -15,7 +16,7 @@ import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import { Query } from "appwrite";
 import { AccountContext } from "./layout";
-import { UpvotesContext } from "./layout";
+import { useUpvotes } from "~/components/hooks/useUpvotes";
 
 export const useHomeData = routeLoader$(async () => {
   const [
@@ -91,17 +92,40 @@ export const head: DocumentHead = () => ({
 
 export default component$(() => {
   const account = useContext(AccountContext);
-  const upvotes = useContext(UpvotesContext);
   const homeDataSignal = useHomeData();
   const homeData = homeDataSignal.value;
 
+  const allProjects = [
+    ...(homeData.featured ? [homeData.featured] : []),
+    ...(homeData.newAndShiny ?? []),
+    ...(homeData.trendZone ?? []),
+    ...(homeData.madeWithTailwind ?? []),
+  ];
+
+  const projectIds = useComputed$(() =>
+    allProjects.map((project) => project.$id)
+  );
+  useUpvotes(projectIds);
+
+  useVisibleTask$(async () => {
+    account.value = await AppwriteService.getAccount();
+  });
+
   const yourPicks = useSignal<Project[] | undefined>([]);
   useVisibleTask$(async () => {
-    if (!account.value || upvotes.value.length === 0) return;
+    if (!account.value) return;
+
+    const lastUpvotes = await AppwriteService.listUserUpvotes(
+      account.value.$id,
+      [Query.limit(3)]
+    );
+
+    if (lastUpvotes.length === 0) return;
+
     yourPicks.value = await AppwriteService.listProjects([
       Query.equal(
         "$id",
-        upvotes.value.slice(0, 3).map((upvote) => upvote.projectId)
+        lastUpvotes.map((upvote) => upvote.projectId)
       ),
     ]);
   });
