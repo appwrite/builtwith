@@ -165,19 +165,7 @@ export default component$(() => {
       const nextProjects = await AppwriteService.listProjects(queries);
 
       const oldLength = projects.value.length;
-
-      const projectsMap = new Map();
-
-      [...projects.value, ...nextProjects].forEach((project) => {
-        if (!projectsMap.has(project.$id)) {
-          projectsMap.set(project.$id, project);
-        } else {
-          projectsMap.set(project.$id, project);
-        }
-      });
-
-      projects.value = Array.from(projectsMap.values());
-
+      projects.value = [...new Set([...projects.value, ...nextProjects])];
       const newLength = projects.value.length;
 
       lastId.value = projects.value[projects.value.length - 1]?.$id ?? null;
