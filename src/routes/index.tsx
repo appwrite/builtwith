@@ -95,18 +95,6 @@ export default component$(() => {
   const homeDataSignal = useHomeData();
   const homeData = homeDataSignal.value;
 
-  const allProjects = [
-    ...(homeData.featured ? [homeData.featured] : []),
-    ...(homeData.newAndShiny ?? []),
-    ...(homeData.trendZone ?? []),
-    ...(homeData.madeWithTailwind ?? []),
-  ];
-
-  const projectIds = useComputed$(() =>
-    allProjects.map((project) => project.$id)
-  );
-  useUpvotes(projectIds);
-
   useVisibleTask$(async () => {
     account.value = await AppwriteService.getAccount();
   });
@@ -141,6 +129,19 @@ export default component$(() => {
       Query.equal("$id", visitedProjects.slice(0, 3)),
     ]);
   });
+
+  const allProjects = useComputed$(() => [
+    ...(homeData.featured ? [homeData.featured] : []),
+    ...(homeData.newAndShiny ?? []),
+    ...(homeData.trendZone ?? []),
+    ...(homeData.madeWithTailwind ?? []),
+    ...(yourPicks.value ?? []),
+    ...(recentlyVisited.value ?? []),
+  ]);
+  const projectIds = useComputed$(() =>
+    allProjects.value.map((project) => project.$id)
+  );
+  useUpvotes(projectIds);
 
   return (
     <>
