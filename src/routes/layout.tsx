@@ -73,16 +73,7 @@ export default component$(() => {
       document.documentElement.style.overflow = "auto";
     }),
   });
-
   useContextProvider(SearchModalContext, searchModal);
-
-  const setStateCallBackFn = $(function (state: string) {
-    contextStore.state = state;
-  });
-  const contextStore = useStore(() => ({
-    state: "closed",
-    setState: setStateCallBackFn,
-  }));
 
   const searchModalRef = useSignal<HTMLDialogElement>();
   const onKeyDown = $((e: QwikKeyboardEvent) => {
