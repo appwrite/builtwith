@@ -21,7 +21,6 @@ export default component$((props: Props) => {
   const isLoading = useSignal(false);
 
   const isUpvotedServer = useComputed$(() => {
-    console.log("isUpvotedServer", props.projectId, upvotes[props.projectId]);
     return upvotes[props.projectId];
   });
   const isUpvotedClient = useSignal(isUpvotedServer.value);
