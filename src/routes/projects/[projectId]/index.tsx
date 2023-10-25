@@ -9,13 +9,30 @@ import Socials from "~/components/blocks/Socials";
 import { AppwriteException } from "appwrite";
 import { useUpvotes } from "~/components/hooks/useUpvotes";
 
+const escape = (unsafe: string) => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
 const renderer: Partial<
   Omit<marked.Renderer<false>, "constructor" | "options">
 > = {
   image(href: string, title: string, text: string) {
-    return `<img src="${href}" ${text ? `alt="${text}"` : ""} ${
-      title ? `title="${title}"` : ""
-    } loading="lazy" crossorigin="anonymous" referrerpolicy="no-referrer">`;
+    if (!href || !/^https?:\/\//i.test(href)) {
+      return text || "";
+    }
+
+    const searchParams = new URLSearchParams();
+    searchParams.set("url", href);
+
+    const escapedText = text ? `alt="${escape(text)}"` : "";
+    const escapedTitle = title ? `title="${escape(title)}"` : "";
+
+    return `<img src="/image-proxy?${searchParams.toString()}" ${escapedText} ${escapedTitle} loading="lazy">`;
   },
 };
 
