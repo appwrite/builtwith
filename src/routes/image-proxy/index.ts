@@ -21,9 +21,12 @@ export const onGet: RequestHandler = async ({ send, headers, url }) => {
     if (!contentType || !contentType.startsWith("image/")) {
       throw new Error("Invalid content type");
     }
+    const cacheControl = response.headers.get("Cache-Control");
+
+    headers.set("Content-Type", contentType);
+    headers.set("Cache-Control", cacheControl || "public, max-age=31536000");
 
     const buffer = Buffer.from(await response.arrayBuffer());
-    headers.set("Content-Type", contentType);
     send(200, buffer);
   } catch (error) {
     send(400, "Error fetching image");
