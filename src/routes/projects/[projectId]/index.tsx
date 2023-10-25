@@ -9,6 +9,35 @@ import Socials from "~/components/blocks/Socials";
 import { AppwriteException } from "appwrite";
 import { useUpvotes } from "~/components/hooks/useUpvotes";
 
+const escape = (unsafe: string) => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+const renderer: Partial<
+  Omit<marked.Renderer<false>, "constructor" | "options">
+> = {
+  image(href: string, title: string, text: string) {
+    if (!href || !/^https?:\/\//i.test(href)) {
+      return text || "";
+    }
+
+    const searchParams = new URLSearchParams();
+    searchParams.set("url", href);
+
+    const escapedText = text ? `alt="${escape(text)}"` : "";
+    const escapedTitle = title ? `title="${escape(title)}"` : "";
+
+    return `<img src="/image-proxy?${searchParams.toString()}" ${escapedText} ${escapedTitle} loading="lazy">`;
+  },
+};
+
+marked.use({ renderer });
+
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
     return {
