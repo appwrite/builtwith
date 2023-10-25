@@ -9,6 +9,18 @@ import Socials from "~/components/blocks/Socials";
 import { AppwriteException } from "appwrite";
 import { useUpvotes } from "~/components/hooks/useUpvotes";
 
+const renderer: Partial<
+  Omit<marked.Renderer<false>, "constructor" | "options">
+> = {
+  image(href: string, title: string, text: string) {
+    return `<img src="${href}" ${text ? `alt="${text}"` : ""} ${
+      title ? `title="${title}"` : ""
+    } loading="lazy" crossorigin="anonymous" referrerpolicy="no-referrer">`;
+  },
+};
+
+marked.use({ renderer });
+
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
     return {
