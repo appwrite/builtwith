@@ -3,7 +3,6 @@ import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
 import { marked } from "marked";
-import { gfmHeadingId } from "marked-gfm-heading-id";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
@@ -36,7 +35,7 @@ const renderer = {
   },
 };
 
-marked.use({ renderer }, gfmHeadingId());
+marked.use({ renderer });
 
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {

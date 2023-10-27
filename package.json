@@ -43,7 +43,6 @@
     "@appwrite.io/pink": "^0.0.6-rc.15",
     "appwrite": "npm:meldiron-appwrite@11.0.2",
     "js-cookie": "^3.0.5",
-    "marked": "^9.1.2",
-    "marked-gfm-heading-id": "^3.1.0"
+    "marked": "^9.1.2"
   }
 }
