@@ -4,6 +4,8 @@ import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import Upvote from "../blocks/Upvote";
 import ProjectTags from "./ProjectTags";
+import ImgProjectPlaceHolder from "../../../public/images/project-placeholder.png";
+import ImgProjectPlaceHolderLight from "../../../public/images/project-placeholder-light.png";
 
 export default component$((props: { project: Project | null }) => {
   const { project } = props;
@@ -27,11 +29,15 @@ export default component$((props: { project: Project | null }) => {
       </div>
 
       <div class="object-og" style="height: 200px;">
-        <img class="c-dark-only" src="/images/project-placeholder.png" alt="" />
+        <img
+          class="c-dark-only"
+          src={ImgProjectPlaceHolder}
+          alt="project placeholder image with question mark"
+        />
         <img
           class="c-light-only"
-          src="/images/project-placeholder-light.png"
-          alt=""
+          src={ImgProjectPlaceHolderLight}
+          alt="project placeholder image with question mark"
         />
       </div>
     </div>

@@ -3,6 +3,7 @@ import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
 import { marked } from "marked";
+import { gfmHeadingId } from "marked-gfm-heading-id";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
@@ -18,25 +19,24 @@ const escape = (unsafe: string) => {
     .replace(/'/g, "&#039;");
 };
 
-const renderer: Partial<
-  Omit<marked.Renderer<false>, "constructor" | "options">
-> = {
-  image(href: string, title: string, text: string) {
+const renderer = {
+  image(href: string, title: string | null, text: string) {
     if (!href || !/^https?:\/\//i.test(href)) {
-      return text || "";
+      return text;
     }
 
     const searchParams = new URLSearchParams();
     searchParams.set("url", href);
 
-    const escapedText = text ? `alt="${escape(text)}"` : "";
     const escapedTitle = title ? `title="${escape(title)}"` : "";
 
-    return `<img src="/image-proxy?${searchParams.toString()}" ${escapedText} ${escapedTitle} loading="lazy">`;
+    return `<img src="/image-proxy?${searchParams.toString()}" alt="${escape(
+      text
+    )} ${escapedTitle} loading="lazy">`;
   },
 };
 
-marked.use({ renderer });
+marked.use({ renderer }, gfmHeadingId());
 
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
@@ -116,10 +116,7 @@ export default component$(() => {
     );
   }
 
-  const html = marked(project.description, {
-    mangle: false,
-    headerIds: false,
-  });
+  const html = marked(project.description);
 
   const projectIds = useComputed$(() => [project.$id]);
   useUpvotes(projectIds);
