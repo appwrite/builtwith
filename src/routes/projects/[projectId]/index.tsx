@@ -39,8 +39,10 @@ marked.use({ renderer });
 
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
+    const project = await AppwriteService.getProject(params.projectId);
     return {
-      project: await AppwriteService.getProject(params.projectId),
+      project,
+      imageSrc: AppwriteService.getProjectThumbnail(project.imageId),
       error: null,
     };
   } catch (error) {
@@ -94,7 +96,7 @@ export const head: DocumentHead = ({ resolveValue }) => {
 };
 
 export default component$(() => {
-  const { project, error } = useProjectData().value;
+  const { project, imageSrc, error } = useProjectData().value;
 
   if (error) {
     return (
@@ -294,10 +296,7 @@ export default component$(() => {
 
         <div>
           <div class="object-og object-og-rounded">
-            <img
-              src={AppwriteService.getProjectThumbnail(project.imageId)}
-              alt=""
-            />
+            <img src={imageSrc} alt="" />
           </div>
         </div>
       </ul>
