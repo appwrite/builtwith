@@ -28,10 +28,6 @@ export default component$(() => {
         ></meta>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" type="image/png" href="/favicon.png" />
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/@tailwindcss/typography@0.4.1/dist/typography.css"
-        />
         <RouterHead />
       </head>
       <body lang="en">
