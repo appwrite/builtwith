@@ -1,6 +1,8 @@
 import { vercelEdgeAdapter } from '@builder.io/qwik-city/adapters/vercel-edge/vite';
 import { extendConfig } from '@builder.io/qwik-city/vite';
 import baseConfig from '../../vite.config';
+import rollupNodePolyfills from 'rollup-plugin-polyfill-node';
+import { nodePolyfills as viteNodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default extendConfig(baseConfig, () => {
   return {
@@ -8,9 +10,12 @@ export default extendConfig(baseConfig, () => {
       ssr: true,
       rollupOptions: {
         input: ['src/entry.vercel-edge.tsx', '@qwik-city-plan'],
-        external: ['form-data']
+        external: ['path', 'util', 'http', 'https', 'fs', 'stream'],
       },
       outDir: '.vercel/output/functions/_qwik-city.func',
+    },
+    ssr: {
+      noExternal: true,
     },
     plugins: [vercelEdgeAdapter()],
   };
