@@ -11,7 +11,6 @@ export default extendConfig(baseConfig, () => {
       rollupOptions: {
         input: ['src/entry.vercel-edge.tsx', '@qwik-city-plan'],
         external: ['util'],
-        plugins: [],
       },
       outDir: '.vercel/output/functions/_qwik-city.func',
     },
