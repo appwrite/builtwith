@@ -9,10 +9,40 @@ import Socials from "~/components/blocks/Socials";
 import { AppwriteException } from "appwrite";
 import { useUpvotes } from "~/components/hooks/useUpvotes";
 
+const escape = (unsafe: string) => {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+const renderer = {
+  image(href: string, title: string | null, text: string) {
+    if (!href || !/^https?:\/\//i.test(href)) {
+      return text;
+    }
+
+    const searchParams = new URLSearchParams();
+    searchParams.set("url", href);
+
+    const escapedTitle = title ? `title="${escape(title)}"` : "";
+
+    return `<img src="/image-proxy?${searchParams.toString()}" alt="${escape(
+      text
+    )} ${escapedTitle} loading="lazy">`;
+  },
+};
+
+marked.use({ renderer });
+
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
+    const project = await AppwriteService.getProject(params.projectId);
     return {
-      project: await AppwriteService.getProject(params.projectId),
+      project,
+      imageSrc: AppwriteService.getProjectThumbnail(project.imageId),
       error: null,
     };
   } catch (error) {
@@ -66,7 +96,7 @@ export const head: DocumentHead = ({ resolveValue }) => {
 };
 
 export default component$(() => {
-  const { project, error } = useProjectData().value;
+  const { project, imageSrc, error } = useProjectData().value;
 
   if (error) {
     return (
@@ -87,10 +117,7 @@ export default component$(() => {
     );
   }
 
-  const html = marked(project.description, {
-    mangle: false,
-    headerIds: false,
-  });
+  const html = marked(project.description);
 
   const projectIds = useComputed$(() => [project.$id]);
   useUpvotes(projectIds);
@@ -269,7 +296,7 @@ export default component$(() => {
 
         <div>
           <div class="object-og object-og-rounded">
-            <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
+            <img src={imageSrc} alt="" />
           </div>
         </div>
       </ul>

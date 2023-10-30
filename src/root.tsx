@@ -28,7 +28,6 @@ export default component$(() => {
         ></meta>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" type="image/svg+xml" href="/logo.svg"></link>
-
         <link
           rel="preload"
           href="https://fonts.appwrite.io/aeonik-pro/AeonikPro-Regular.woff2"
@@ -40,11 +39,6 @@ export default component$(() => {
         <link
           href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
           rel="stylesheet"
-        />
-
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/@tailwindcss/typography@0.4.1/dist/typography.css"
         />
         <RouterHead />
       </head>

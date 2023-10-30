@@ -4,6 +4,8 @@ import type { Project } from "~/AppwriteService";
 import { AppwriteService } from "~/AppwriteService";
 import Upvote from "../blocks/Upvote";
 import ProjectTags from "./ProjectTags";
+import ImgProjectPlaceHolder from "../../../public/images/project-placeholder.png";
+import ImgProjectPlaceHolderLight from "../../../public/images/project-placeholder-light.png";
 
 export default component$((props: { project: Project | null }) => {
   const { project } = props;
@@ -26,12 +28,20 @@ export default component$((props: { project: Project | null }) => {
         </div>
       </div>
 
-      <div class="object-og" style="height: 200px;">
-        <img class="c-dark-only" src="/images/project-placeholder.png" alt="" />
+      <div class="object-og">
+        <img
+          class="c-dark-only"
+          height={200}
+          width={355}
+          src={ImgProjectPlaceHolder}
+          alt="No project image"
+        />
         <img
           class="c-light-only"
-          src="/images/project-placeholder-light.png"
-          alt=""
+          height={200}
+          width={355}
+          src={ImgProjectPlaceHolderLight}
+          alt="No project image"
         />
       </div>
     </div>
@@ -64,7 +74,12 @@ export default component$((props: { project: Project | null }) => {
       </div>
 
       <Link class="object-og" href={`/projects/${project.$id}`}>
-        <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
+        <img
+          src={AppwriteService.getProjectThumbnail(project.imageId)}
+          width={1280}
+          height={720}
+          alt=""
+        />
       </Link>
 
       <div

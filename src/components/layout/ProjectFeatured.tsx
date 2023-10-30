@@ -4,7 +4,7 @@ import { AppwriteService, type Project } from "~/AppwriteService";
 import { Link } from "@builder.io/qwik-city";
 import ProjectTags from "./ProjectTags";
 
-export default component$((props: { project: Project }) => {
+export default component$((props: { project: Project; lazy?: boolean }) => {
   const { project } = props;
 
   return (
@@ -17,6 +17,10 @@ export default component$((props: { project: Project }) => {
           >
             <img
               src={AppwriteService.getProjectThumbnail(project.imageId, 1920)}
+              loading={props.lazy ? "lazy" : "eager"}
+              width={1920}
+              height={1080}
+              alt=""
             />
           </Link>
         </div>
