@@ -297,8 +297,6 @@ export default component$(() => {
             <img
               src={AppwriteService.getProjectThumbnail(project.imageId)}
               alt=""
-              width={1280}
-              height={720}
             />
           </div>
         </div>

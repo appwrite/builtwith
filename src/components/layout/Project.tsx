@@ -29,20 +29,8 @@ export default component$((props: { project: Project | null }) => {
       </div>
 
       <div class="object-og" style="height: 200px;">
-        <img
-          class="c-dark-only"
-          src={ImgProjectPlaceHolder}
-          alt=""
-          width={1280}
-          height={720}
-        />
-        <img
-          class="c-light-only"
-          src={ImgProjectPlaceHolderLight}
-          alt=""
-          width={1280}
-          height={720}
-        />
+        <img class="c-dark-only" src={ImgProjectPlaceHolder} alt="" />
+        <img class="c-light-only" src={ImgProjectPlaceHolderLight} alt="" />
       </div>
     </div>
   ) : (
@@ -77,8 +65,6 @@ export default component$((props: { project: Project | null }) => {
         <img
           src={AppwriteService.getProjectThumbnail(project.imageId)}
           alt=""
-          width={1280}
-          height={720}
         />
       </Link>
 
