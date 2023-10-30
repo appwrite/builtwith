@@ -11,15 +11,13 @@ export default extendConfig(baseConfig, () => {
       rollupOptions: {
         input: ['src/entry.vercel-edge.tsx', '@qwik-city-plan'],
         external: ['path', 'util', 'http', 'https', 'fs', 'stream'],
-        plugins: [rollupNodePolyfills({
-          include: ['node_modules/form-data/**/*.js'],
-        })],
+        plugins: [],
       },
       outDir: '.vercel/output/functions/_qwik-city.func',
     },
     ssr: {
       noExternal: true,
     },
-    plugins: [vercelEdgeAdapter()],
+    plugins: [vercelEdgeAdapter(), viteNodePolyfills()],
   };
 });
