@@ -1,7 +1,6 @@
 import { vercelEdgeAdapter } from '@builder.io/qwik-city/adapters/vercel-edge/vite';
 import { extendConfig } from '@builder.io/qwik-city/vite';
 import baseConfig from '../../vite.config';
-import rollupNodePolyfills from 'rollup-plugin-polyfill-node';
 import { nodePolyfills as viteNodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default extendConfig(baseConfig, () => {
