@@ -2,7 +2,7 @@
   "name": "my-qwik-basic-starter",
   "description": "App with Routing built-in (recommended)",
   "engines": {
-    "node": ">=19.0.0"
+    "node": "18.x"
   },
   "private": true,
   "scripts": {
