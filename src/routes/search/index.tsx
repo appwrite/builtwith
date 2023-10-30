@@ -216,8 +216,12 @@ export default component$(() => {
               </article>
             )}
 
-            {projects.value.map((project) => (
-              <ProjectFeatured key={project.$id} project={project} />
+            {projects.value.map((project, index) => (
+              <ProjectFeatured
+                key={project.$id}
+                project={project}
+                lazy={index > 1}
+              />
             ))}
 
             {showPagination.value && (

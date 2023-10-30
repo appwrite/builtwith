@@ -18,21 +18,20 @@ const escape = (unsafe: string) => {
     .replace(/'/g, "&#039;");
 };
 
-const renderer: Partial<
-  Omit<marked.Renderer<false>, "constructor" | "options">
-> = {
-  image(href: string, title: string, text: string) {
+const renderer = {
+  image(href: string, title: string | null, text: string) {
     if (!href || !/^https?:\/\//i.test(href)) {
-      return text || "";
+      return text;
     }
 
     const searchParams = new URLSearchParams();
     searchParams.set("url", href);
 
-    const escapedText = text ? `alt="${escape(text)}"` : "";
     const escapedTitle = title ? `title="${escape(title)}"` : "";
 
-    return `<img src="/image-proxy?${searchParams.toString()}" ${escapedText} ${escapedTitle} loading="lazy">`;
+    return `<img src="/image-proxy?${searchParams.toString()}" alt="${escape(
+      text
+    )} ${escapedTitle} loading="lazy">`;
   },
 };
 
@@ -40,8 +39,10 @@ marked.use({ renderer });
 
 export const useProjectData = routeLoader$(async ({ params, status }) => {
   try {
+    const project = await AppwriteService.getProject(params.projectId);
     return {
-      project: await AppwriteService.getProject(params.projectId),
+      project,
+      imageSrc: AppwriteService.getProjectThumbnail(project.imageId),
       error: null,
     };
   } catch (error) {
@@ -95,7 +96,7 @@ export const head: DocumentHead = ({ resolveValue }) => {
 };
 
 export default component$(() => {
-  const { project, error } = useProjectData().value;
+  const { project, imageSrc, error } = useProjectData().value;
 
   if (error) {
     return (
@@ -116,10 +117,7 @@ export default component$(() => {
     );
   }
 
-  const html = marked(project.description, {
-    mangle: false,
-    headerIds: false,
-  });
+  const html = marked(project.description);
 
   const projectIds = useComputed$(() => [project.$id]);
   useUpvotes(projectIds);
@@ -298,7 +296,7 @@ export default component$(() => {
 
         <div>
           <div class="object-og object-og-rounded">
-            <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
+            <img src={imageSrc} alt="" />
           </div>
         </div>
       </ul>
