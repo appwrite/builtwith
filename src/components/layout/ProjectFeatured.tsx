@@ -17,6 +17,9 @@ export default component$((props: { project: Project }) => {
           >
             <img
               src={AppwriteService.getProjectThumbnail(project.imageId, 1920)}
+              width={1920}
+              height={1080}
+              alt=""
             />
           </Link>
         </div>

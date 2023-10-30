@@ -294,7 +294,12 @@ export default component$(() => {
 
         <div>
           <div class="object-og object-og-rounded">
-            <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
+            <img
+              src={AppwriteService.getProjectThumbnail(project.imageId)}
+              alt=""
+              width={1280}
+              height={720}
+            />
           </div>
         </div>
       </ul>

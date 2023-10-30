@@ -32,12 +32,16 @@ export default component$((props: { project: Project | null }) => {
         <img
           class="c-dark-only"
           src={ImgProjectPlaceHolder}
-          alt="project placeholder image with question mark"
+          alt=""
+          width={1280}
+          height={720}
         />
         <img
           class="c-light-only"
           src={ImgProjectPlaceHolderLight}
-          alt="project placeholder image with question mark"
+          alt=""
+          width={1280}
+          height={720}
         />
       </div>
     </div>
@@ -70,7 +74,12 @@ export default component$((props: { project: Project | null }) => {
       </div>
 
       <Link class="object-og" href={`/projects/${project.$id}`}>
-        <img src={AppwriteService.getProjectThumbnail(project.imageId)} />
+        <img
+          src={AppwriteService.getProjectThumbnail(project.imageId)}
+          alt=""
+          width={1280}
+          height={720}
+        />
       </Link>
 
       <div
