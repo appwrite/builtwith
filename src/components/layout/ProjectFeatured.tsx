@@ -18,6 +18,8 @@ export default component$((props: { project: Project; lazy?: boolean }) => {
             <img
               src={AppwriteService.getProjectThumbnail(project.imageId, 1920)}
               loading={props.lazy ? "lazy" : "eager"}
+              width={1920}
+              height={1080}
               alt=""
             />
           </Link>
