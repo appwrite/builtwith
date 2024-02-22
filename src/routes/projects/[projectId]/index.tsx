@@ -3,6 +3,7 @@ import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
 import { marked } from "marked";
+import xss from "xss";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
@@ -117,7 +118,8 @@ export default component$(() => {
     );
   }
 
-  const html = marked(project.description);
+  const unsafeHtml = marked(project.description);
+  const safeHtml = xss(unsafeHtml);
 
   const projectIds = useComputed$(() => [project.$id]);
   useUpvotes(projectIds);
@@ -302,7 +304,7 @@ export default component$(() => {
       </ul>
 
       <div class="card u-margin-block-start-20">
-        <div class="prose" dangerouslySetInnerHTML={html}></div>
+        <div class="prose" dangerouslySetInnerHTML={safeHtml}></div>
       </div>
     </>
   );
