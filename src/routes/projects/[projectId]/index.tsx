@@ -3,7 +3,7 @@ import { AppwriteService } from "~/AppwriteService";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
 import { marked } from "marked";
-import sanitizeHtml from "sanitize-html";
+import xss from "xss";
 import ProjectTags from "~/components/layout/ProjectTags";
 import Upvote from "~/components/blocks/Upvote";
 import Socials from "~/components/blocks/Socials";
@@ -119,7 +119,7 @@ export default component$(() => {
   }
 
   const unsafeHtml = marked(project.description);
-  const safeHtml = sanitizeHtml(unsafeHtml);
+  const safeHtml = xss(unsafeHtml);
 
   const projectIds = useComputed$(() => [project.$id]);
   useUpvotes(projectIds);
