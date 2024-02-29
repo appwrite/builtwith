@@ -27,7 +27,19 @@ export default component$(() => {
           content="width=device-width, initial-scale=1.0"
         ></meta>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="icon" type="image/svg+xml" href="/logo.svg"></link>
+        <link
+          rel="preload"
+          href="https://fonts.appwrite.io/aeonik-pro/AeonikPro-Regular.woff2"
+          as="font"
+          type="font/woff2"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+          rel="stylesheet"
+        />
         <RouterHead />
       </head>
       <body lang="en">
