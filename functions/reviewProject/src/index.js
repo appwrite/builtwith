@@ -1,6 +1,6 @@
 const sdk = require("node-appwrite");
 const nodemailer = require("nodemailer");
-const template = require("./template");
+const templates = require("./templates");
 
 module.exports = async function (req, res) {
   const client = new sdk.Client();
@@ -29,12 +29,6 @@ module.exports = async function (req, res) {
     throw new Error("Invalid project update event.");
   }
 
-  if (!project.rejectionReason || project.isPublished) {
-    console.log("Project has no rejection reason or is already published.");
-    res.json({ ok: true });
-    return;
-  }
-
   console.log("Fetching project author");
   const author = await user.get(project.userId);
   if (!author || !author.email) {
@@ -55,29 +49,47 @@ module.exports = async function (req, res) {
     },
   });
 
-  console.log("Sending email to project author");
+  if (project.isPublished) {
+    console.log("Sending approval email");
+    try {
+      await transporter.sendMail({
+        from: SMTP_USERNAME,
+        to: author.email,
+        bcc: req.variables["APPROVER_EMAILS"],
+        subject: "Project Review - builtwith.appwrite.io ",
+        text: templates.approval(project),
+      });
+      console.log("Done - exiting.");
+    } catch (error) {
+      throw new Error(`Failed to send approval email: ${error}`);
+    }
+    return;
+  }
+
+  if (!project.rejectionReason) {
+    console.log("Project is not rejected - exiting.");
+    return;
+  }
+
+  console.log("Sending rejection email");
   try {
     await transporter.sendMail({
       from: SMTP_USERNAME,
       to: author.email,
       bcc: req.variables["APPROVER_EMAILS"],
       subject: "Project Review - builtwith.appwrite.io ",
-      text: template(project),
+      text: templates.rejection(project),
     });
     console.log("Done");
   } catch (error) {
-    throw new Error(`Failed to send email: ${error}`);
+    throw new Error(`Failed to send rejection email: ${error}`);
   }
 
   console.log("Deleting the project document");
   try {
     await database.deleteDocument("main", "projects", project.$id);
-    console.log("Done");
+    console.log("Done - exiting.");
   } catch (error) {
     throw new Error(`Failed to delete project: ${error}`);
   }
-
-  res.json({
-    ok: true,
-  });
 };
