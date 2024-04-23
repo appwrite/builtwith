@@ -94,7 +94,6 @@
 
 .upvote-button.is-primary {
   background-color: transparent;
-  background: transparent;
   border-color: hsl(var(--color-primary-300));
 }
 .upvote-button.is-primary .icon-heart {
