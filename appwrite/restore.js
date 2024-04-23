@@ -11,17 +11,19 @@ const client = new Client()
 const databases = new Databases(client);
 
 (async () => {
-  docs = JSON.parse(readFileSync('backup_1684004676523.json').toString());
+  const documents = JSON.parse(
+    readFileSync("backup_1684004676523.json").toString()
+  );
 
-  for(doc of docs) {
-    await databases.createDocument('main', 'projects', doc.$id, {
-      ...doc,
-      '$createdAt': undefined,
-      '$updatedAt': undefined,
-      '$id': undefined,
-      '$databaseId': undefined,
-      '$collectionId': undefined,
-      '$permissions': undefined,
+  for (const document of documents) {
+    await databases.createDocument("main", "projects", document.$id, {
+      ...document,
+      $createdAt: undefined,
+      $updatedAt: undefined,
+      $id: undefined,
+      $databaseId: undefined,
+      $collectionId: undefined,
+      $permissions: undefined,
     });
   }
 })();
