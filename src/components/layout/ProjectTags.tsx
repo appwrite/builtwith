@@ -17,7 +17,7 @@ export default component$((props: { project: Project }) => {
     },
     messaging: {
       used: props.project.hasMessaging,
-      name: "messaging",
+      name: "Messaging",
       icon: "send",
     },
     storage: {
