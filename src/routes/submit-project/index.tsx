@@ -64,6 +64,7 @@ export default component$(() => {
   const servicesDb = useSignal(false);
   const servicesFunctions = useSignal(false);
   const servicesAuth = useSignal(false);
+  const servicesMessaging = useSignal(false);
   const servicesStorage = useSignal(false);
   const servicesRealtime = useSignal(false);
 
@@ -102,6 +103,9 @@ export default component$(() => {
       }
       if (servicesAuth.value) {
         services.push("authentication");
+      }
+      if (servicesMessaging.value) {
+        services.push("messaging");
       }
 
       if (services.length <= 0) {
@@ -345,6 +349,10 @@ export default component$(() => {
                     <div class="u-width-full-line u-flex u-gap-8 u-margin-block-start-4 u-cross-center">
                       <input type="checkbox" bind:checked={servicesAuth} />{" "}
                       <span>Authentication</span>
+                    </div>
+                    <div class="u-width-full-line u-flex u-gap-8 u-margin-block-start-4 u-cross-center">
+                      <input type="checkbox" bind:checked={servicesMessaging} />{" "}
+                      <span>Messaging</span>
                     </div>
                     <div class="u-width-full-line u-flex u-gap-8 u-margin-block-start-4 u-cross-center">
                       <input type="checkbox" bind:checked={servicesStorage} />{" "}

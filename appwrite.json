@@ -204,6 +204,14 @@
                     "default": null
                 },
                 {
+                    "key": "hasMessaging",
+                    "type": "boolean",
+                    "status": "available",
+                    "required": true,
+                    "array": false,
+                    "default": null
+                },
+                {
                     "key": "platform",
                     "type": "string",
                     "status": "available",
@@ -389,6 +397,19 @@
                     "status": "available",
                     "attributes": [
                         "hasAuthentication",
+                        "isPublished"
+                    ],
+                    "orders": [
+                        "ASC",
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "index_15",
+                    "type": "key",
+                    "status": "available",
+                    "attributes": [
+                        "hasMessaging",
                         "isPublished"
                     ],
                     "orders": [

@@ -23,6 +23,11 @@ export default component$(() => {
         </Service>
       </li>
       <li>
+        <Service id="messaging" name="Messaging">
+          <Auth />
+        </Service>
+      </li>
+      <li>
         <Service id="storage" name="Storage">
           <Storage />
         </Service>
