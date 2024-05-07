@@ -98,6 +98,7 @@ module.exports = async function (req, res) {
       isPublished: false,
       isFeatured: false,
       hasAuthentication: services.includes("authentication"),
+      hasMessaging: services.includes("messaging"),
       hasStorage: services.includes("storage"),
       hasRealtime: services.includes("realtime"),
       hasFunctions: services.includes("functions"),
