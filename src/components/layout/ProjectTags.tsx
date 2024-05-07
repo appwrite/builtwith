@@ -15,6 +15,11 @@ export default component$((props: { project: Project }) => {
       name: "Authentication",
       icon: "user-group",
     },
+    messaging: {
+      used: props.project.hasMessaging,
+      name: "Messaging",
+      icon: "send",
+    },
     storage: {
       used: props.project.hasStorage,
       name: "Storage",

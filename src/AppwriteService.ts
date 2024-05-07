@@ -29,6 +29,7 @@ export type Project = {
   urlGooglePlay?: string;
   imageId: string;
   hasAuthentication: boolean;
+  hasMessaging: boolean;
   hasStorage: boolean;
   hasRealtime: boolean;
   hasFunctions: boolean;

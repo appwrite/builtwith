@@ -5,6 +5,7 @@ import Auth from "../icons/Auth";
 import Storage from "../icons/Storage";
 import Functions from "../icons/Functions";
 import Realtime from "../icons/Realtime";
+import Messaging from "../icons/Messaging";
 
 export default component$(() => {
   return (
@@ -20,6 +21,11 @@ export default component$(() => {
       <li>
         <Service id="authentication" name="Authentication">
           <Auth />
+        </Service>
+      </li>
+      <li>
+        <Service id="messaging" name="Messaging">
+          <Messaging />
         </Service>
       </li>
       <li>

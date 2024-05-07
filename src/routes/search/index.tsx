@@ -46,6 +46,9 @@ const generateQueries = (url: URL) => {
       if (service === "authentication") {
         queries.push(Query.equal("hasAuthentication", true));
       }
+      if (service === "messaging") {
+        queries.push(Query.equal("hasMessaging", true));
+      }
       if (service === "storage") {
         queries.push(Query.equal("hasStorage", true));
       }

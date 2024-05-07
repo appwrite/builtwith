@@ -1,6 +1,7 @@
 function servicesTemplate(project) {
   const serviceFields = [
     { name: "Authentication", key: "hasAuthentication" },
+    { name: "Messaging", key: "hasMessaging" },
     { name: "Storage", key: "hasStorage" },
     { name: "Realtime", key: "hasRealtime" },
     { name: "Functions", key: "hasFunctions" },
