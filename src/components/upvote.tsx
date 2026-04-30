@@ -38,12 +38,26 @@ export default function Upvote({ projectId, votes }: Props) {
       alert("Please sign in first.");
       return;
     }
+    if (isLoading) return;
+
+    // Optimistic flip: toggle UI immediately, reconcile on server response.
+    const prevIsUpvoted = isUpvoted;
+    const prevCount = count;
+    const nextIsUpvoted = !prevIsUpvoted;
+    setIsUpvoted(nextIsUpvoted);
+    setCount(prevCount + (nextIsUpvoted ? 1 : -1));
     setIsLoading(true);
+
     try {
       const response = await ClientAppwrite.upvoteProject(projectId);
       setIsUpvoted(Boolean(response.isUpvoted));
-      setCount(Number(response.votes ?? count));
+      if (typeof response.votes === "number") {
+        setCount(response.votes);
+      }
     } catch {
+      // Roll back on failure.
+      setIsUpvoted(prevIsUpvoted);
+      setCount(prevCount);
       alert("An unexpected error occurred.");
     } finally {
       setIsLoading(false);
@@ -53,12 +67,12 @@ export default function Upvote({ projectId, votes }: Props) {
   return (
     <button
       onClick={onClick}
-      disabled={isLoading}
       className={`button upvote-button ${
         isUpvoted ? "is-primary" : "is-secondary"
       }`}
       aria-label="Upvote"
       aria-pressed={isUpvoted}
+      aria-busy={isLoading}
     >
       <span className="icon-heart" aria-hidden="true" />
       <span className="text">{count}</span>

@@ -22,13 +22,26 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const initialTheme =
-    cookies().get("theme_buildwithappwrite")?.value === "dark"
-      ? "dark"
-      : "light";
+  const cookieTheme = cookies().get("theme_buildwithappwrite")?.value;
+  const initialTheme: "light" | "dark" =
+    cookieTheme === "dark" ? "dark" : "light";
+
+  // Runs synchronously before hydration. If the user has no cookie, follow
+  // prefers-color-scheme so the page paints in the right theme on first
+  // paint instead of flashing light then switching.
+  const themeBootstrap = `
+    (function () {
+      try {
+        var c = document.cookie.match(/(?:^|; )theme_buildwithappwrite=(dark|light)/);
+        var theme = c ? c[1] : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.themePreboot = theme;
+        document.documentElement.style.colorScheme = theme;
+      } catch (e) {}
+    })();
+  `.replace(/\s+/g, " ");
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           rel="preload"
@@ -47,6 +60,7 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
         />
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
       <body>
         <Providers initialTheme={initialTheme}>

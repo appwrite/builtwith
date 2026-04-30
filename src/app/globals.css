@@ -10,6 +10,17 @@
   min-height: 100vh;
 }
 
+/* Pre-hydration theme: the inline script in <head> sets
+   <html data-theme-preboot="dark|light"> before React paints. We mirror the
+   .theme-dark.grid-with-side selector here so dark colours apply on first
+   paint, before the React state hooks kick in. */
+[data-theme-preboot="dark"] .grid-with-side {
+  --p-body-text-color: var(--color-neutral-50);
+  --p-body-bg-color: var(--color-neutral-500);
+  color: hsl(var(--p-body-text-color));
+  background-color: hsl(var(--p-body-bg-color));
+}
+
 /* Project cards isolate their layout/style/paint so reflows inside one card
    (e.g. images loading, tag wrap, upvote re-render) cannot invalidate the
    ancestor chain and trigger a full-page repaint mid-scroll. */
@@ -710,6 +721,30 @@ input[type="checkbox"]:not(:checked) {
 .prose img {
   margin-top: 2em;
   margin-bottom: 2em;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Treat inline images (badges, emoji, icons inside paragraphs / list items /
+   anchors) as inline content: no block margin, vertical-aligned to text. */
+.prose p img,
+.prose li img,
+.prose a img {
+  display: inline-block;
+  margin: 0 0.25rem;
+  vertical-align: middle;
+}
+
+/* Anchors that are purely an image wrapper (badges) shouldn't underline. */
+.prose a:has(> img) {
+  text-decoration: none;
+}
+
+/* Tighten the vertical rhythm in lists of badges. */
+.prose li:has(> a > img),
+.prose li:has(> img) {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .prose video {

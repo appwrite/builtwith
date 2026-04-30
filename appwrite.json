@@ -576,7 +576,9 @@
             ],
             "events": [],
             "schedule": "",
-            "timeout": 15
+            "timeout": 15,
+            "specification": "s-1vcpu-1gb",
+            "buildSpecification": "s-2vcpu-2gb"
         },
         {
             "$id": "submitProject",
@@ -593,7 +595,9 @@
             ],
             "events": [],
             "schedule": "",
-            "timeout": 15
+            "timeout": 30,
+            "specification": "s-1vcpu-1gb",
+            "buildSpecification": "s-2vcpu-2gb"
         },
         {
             "$id": "rejectProject",
@@ -608,7 +612,9 @@
             "execute": [],
             "events": ["databases.main.collections.projects.documents.*.update"],
             "schedule": "",
-            "timeout": 15
+            "timeout": 15,
+            "specification": "s-1vcpu-1gb",
+            "buildSpecification": "s-2vcpu-2gb"
         }
     ]
 }

@@ -40,6 +40,13 @@ const readCookie = (): Theme | null => {
   return m ? (m[1] === "dark" ? "dark" : "light") : null;
 };
 
+const readSystem = (): Theme => {
+  if (typeof window === "undefined" || !window.matchMedia) return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
 export default function Providers({
   initialTheme,
   children,
@@ -48,19 +55,38 @@ export default function Providers({
   children: ReactNode;
 }) {
   const [theme, setThemeState] = useState<Theme>(initialTheme);
+  const [hasUserChoice, setHasUserChoice] = useState(false);
   const [account, setAccount] =
     useState<Models.User<Models.Preferences> | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    const t = readCookie();
-    if (t && t !== theme) setThemeState(t);
+    const cookieTheme = readCookie();
+    if (cookieTheme) {
+      setHasUserChoice(true);
+      if (cookieTheme !== theme) setThemeState(cookieTheme);
+    } else {
+      setThemeState(readSystem());
+    }
     ClientAppwrite.getAccount().then(setAccount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Follow live OS changes only while the user hasn't made an explicit choice.
+  useEffect(() => {
+    if (hasUserChoice) return;
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = (e: MediaQueryListEvent) => {
+      setThemeState(e.matches ? "dark" : "light");
+    };
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [hasUserChoice]);
+
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
+    setHasUserChoice(true);
     document.cookie = `${COOKIE}=${t}; path=/; max-age=31536000; samesite=strict`;
   }, []);
 
