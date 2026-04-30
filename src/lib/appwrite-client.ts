@@ -22,6 +22,29 @@ const client = new Client()
   .setEndpoint(APPWRITE_ENDPOINT)
   .setProject(APPWRITE_PROJECT_ID);
 
+// Cross-site session persistence. The SDK's cookieFallback works only when
+// Appwrite Cloud opts to send X-Fallback-Cookies, which it doesn't in every
+// path. We always store the session secret in our own first-party
+// localStorage and re-attach it via client.setSession() so the SDK sends
+// X-Appwrite-Session on every request — independent of cookies.
+const SESSION_KEY = "builtwith.session";
+const persistSession = (secret: string | null) => {
+  if (typeof window === "undefined") return;
+  if (secret) {
+    window.localStorage.setItem(SESSION_KEY, secret);
+    client.setSession(secret);
+  } else {
+    window.localStorage.removeItem(SESSION_KEY);
+    client.setSession("");
+  }
+};
+
+// Attach the persisted session on initial module load.
+if (typeof window !== "undefined") {
+  const stored = window.localStorage.getItem(SESSION_KEY);
+  if (stored) client.setSession(stored);
+}
+
 const account = new Account(client);
 const storage = new Storage(client);
 const databases = new Databases(client);
@@ -48,14 +71,20 @@ export const ClientAppwrite = {
     secret: string
   ): Promise<Models.Session | null> => {
     try {
-      return await account.createSession(userId, secret);
+      const session = await account.createSession(userId, secret);
+      persistSession(session.secret || session.$id);
+      return session;
     } catch (err) {
       console.error("createSession failed:", err);
       return null;
     }
   },
   signOut: async () => {
-    await account.deleteSession("current");
+    try {
+      await account.deleteSession("current");
+    } finally {
+      persistSession(null);
+    }
   },
   getAccount: async (): Promise<Models.User<Models.Preferences> | null> => {
     try {
