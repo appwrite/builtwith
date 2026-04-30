@@ -24,10 +24,10 @@ export default async function HomePage() {
     ServerAppwrite.listProjects([Q.limit(3)]),
     ServerAppwrite.listProjects([Q.orderDesc("upvotes"), Q.limit(3)]),
     ServerAppwrite.listProjects([Q.equal("uiLibrary", "tailwind"), Q.limit(3)]),
-    ServerAppwrite.countProjects([Q.equal("useCase", "demo-app"), Q.limit(1)]),
-    ServerAppwrite.countProjects([Q.equal("useCase", "starter"), Q.limit(1)]),
-    ServerAppwrite.countProjects([Q.equal("useCase", "saas"), Q.limit(1)]),
-    ServerAppwrite.countProjects([Q.equal("useCase", "other"), Q.limit(1)]),
+    ServerAppwrite.countProjects([Q.equal("useCase", "demo-app")]),
+    ServerAppwrite.countProjects([Q.equal("useCase", "starter")]),
+    ServerAppwrite.countProjects([Q.equal("useCase", "saas")]),
+    ServerAppwrite.countProjects([Q.equal("useCase", "other")]),
   ]);
 
   return (

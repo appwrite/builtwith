@@ -10,22 +10,24 @@
   min-height: 100vh;
 }
 
-/* Skip layout/paint for off-screen project cards. The intrinsic size keeps the
-   scrollbar honest before the browser actually paints the card. */
+/* Project cards isolate their layout/style/paint so reflows inside one card
+   (e.g. images loading, tag wrap, upvote re-render) cannot invalidate the
+   ancestor chain and trigger a full-page repaint mid-scroll. */
 .project-card-virtual {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 360px;
+  contain: layout style paint;
 }
 
-/* Pink Design's card hover repaints box-shadow on every frame; force it onto
-   its own compositor layer so scroll work stays cheap. */
-.card {
-  will-change: auto;
-  transform: translateZ(0);
+/* The Pink Design sidebar is position:sticky. Containment prevents its
+   internal repaints (hover, filter open/close) from bleeding into the main
+   scroll region, which is the most expensive layer. */
+.main-side {
+  contain: layout style;
 }
 
-img {
-  content-visibility: auto;
+/* Pin the html scroll container — without this Safari sometimes runs
+   non-accelerated scroll on the body. */
+html {
+  -webkit-overflow-scrolling: touch;
 }
 
 .filter-chevron {

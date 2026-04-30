@@ -37,11 +37,13 @@ export const ServerAppwrite = {
     return res.documents;
   },
   countProjects: async (queries: string[] = []): Promise<number> => {
-    // Only the total is needed; cap the page so we don't ship 25 docs each call.
+    // Only the total is needed; strip any caller-supplied limit so the SDK
+    // doesn't see duplicate Query.limit(...) entries, then cap at 1.
+    const withoutLimit = queries.filter((q) => !q.startsWith('limit('));
     const res = await databases.listDocuments<Project>(
       "main",
       "projects",
-      [...ensurePublishedAndSorted(queries), Query.limit(1)]
+      [...ensurePublishedAndSorted(withoutLimit), Query.limit(1)]
     );
     return res.total;
   },
