@@ -68,7 +68,25 @@ export default function Providers({
     } else {
       setThemeState(readSystem());
     }
-    ClientAppwrite.getAccount().then(setAccount);
+
+    const completeAndLoadAccount = async () => {
+      // Token-flow OAuth callback: ?userId=...&secret=... means GitHub just
+      // redirected back. Exchange the token for a real session on our own
+      // origin so the SDK stores it locally and we don't depend on a
+      // third-party cookie from cloud.appwrite.io.
+      const url = new URL(window.location.href);
+      const userId = url.searchParams.get("userId");
+      const secret = url.searchParams.get("secret");
+      if (userId && secret) {
+        await ClientAppwrite.completeOAuthSession(userId, secret);
+        url.searchParams.delete("userId");
+        url.searchParams.delete("secret");
+        window.history.replaceState({}, "", url.toString());
+      }
+      const me = await ClientAppwrite.getAccount();
+      setAccount(me);
+    };
+    completeAndLoadAccount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

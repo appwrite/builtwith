@@ -30,9 +30,29 @@ const functions = new Functions(client);
 export { client as appwriteClient, Query };
 
 export const ClientAppwrite = {
+  // Token-flow OAuth: Appwrite redirects back with ?userId&secret query
+  // params, which we exchange for a session via createSession() on our own
+  // origin. The SDK then stores the session secret in this origin's
+  // localStorage and rides it on future calls via the X-Appwrite-Session
+  // header — no reliance on the third-party cookie set by cloud.appwrite.io.
   signIn: () => {
-    const redirectUrl = window.location.href;
-    account.createOAuth2Session(OAuthProvider.Github, redirectUrl, redirectUrl);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("userId");
+    url.searchParams.delete("secret");
+    const success = url.toString();
+    const failure = url.toString();
+    account.createOAuth2Token(OAuthProvider.Github, success, failure);
+  },
+  completeOAuthSession: async (
+    userId: string,
+    secret: string
+  ): Promise<Models.Session | null> => {
+    try {
+      return await account.createSession(userId, secret);
+    } catch (err) {
+      console.error("createSession failed:", err);
+      return null;
+    }
   },
   signOut: async () => {
     await account.deleteSession("current");
