@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { ServerAppwrite } from "~/lib/appwrite-server";
-import { buildSearchQueries, titleFromParams, type SearchParams } from "~/lib/queries";
+import {
+  buildSearchQueries,
+  titleFromParams,
+  type RawSearchParams,
+} from "~/lib/queries";
 import Group from "~/components/group";
 import ProjectFeatured from "~/components/project-featured";
 
@@ -9,7 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: RawSearchParams;
 }) {
   const queries = buildSearchQueries(searchParams);
   const projects = await ServerAppwrite.listProjects(queries);

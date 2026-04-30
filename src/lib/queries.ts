@@ -1,16 +1,21 @@
 import { Query } from "node-appwrite";
 
-export type SearchParams = {
-  framework?: string;
-  uiLibrary?: string;
-  useCase?: string;
-  service?: string;
-  platform?: string;
-  sort?: string;
+// Match Next.js App Router's runtime shape: a key can be string, string[]
+// (duplicate keys), or undefined. Treat string[] as a comma-joined value.
+export type RawSearchParams = Record<
+  string,
+  string | string[] | undefined
+>;
+
+const first = (
+  v: string | string[] | undefined
+): string | undefined => {
+  if (Array.isArray(v)) return v.join(",");
+  return v;
 };
 
 export const buildSearchQueries = (
-  params: SearchParams,
+  raw: RawSearchParams,
   limit = 20,
   cursorAfter?: string
 ): string[] => {
@@ -20,51 +25,64 @@ export const buildSearchQueries = (
     queries.push(Query.cursorAfter(cursorAfter));
   }
 
-  if (params.framework) {
-    queries.push(Query.equal("framework", params.framework.split(",")));
+  const framework = first(raw.framework);
+  const platform = first(raw.platform);
+  const uiLibrary = first(raw.uiLibrary);
+  const useCase = first(raw.useCase);
+  const service = first(raw.service);
+  const sort = first(raw.sort);
+
+  if (framework) {
+    queries.push(Query.equal("framework", framework.split(",")));
   }
-  if (params.platform) {
-    queries.push(Query.equal("platform", params.platform.split(",")));
+  if (platform) {
+    queries.push(Query.equal("platform", platform.split(",")));
   }
-  if (params.uiLibrary) {
-    queries.push(Query.equal("uiLibrary", params.uiLibrary.split(",")));
+  if (uiLibrary) {
+    queries.push(Query.equal("uiLibrary", uiLibrary.split(",")));
   }
-  if (params.useCase) {
-    queries.push(Query.equal("useCase", params.useCase.split(",")));
+  if (useCase) {
+    queries.push(Query.equal("useCase", useCase.split(",")));
   }
 
-  if (params.service) {
-    for (const service of params.service.split(",")) {
-      if (service === "authentication") {
+  if (service) {
+    for (const s of service.split(",")) {
+      if (s === "authentication") {
         queries.push(Query.equal("hasAuthentication", true));
-      } else if (service === "messaging") {
+      } else if (s === "messaging") {
         queries.push(Query.equal("hasMessaging", true));
-      } else if (service === "storage") {
+      } else if (s === "storage") {
         queries.push(Query.equal("hasStorage", true));
-      } else if (service === "realtime") {
+      } else if (s === "realtime") {
         queries.push(Query.equal("hasRealtime", true));
-      } else if (service === "functions") {
+      } else if (s === "functions") {
         queries.push(Query.equal("hasFunctions", true));
-      } else if (service === "databases") {
+      } else if (s === "databases") {
         queries.push(Query.equal("hasDatabases", true));
       }
     }
   }
 
-  if (params.sort === "latest") {
+  if (sort === "latest") {
     queries.push(Query.orderDesc("$createdAt"));
-  } else if (params.sort === "upvotes") {
+  } else if (sort === "upvotes") {
     queries.push(Query.orderDesc("upvotes"));
   }
 
   return queries;
 };
 
-export const titleFromParams = (params: SearchParams) => {
-  if (params.framework) return `Made with ${params.framework}`;
-  if (params.platform) return `Built for ${params.platform}`;
-  if (params.uiLibrary) return `Designed with ${params.uiLibrary}`;
-  if (params.useCase) return `${params.useCase} projects`;
-  if (params.service) return `Using ${params.service}`;
+export const titleFromParams = (raw: RawSearchParams) => {
+  const framework = first(raw.framework);
+  const platform = first(raw.platform);
+  const uiLibrary = first(raw.uiLibrary);
+  const useCase = first(raw.useCase);
+  const service = first(raw.service);
+
+  if (framework) return `Made with ${framework}`;
+  if (platform) return `Built for ${platform}`;
+  if (uiLibrary) return `Designed with ${uiLibrary}`;
+  if (useCase) return `${useCase} projects`;
+  if (service) return `Using ${service}`;
   return "Search Results";
 };
