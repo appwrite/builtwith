@@ -12,7 +12,7 @@
     "@appwrite.io/pink-icons": "^0.25.0",
     "appwrite": "^16.1.0",
     "marked": "^9.1.2",
-    "next": "14.2.18",
+    "next": "14.2.35",
     "node-appwrite": "^14.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -22,6 +22,8 @@
     "@types/node": "^20.8.9",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.35",
     "typescript": "^5.4.5"
   }
 }

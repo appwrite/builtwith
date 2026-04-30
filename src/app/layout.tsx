@@ -57,10 +57,7 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        />
+        {/* Inter is loaded via `@import` in globals.css; no <link rel="stylesheet"> here. */}
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
       </head>
       <body>
