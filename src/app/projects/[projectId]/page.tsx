@@ -20,12 +20,14 @@ const escape = (unsafe: string) =>
 marked.use({
   renderer: {
     image(href: string, title: string | null, text: string) {
+      // Only allow http(s) URLs; render directly so the server never proxies
+      // user-supplied URLs (no SSRF surface). The browser fetches from the
+      // host the markdown author chose.
       if (!href || !/^https?:\/\//i.test(href)) return text;
-      const params = new URLSearchParams({ url: href });
       const titleAttr = title ? ` title="${escape(title)}"` : "";
-      return `<img src="/api/image-proxy?${params.toString()}" alt="${escape(
+      return `<img src="${escape(href)}" alt="${escape(
         text
-      )}"${titleAttr} loading="lazy" decoding="async">`;
+      )}"${titleAttr} loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
     },
   },
 });
