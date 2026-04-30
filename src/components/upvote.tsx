@@ -50,8 +50,12 @@ export default function Upvote({ projectId, votes }: Props) {
 
     try {
       const response = await ClientAppwrite.upvoteProject(projectId);
-      setIsUpvoted(Boolean(response.isUpvoted));
-      if (typeof response.votes === "number") {
+      // Honour server-returned values when present; otherwise keep our
+      // optimistic state (the side effect ran since the function returned 2xx).
+      if (typeof response?.isUpvoted === "boolean") {
+        setIsUpvoted(response.isUpvoted);
+      }
+      if (typeof response?.votes === "number") {
         setCount(response.votes);
       }
     } catch {

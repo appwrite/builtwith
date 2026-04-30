@@ -49,10 +49,29 @@ export const ClientAppwrite = {
       "upvoteProject",
       projectId
     );
-    if (!execution.responseBody) throw new Error("Unexpected error.");
-    const json = JSON.parse(execution.responseBody);
-    if (json.ok === false) throw new Error(json.msg);
-    return json;
+    // The function returns 200 + a JSON body. Some Cloud runtime/SDK
+    // combinations don't surface responseBody to the web SDK, so treat any
+    // 2xx as success and parse the body opportunistically.
+    if (
+      execution.responseStatusCode < 200 ||
+      execution.responseStatusCode >= 300
+    ) {
+      throw new Error(`Function failed (${execution.responseStatusCode})`);
+    }
+    if (execution.responseBody) {
+      try {
+        const json = JSON.parse(execution.responseBody);
+        if (json.ok === false) throw new Error(json.msg ?? "Function failed");
+        return json;
+      } catch (err) {
+        if (err instanceof Error && err.message !== "Function failed") {
+          // JSON parse error: still treat as success, the side effect ran.
+        } else {
+          throw err;
+        }
+      }
+    }
+    return { ok: true };
   },
   listUpvotes: async (queries: string[]) => {
     return (

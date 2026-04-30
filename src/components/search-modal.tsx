@@ -27,6 +27,7 @@ export default function SearchModal() {
     if (!searchOpen) return;
     const term = input.trim();
     let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
     const run = async () => {
       const list = term
         ? await ClientAppwrite.searchProjects(term)
@@ -38,12 +39,15 @@ export default function SearchModal() {
     };
     if (!term) {
       run();
-      return;
+    } else {
+      timer = setTimeout(run, 200);
     }
-    const timer = setTimeout(run, 200);
+    // Always return the cleanup so the cancellation flag flips even on the
+    // empty-term path; otherwise a slow listLatestProjects can resolve after
+    // a newer search and overwrite results.
     return () => {
       cancelled = true;
-      clearTimeout(timer);
+      if (timer) clearTimeout(timer);
     };
   }, [input, searchOpen]);
 

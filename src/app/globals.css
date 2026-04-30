@@ -10,6 +10,112 @@
   min-height: 100vh;
 }
 
+/* === Submit form === */
+.submit-form {
+  max-width: 64rem;
+  margin: 1rem auto 4rem;
+}
+.submit-section {
+  padding: 1.75rem;
+}
+.submit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+@media (max-width: 720px) {
+  .submit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.submit-grid-full {
+  grid-column: 1 / -1;
+}
+.submit-thumb-drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed hsl(var(--color-border));
+  border-radius: var(--border-radius-medium, 0.75rem);
+  padding: 2rem;
+  min-height: 14rem;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 160ms ease, background-color 160ms ease;
+  background-color: hsl(var(--color-neutral-5) / 0.5);
+}
+.submit-thumb-drop:hover {
+  border-color: hsl(var(--color-primary-100, 340 82% 59%));
+  background-color: hsl(var(--color-neutral-5));
+}
+.submit-thumb-drop img {
+  max-height: 18rem;
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius-small, 0.5rem);
+}
+.theme-dark .submit-thumb-drop {
+  background-color: hsl(var(--color-neutral-300) / 0.4);
+}
+.submit-services {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.625rem;
+}
+.submit-service-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid hsl(var(--color-border));
+  border-radius: var(--border-radius-small, 0.5rem);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 140ms ease, background-color 140ms ease,
+    color 140ms ease;
+}
+.submit-service-pill:hover {
+  border-color: hsl(var(--color-primary-100, 340 82% 59%));
+}
+.submit-service-pill .text {
+  flex: 1;
+}
+.submit-service-pill .submit-service-check {
+  opacity: 0.55;
+}
+.submit-service-pill.is-active {
+  border-color: hsl(var(--color-primary-100, 340 82% 59%));
+  background-color: hsl(var(--color-primary-100, 340 82% 59%) / 0.08);
+}
+.submit-service-pill.is-active .submit-service-check {
+  opacity: 1;
+  color: hsl(var(--color-primary-100, 340 82% 59%));
+}
+.submit-footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--border-radius-medium, 0.75rem);
+  background-color: hsl(var(--color-neutral-0));
+  border: 1px solid hsl(var(--color-border));
+  box-shadow: 0 6px 24px hsl(var(--color-neutral-500) / 0.08);
+}
+.theme-dark .submit-footer {
+  background-color: hsl(var(--color-neutral-400));
+}
+@media (max-width: 480px) {
+  .submit-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 /* Pre-hydration theme: the inline script in <head> sets
    <html data-theme-preboot="dark|light"> before React paints. We mirror the
    .theme-dark.grid-with-side selector here so dark colours apply on first
