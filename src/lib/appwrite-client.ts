@@ -49,29 +49,27 @@ export const ClientAppwrite = {
       "upvoteProject",
       projectId
     );
-    // The function returns 200 + a JSON body. Some Cloud runtime/SDK
-    // combinations don't surface responseBody to the web SDK, so treat any
-    // 2xx as success and parse the body opportunistically.
+    if (execution.status === "failed") {
+      throw new Error(execution.errors || "Function failed");
+    }
     if (
       execution.responseStatusCode < 200 ||
       execution.responseStatusCode >= 300
     ) {
-      throw new Error(`Function failed (${execution.responseStatusCode})`);
+      throw new Error(`Function returned ${execution.responseStatusCode}`);
     }
-    if (execution.responseBody) {
-      try {
-        const json = JSON.parse(execution.responseBody);
-        if (json.ok === false) throw new Error(json.msg ?? "Function failed");
-        return json;
-      } catch (err) {
-        if (err instanceof Error && err.message !== "Function failed") {
-          // JSON parse error: still treat as success, the side effect ran.
-        } else {
-          throw err;
-        }
-      }
+    // Body is sometimes empty for older runtimes / SDK combinations on Cloud.
+    // When it's empty, treat as success (the side effect ran).
+    if (!execution.responseBody) return { ok: true };
+    let json;
+    try {
+      json = JSON.parse(execution.responseBody);
+    } catch {
+      // Malformed JSON, but the function returned 2xx — accept as success.
+      return { ok: true };
     }
-    return { ok: true };
+    if (json.ok === false) throw new Error(json.msg ?? "Function failed");
+    return json;
   },
   listUpvotes: async (queries: string[]) => {
     return (

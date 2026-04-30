@@ -58,11 +58,16 @@ export default function Upvote({ projectId, votes }: Props) {
       if (typeof response?.votes === "number") {
         setCount(response.votes);
       }
-    } catch {
+    } catch (err) {
       // Roll back on failure.
       setIsUpvoted(prevIsUpvoted);
       setCount(prevCount);
-      alert("An unexpected error occurred.");
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : "Could not record your vote. Try again in a moment.";
+      console.error("upvote failed:", err);
+      alert(message);
     } finally {
       setIsLoading(false);
     }
