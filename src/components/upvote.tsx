@@ -3,6 +3,7 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import { ClientAppwrite } from "~/lib/appwrite-client";
 import { useApp } from "./providers";
+import { useToast } from "./toast";
 
 type Props = {
   projectId: string;
@@ -11,6 +12,7 @@ type Props = {
 
 export default function Upvote({ projectId, votes }: Props) {
   const { account } = useApp();
+  const toast = useToast();
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [count, setCount] = useState(votes);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +37,7 @@ export default function Upvote({ projectId, votes }: Props) {
     e.preventDefault();
     e.stopPropagation();
     if (!account) {
-      alert("Please sign in first.");
+      toast.info("Sign in to upvote a project.");
       return;
     }
     if (isLoading) return;
@@ -67,7 +69,7 @@ export default function Upvote({ projectId, votes }: Props) {
           ? err.message
           : "Could not record your vote. Try again in a moment.";
       console.error("upvote failed:", err);
-      alert(message);
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

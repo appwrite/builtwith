@@ -9,6 +9,7 @@ import Sidebar from "~/components/sidebar";
 import Providers from "~/components/providers";
 import ThemedShell from "~/components/themed-shell";
 import SearchModal from "~/components/search-modal";
+import ToastProvider from "~/components/toast";
 
 export const metadata: Metadata = {
   title: "Built with Appwrite",
@@ -64,15 +65,17 @@ export default function RootLayout({
       </head>
       <body>
         <Providers initialTheme={initialTheme}>
-          <ThemedShell>
-            <SearchModal />
-            <Header />
-            <main className="main-content u-main-space-between">
-              <div className="container hero-top-container">{children}</div>
-              <Footer />
-            </main>
-            <Sidebar />
-          </ThemedShell>
+          <ToastProvider>
+            <ThemedShell>
+              <SearchModal />
+              <Header />
+              <main className="main-content u-main-space-between">
+                <div className="container hero-top-container">{children}</div>
+                <Footer />
+              </main>
+              <Sidebar />
+            </ThemedShell>
+          </ToastProvider>
         </Providers>
       </body>
     </html>
