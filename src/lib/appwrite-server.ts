@@ -1,0 +1,66 @@
+import "server-only";
+import { Client, Databases, Query } from "node-appwrite";
+import {
+  APPWRITE_ENDPOINT,
+  APPWRITE_PROJECT_ID,
+  type Project,
+} from "./types";
+
+const client = new Client()
+  .setEndpoint(APPWRITE_ENDPOINT)
+  .setProject(APPWRITE_PROJECT_ID);
+
+const databases = new Databases(client);
+
+const ensurePublishedAndSorted = (queries: string[]) => {
+  const hasIsPublished = queries.find((q) => q.includes('"isPublished"'));
+  const hasCreatedAtSort = queries.find(
+    (q) =>
+      q.startsWith('orderDesc("$createdAt') ||
+      q.startsWith('orderAsc("$createdAt')
+  );
+
+  const final = [...queries];
+  if (!hasIsPublished) final.push(Query.equal("isPublished", true));
+  if (!hasCreatedAtSort) final.push(Query.orderDesc("$createdAt"));
+  return final;
+};
+
+export const ServerAppwrite = {
+  Query,
+  listProjects: async (queries: string[] = []): Promise<Project[]> => {
+    const res = await databases.listDocuments<Project>(
+      "main",
+      "projects",
+      ensurePublishedAndSorted(queries)
+    );
+    return res.documents;
+  },
+  countProjects: async (queries: string[] = []): Promise<number> => {
+    const res = await databases.listDocuments<Project>(
+      "main",
+      "projects",
+      ensurePublishedAndSorted(queries)
+    );
+    return res.total;
+  },
+  getProject: async (projectId: string): Promise<Project | null> => {
+    try {
+      return await databases.getDocument<Project>(
+        "main",
+        "projects",
+        projectId
+      );
+    } catch {
+      return null;
+    }
+  },
+  thumbnailUrl: (fileId: string, width = 1280) => {
+    const params = new URLSearchParams({
+      project: APPWRITE_PROJECT_ID,
+      width: String(width),
+      output: "webp",
+    });
+    return `${APPWRITE_ENDPOINT}/storage/buckets/thumbnails/files/${fileId}/preview?${params.toString()}`;
+  },
+};

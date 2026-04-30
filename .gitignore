@@ -3,6 +3,8 @@
 /lib
 /lib-types
 /server
+.next/
+out/
 
 # Development
 node_modules

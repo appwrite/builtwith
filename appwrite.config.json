@@ -1,0 +1,24 @@
+{
+    "projectId": "builtWithAppwrite",
+    "projectName": "Built with Appwrite",
+    "endpoint": "https://fra.cloud.appwrite.io/v1",
+    "sites": [
+        {
+            "$id": "builtwith",
+            "name": "builtwith",
+            "path": "./",
+            "framework": "nextjs",
+            "logging": true,
+            "timeout": 30,
+            "buildRuntime": "node-22",
+            "adapter": "ssr",
+            "installCommand": "npm install",
+            "buildCommand": "npm run build",
+            "outputDirectory": "./.next",
+            "fallbackFile": "",
+            "buildSpecification": "s-2vcpu-2gb",
+            "runtimeSpecification": "s-2vcpu-2gb",
+            "deploymentRetention": 0
+        }
+    ]
+}
