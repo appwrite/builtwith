@@ -22,10 +22,10 @@ marked.use({
     image(href: string, title: string | null, text: string) {
       if (!href || !/^https?:\/\//i.test(href)) return text;
       const params = new URLSearchParams({ url: href });
-      const t = title ? `title="${escape(title)}"` : "";
+      const titleAttr = title ? ` title="${escape(title)}"` : "";
       return `<img src="/api/image-proxy?${params.toString()}" alt="${escape(
         text
-      )} ${t} loading="lazy">`;
+      )}"${titleAttr} loading="lazy" decoding="async">`;
     },
   },
 });

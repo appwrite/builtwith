@@ -10,6 +10,65 @@
   min-height: 100vh;
 }
 
+/* Skip layout/paint for off-screen project cards. The intrinsic size keeps the
+   scrollbar honest before the browser actually paints the card. */
+.project-card-virtual {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 360px;
+}
+
+/* Pink Design's card hover repaints box-shadow on every frame; force it onto
+   its own compositor layer so scroll work stays cheap. */
+.card {
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+img {
+  content-visibility: auto;
+}
+
+.filter-chevron {
+  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.filter-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.filter-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.filter-panel.is-open {
+  grid-template-rows: 1fr;
+}
+.filter-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.filter-option {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 220ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 160ms ease;
+  transition-delay: calc(var(--filter-i, 0) * 18ms);
+}
+.filter-panel.is-open .filter-option {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .filter-chevron,
+  .filter-panel,
+  .filter-option {
+    transition: none !important;
+  }
+}
+
 .project-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));

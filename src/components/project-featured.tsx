@@ -12,7 +12,7 @@ export default function ProjectFeatured({
   lazy?: boolean;
 }) {
   return (
-    <article className="card u-min-width-100-percent">
+    <article className="card u-min-width-100-percent project-card-virtual">
       <div className="u-flex u-flex-vertical-mobile u-gap-24">
         <div className="u-flex-basis-50-percent u-flex-shrink-0">
           <Link
@@ -21,10 +21,12 @@ export default function ProjectFeatured({
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={ServerAppwrite.thumbnailUrl(project.imageId, 1920)}
+              src={ServerAppwrite.thumbnailUrl(project.imageId, 1280)}
               loading={lazy ? "lazy" : "eager"}
-              width={1920}
-              height={1080}
+              decoding="async"
+              fetchPriority={lazy ? "low" : "high"}
+              width={1280}
+              height={720}
               alt=""
             />
           </Link>

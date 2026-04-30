@@ -67,9 +67,12 @@ export const ClientAppwrite = {
     const { documents } = await databases.listDocuments<Project>(
       "main",
       "projects",
-      [Query.search("search", searchQuery)]
+      [
+        Query.equal("isPublished", true),
+        Query.search("search", searchQuery),
+      ]
     );
-    return documents.filter((p) => p.isPublished);
+    return documents;
   },
   listLatestProjects: async (limit = 12): Promise<Project[]> => {
     const { documents } = await databases.listDocuments<Project>(
@@ -79,8 +82,30 @@ export const ClientAppwrite = {
     );
     return documents;
   },
+  hasUserUpvotedProject: async (
+    userId: string,
+    projectId: string
+  ): Promise<boolean> => {
+    const { total } = await databases.listDocuments<ProjectUpvote>(
+      "main",
+      "projectUpvotes",
+      [
+        Query.equal("userId", userId),
+        Query.equal("projectId", projectId),
+        Query.limit(1),
+      ]
+    );
+    return total > 0;
+  },
   uploadThumbnail: async (file: File) => {
     return await storage.createFile("thumbnails", ID.unique(), file);
+  },
+  deleteThumbnail: async (fileId: string) => {
+    try {
+      await storage.deleteFile("thumbnails", fileId);
+    } catch {
+      // best-effort rollback
+    }
   },
   submitProject: async (data: unknown) => {
     const execution = await functions.createExecution(

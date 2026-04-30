@@ -110,7 +110,13 @@ export default function SubmitForm() {
         fileId,
       };
 
-      const response = await ClientAppwrite.submitProject(data);
+      let response;
+      try {
+        response = await ClientAppwrite.submitProject(data);
+      } catch (submitErr) {
+        await ClientAppwrite.deleteThumbnail(fileId);
+        throw submitErr;
+      }
       setSuccess(response.msg ?? "Submitted! We'll review shortly.");
       setName("");
       setTagline("");

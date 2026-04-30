@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { ClientAppwrite } from "~/lib/appwrite-client";
 import { useApp } from "./providers";
 
@@ -14,6 +14,22 @@ export default function Upvote({ projectId, votes }: Props) {
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [count, setCount] = useState(votes);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!account) {
+      setIsUpvoted(false);
+      return;
+    }
+    let cancelled = false;
+    ClientAppwrite.hasUserUpvotedProject(account.$id, projectId)
+      .then((v) => {
+        if (!cancelled) setIsUpvoted(v);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [account, projectId]);
 
   const onClick = async (e: MouseEvent) => {
     e.preventDefault();

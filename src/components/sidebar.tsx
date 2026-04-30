@@ -61,69 +61,87 @@ export default function Sidebar() {
         <div className="side-nav-main">
           <div className="drop-section" style={{ paddingTop: "0.5rem" }}>
             <div className="drop-list">
-              {filters.map((filter) => (
-                <div className="drop-list-item" key={filter.name}>
-                  <button
-                    onClick={() => toggle(filter.id)}
-                    className="u-flex u-main-space-between u-cross-center u-width-full-line"
-                  >
-                    <h4 className="eyebrow-heading-3">{filter.name}</h4>
-                    <span
-                      className="icon-cheveron-down"
-                      style={
-                        opened === filter.id
-                          ? { transform: "rotate(180deg)" }
-                          : undefined
-                      }
-                    />
-                  </button>
-                  {opened === filter.id && (
-                    <div className="u-flex-vertical u-gap-8 u-margin-block-start-8">
-                      {Object.keys(filter.options).map((id) => {
-                        const opt = filter.options[id];
-                        const selected =
-                          currentKey === filter.id && currentValue === id;
-                        return (
-                          <label
-                            htmlFor={id}
-                            key={id}
-                            className={`u-flex u-cross-center u-gap-8 c-filter-card u-cursor-pointer ${
-                              selected ? "c-menu-selected" : ""
-                            }`}
-                            style={{
-                              borderRadius: "var(--border-radius-xsmall)",
-                              padding: "0.5rem",
-                            }}
-                          >
-                            <input
-                              checked={selected}
-                              onChange={() => onSelect(filter.id, id)}
-                              id={id}
-                              type="radio"
-                              className="u-hide"
-                              style={{ width: 16, height: 16 }}
-                            />
-                            {opt.icon && (
-                              <div
-                                className="u-flex u-cross-center u-main-center c-menu-icon"
-                                dangerouslySetInnerHTML={{ __html: opt.icon }}
-                              />
-                            )}
-                            {opt.iconClass && (
-                              <span
-                                className={`c-menu-icon icon-${opt.iconClass}`}
-                                style={{ fontSize: "1rem" }}
-                                aria-hidden="true"
-                              />
-                            )}
-                            <p>{opt.name}</p>
-                          </label>
-                        );
-                      })}
+              {filters.map((filter) => {
+                const isOpen = opened === filter.id;
+                return (
+                  <div className="drop-list-item" key={filter.name}>
+                    <button
+                      type="button"
+                      onClick={() => toggle(filter.id)}
+                      aria-expanded={isOpen}
+                      aria-controls={`filter-panel-${filter.id}`}
+                      className="u-flex u-main-space-between u-cross-center u-width-full-line"
+                    >
+                      <h4 className="eyebrow-heading-3">{filter.name}</h4>
+                      <span
+                        className={`icon-cheveron-down filter-chevron${
+                          isOpen ? " is-open" : ""
+                        }`}
+                      />
+                    </button>
+                    <div
+                      id={`filter-panel-${filter.id}`}
+                      className={`filter-panel${isOpen ? " is-open" : ""}`}
+                    >
+                      <div className="filter-panel-inner">
+                        <div
+                          className="u-flex-vertical u-gap-8 u-margin-block-start-8"
+                          aria-hidden={!isOpen}
+                        >
+                          {Object.keys(filter.options).map((id, i) => {
+                            const opt = filter.options[id];
+                            const selected =
+                              currentKey === filter.id && currentValue === id;
+                            return (
+                              <label
+                                htmlFor={id}
+                                key={id}
+                                className={`filter-option u-flex u-cross-center u-gap-8 c-filter-card u-cursor-pointer${
+                                  selected ? " c-menu-selected" : ""
+                                }`}
+                                style={
+                                  {
+                                    borderRadius:
+                                      "var(--border-radius-xsmall)",
+                                    padding: "0.5rem",
+                                    "--filter-i": i,
+                                  } as React.CSSProperties
+                                }
+                              >
+                                <input
+                                  checked={selected}
+                                  onChange={() => onSelect(filter.id, id)}
+                                  id={id}
+                                  type="radio"
+                                  className="u-hide"
+                                  tabIndex={isOpen ? 0 : -1}
+                                  style={{ width: 16, height: 16 }}
+                                />
+                                {opt.icon && (
+                                  <div
+                                    className="u-flex u-cross-center u-main-center c-menu-icon"
+                                    dangerouslySetInnerHTML={{
+                                      __html: opt.icon,
+                                    }}
+                                  />
+                                )}
+                                {opt.iconClass && (
+                                  <span
+                                    className={`c-menu-icon icon-${opt.iconClass}`}
+                                    style={{ fontSize: "1rem" }}
+                                    aria-hidden="true"
+                                  />
+                                )}
+                                <p>{opt.name}</p>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

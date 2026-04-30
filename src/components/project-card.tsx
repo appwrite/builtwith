@@ -60,7 +60,9 @@ export default function ProjectCard({ project }: { project: Project | null }) {
       <Link className="object-og" href={`/projects/${project.$id}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={ServerAppwrite.thumbnailUrl(project.imageId)}
+          src={ServerAppwrite.thumbnailUrl(project.imageId, 720)}
+          loading="lazy"
+          decoding="async"
           width={1280}
           height={720}
           alt=""

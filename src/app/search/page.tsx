@@ -45,7 +45,7 @@ export default async function SearchPage({
             <ProjectFeatured
               key={project.$id}
               project={project}
-              lazy={index > 1}
+              lazy={index > 0}
             />
           ))}
         </div>
