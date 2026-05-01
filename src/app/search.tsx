@@ -75,8 +75,14 @@ const getSearchData = createServerFn({ method: "GET" })
 
 export const Route = createFileRoute("/search")({
   validateSearch: (search) => toRawSearchParams(search),
-  loader: async ({ location }) => {
-    const searchParams = toRawSearchParams(location.search);
+  // Declare the loader's dependency on the search object so changing filters
+  // (e.g. clicking another platform in the sidebar) invalidates the cached
+  // loader result and re-runs it. Without loaderDeps, TanStack Router treats
+  // search-only navigations as a no-op and useLoaderData keeps returning
+  // stale data while the URL updates underneath.
+  loaderDeps: ({ search }) => ({ search }),
+  loader: async ({ deps }) => {
+    const searchParams = deps.search;
     return {
       projects: await getSearchData({ data: searchParams }),
       searchParams,
