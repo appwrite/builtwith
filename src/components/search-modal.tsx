@@ -14,6 +14,37 @@ const thumbUrl = (imageId: string) =>
   `${APPWRITE_ENDPOINT}/storage/buckets/thumbnails/files/${imageId}/preview` +
   `?project=${APPWRITE_PROJECT_ID}&width=128&height=128&output=webp`;
 
+// Appwrite's fulltext search ranks across the whole `search` attribute
+// (which concatenates many fields), so a tagline hit can outrank an exact
+// name match. Re-score on the client so name matches always win.
+const scoreProject = (p: Project, term: string) => {
+  const t = term.toLowerCase().trim();
+  if (!t) return 0;
+  const name = (p.name || "").toLowerCase();
+  const tagline = (p.tagline || "").toLowerCase();
+  const tokens = t.split(/\s+/).filter(Boolean);
+  const allTokensIn = (s: string) => tokens.every((tok) => s.includes(tok));
+
+  if (name === t) return 1000;
+  if (name.startsWith(t)) return 600;
+  if (name.includes(t)) return 400;
+  if (allTokensIn(name)) return 300;
+  if (tagline.startsWith(t)) return 180;
+  if (tagline.includes(t)) return 120;
+  if (allTokensIn(tagline)) return 80;
+  return 0;
+};
+
+const rankResults = (list: Project[], term: string): Project[] => {
+  if (!term.trim()) return list;
+  // Decorate with original index for a stable sort fallback so equally
+  // scored items keep Appwrite's order.
+  return list
+    .map((p, i) => ({ p, i, s: scoreProject(p, term) }))
+    .sort((a, b) => b.s - a.s || a.i - b.i)
+    .map((x) => x.p);
+};
+
 export default function SearchModal() {
   const { searchOpen, closeSearch } = useApp();
   const router = useRouter();
@@ -44,7 +75,7 @@ export default function SearchModal() {
           ? await ClientAppwrite.searchProjects(term)
           : await ClientAppwrite.listLatestProjects(12);
         if (!cancelled) {
-          setResults(list);
+          setResults(rankResults(list, term));
           setSelected(-1);
         }
       } finally {
