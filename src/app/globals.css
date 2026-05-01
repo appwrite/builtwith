@@ -460,10 +460,12 @@ input[type="checkbox"]:not(:checked) {
   padding: 2rem;
   width: 100%;
   background-color: hsl(var(--color-neutral-30));
+  color: hsl(var(--color-primary-100));
 }
 
 .theme-dark .c-service-container {
   background-color: hsl(var(--color-neutral-150));
+  color: hsl(var(--color-primary-100));
 }
 
 .c-service-container svg {
