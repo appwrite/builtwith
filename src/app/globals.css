@@ -544,12 +544,18 @@ input[type="checkbox"]:not(:checked) {
   z-index: 10 !important;
 }
 
+.theme-dark .prose {
+  color: hsl(var(--color-neutral-50));
+}
+
 .theme-dark .prose h1,
 .theme-dark .prose h2,
 .theme-dark .prose h3,
 .theme-dark .prose h4,
 .theme-dark .prose h5,
-.theme-dark .prose h6 {
+.theme-dark .prose h6,
+.theme-dark .prose strong,
+.theme-dark .prose blockquote {
   color: hsl(var(--color-neutral-10));
 }
 
@@ -557,13 +563,18 @@ input[type="checkbox"]:not(:checked) {
 .theme-dark .prose a,
 .theme-dark .prose ul,
 .theme-dark .prose li,
-.theme-dark .prose ol {
+.theme-dark .prose ol,
+.theme-dark .prose [class~="lead"] {
   color: hsl(var(--color-neutral-50));
 }
 
 .theme-dark .prose span,
 .theme-dark .prose code {
   color: hsl(var(--color-neutral-25));
+}
+
+.theme-dark .prose figure figcaption {
+  color: hsl(var(--color-neutral-70));
 }
 
 .theme-dark .c-menu-selected {
