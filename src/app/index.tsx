@@ -1,15 +1,15 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { ServerAppwrite } from "~/lib/appwrite-server";
 import Group from "~/components/group";
 import ProjectFeatured from "~/components/project-featured";
 import ProjectList from "~/components/project-list";
 import ServiceList from "~/components/service-list";
 import TagList from "~/components/tag-list";
+import { SITE_URL } from "~/lib/site";
 
-export const dynamic = "force-dynamic";
-
-export default async function HomePage() {
+const getHomeData = createServerFn({ method: "GET" }).handler(async () => {
   const Q = ServerAppwrite.Query;
-
   const [
     featured,
     newAndShiny,
@@ -29,6 +29,37 @@ export default async function HomePage() {
     ServerAppwrite.countProjects([Q.equal("useCase", "saas")]),
     ServerAppwrite.countProjects([Q.equal("useCase", "other")]),
   ]);
+
+  return {
+    featured,
+    newAndShiny,
+    trendZone,
+    madeWithTailwind,
+    totals: {
+      "demo-app": demoAppsTotal,
+      starter: startersTotal,
+      saas: saasTotal,
+      other: othersTotal,
+    },
+  };
+});
+
+export const Route = createFileRoute("/")({
+  loader: () => getHomeData(),
+  head: () => ({
+    links: [{ rel: "canonical", href: SITE_URL }],
+  }),
+  component: HomePage,
+});
+
+function HomePage() {
+  const {
+    featured,
+    newAndShiny,
+    trendZone,
+    madeWithTailwind,
+    totals,
+  } = Route.useLoaderData();
 
   return (
     <div className="u-flex-vertical u-gap-32 u-margin-block-start-16">
@@ -60,14 +91,7 @@ export default async function HomePage() {
       </Group>
 
       <Group title="Use Cases">
-        <TagList
-          totals={{
-            "demo-app": demoAppsTotal,
-            starter: startersTotal,
-            saas: saasTotal,
-            other: othersTotal,
-          }}
-        />
+        <TagList totals={totals} />
       </Group>
     </div>
   );

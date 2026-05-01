@@ -319,7 +319,6 @@ export default function SubmitForm() {
           onDrop={onDrop}
         >
           {previewUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={previewUrl} alt="Thumbnail preview" />
           ) : (
             <div className="u-flex-vertical u-cross-center u-gap-8">

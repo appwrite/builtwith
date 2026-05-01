@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 const services = [
   { id: "databases", name: "Databases", icon: "database" },
@@ -24,7 +24,8 @@ export default function ServiceList() {
       {services.map((service) => (
         <li key={service.id}>
           <Link
-            href={`/search?service=${service.id}`}
+            to="/search"
+            search={{ service: service.id }}
             className="card u-flex-vertical u-cross-center u-main-space u-overflow-hidden u-width-full-line"
             style={{ padding: 0 }}
           >

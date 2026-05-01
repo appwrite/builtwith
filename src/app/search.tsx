@@ -1,5 +1,5 @@
-import Link from "next/link";
-import type { Metadata } from "next";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { ServerAppwrite } from "~/lib/appwrite-server";
 import {
   buildSearchQueries,
@@ -8,8 +8,6 @@ import {
 } from "~/lib/queries";
 import ProjectFeatured from "~/components/project-featured";
 import { SITE_URL } from "~/lib/site";
-
-export const dynamic = "force-dynamic";
 
 const FILTER_KEYS = [
   "framework",
@@ -56,50 +54,69 @@ function descriptionFromParams(raw: RawSearchParams): string {
   return "Browse the directory of projects built with Appwrite.";
 }
 
-export async function generateMetadata({
-  searchParams,
-}: {
-  searchParams: RawSearchParams;
-}): Promise<Metadata> {
-  // The root layout's title.template adds "| Built with Appwrite", so this
-  // returns just the page-specific portion.
-  const title = titleFromParams(searchParams);
-  const description = descriptionFromParams(searchParams);
-  const single = indexableSingleFilter(searchParams);
-  const canonical = single
-    ? `${SITE_URL}/search?${single.key}=${encodeURIComponent(single.val)}`
-    : undefined;
+const toRawSearchParams = (search: Record<string, unknown>): RawSearchParams =>
+  Object.fromEntries(
+    Object.entries(search).map(([key, value]) => [
+      key,
+      Array.isArray(value)
+        ? value.map(String)
+        : value == null
+          ? undefined
+          : String(value),
+    ])
+  );
 
-  return {
-    title,
-    description,
-    alternates: canonical ? { canonical } : undefined,
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      url: canonical ?? `${SITE_URL}/search`,
-      images: [
-        { url: "/cover.png", width: 1200, height: 630, alt: "Built with Appwrite" },
+const getSearchData = createServerFn({ method: "GET" })
+  .inputValidator((raw: RawSearchParams) => raw)
+  .handler(async ({ data: searchParams }) => {
+    const queries = buildSearchQueries(searchParams);
+    return ServerAppwrite.listProjects(queries);
+  });
+
+export const Route = createFileRoute("/search")({
+  validateSearch: (search) => toRawSearchParams(search),
+  loader: async ({ location }) => {
+    const searchParams = toRawSearchParams(location.search);
+    return {
+      projects: await getSearchData({ data: searchParams }),
+      searchParams,
+    };
+  },
+  head: ({ loaderData }) => {
+    const searchParams = loaderData?.searchParams ?? {};
+    const title = titleFromParams(searchParams);
+    const description = descriptionFromParams(searchParams);
+    const single = indexableSingleFilter(searchParams);
+    const canonical = single
+      ? `${SITE_URL}/search?${single.key}=${encodeURIComponent(single.val)}`
+      : undefined;
+
+    return {
+      meta: [
+        { title: `${title} | Built with Appwrite` },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: canonical ?? `${SITE_URL}/search` },
+        { property: "og:image", content: "/cover.png" },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:image:alt", content: "Built with Appwrite" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: "/cover.png" },
+        ...(single ? [] : [{ name: "robots", content: "noindex,follow" }]),
       ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["/cover.png"],
-    },
-    robots: single ? undefined : { index: false, follow: true },
-  };
-}
+      links: canonical ? [{ rel: "canonical", href: canonical }] : [],
+    };
+  },
+  component: SearchPage,
+});
 
-export default async function SearchPage({
-  searchParams,
-}: {
-  searchParams: RawSearchParams;
-}) {
-  const queries = buildSearchQueries(searchParams);
-  const projects = await ServerAppwrite.listProjects(queries);
+function SearchPage() {
+  const { projects, searchParams } = Route.useLoaderData();
   const title = titleFromParams(searchParams);
   const single = indexableSingleFilter(searchParams);
   const canonicalUrl = single
@@ -145,7 +162,7 @@ export default async function SearchPage({
                 </p>
               </div>
               <div className="u-flex u-gap-16 u-main-center">
-                <Link href="/submit-project" className="button is-secondary">
+                <Link to="/submit-project" className="button is-secondary">
                   <span className="text">Submit Project</span>
                 </Link>
               </div>

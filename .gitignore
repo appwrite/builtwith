@@ -4,6 +4,7 @@
 /lib-types
 /server
 .next/
+.output/
 out/
 
 # Development

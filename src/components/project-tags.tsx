@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { Config } from "~/lib/config";
 import type { Project } from "~/lib/types";
 
@@ -31,7 +31,8 @@ export default function ProjectTags({ project }: { project: Project }) {
     <>
       {platform && (
         <Link
-          href={`/search?platform=${project.platform}`}
+          to="/search"
+          search={{ platform: project.platform }}
           className="tag is-secondary"
         >
           {platform.iconClass && (
@@ -43,7 +44,8 @@ export default function ProjectTags({ project }: { project: Project }) {
 
       {useCases[project.useCase] && (
         <Link
-          href={`/search?useCase=${project.useCase}`}
+          to="/search"
+          search={{ useCase: project.useCase }}
           className="tag is-secondary"
         >
           <span className="text">{useCases[project.useCase].name}</span>
@@ -52,7 +54,8 @@ export default function ProjectTags({ project }: { project: Project }) {
 
       {project.framework && frameworks[project.framework] && (
         <Link
-          href={`/search?framework=${project.framework}`}
+          to="/search"
+          search={{ framework: project.framework }}
           className="tag is-secondary"
         >
           <span className="text">{frameworks[project.framework].name}</span>
@@ -61,7 +64,8 @@ export default function ProjectTags({ project }: { project: Project }) {
 
       {project.uiLibrary && uiLibraries[project.uiLibrary] && (
         <Link
-          href={`/search?uiLibrary=${project.uiLibrary}`}
+          to="/search"
+          search={{ uiLibrary: project.uiLibrary }}
           className="tag is-secondary"
         >
           <span className="text">{uiLibraries[project.uiLibrary].name}</span>
@@ -73,7 +77,8 @@ export default function ProjectTags({ project }: { project: Project }) {
         .map((service) => (
           <Link
             key={service}
-            href={`/search?service=${service}`}
+            to="/search"
+            search={{ service }}
             className="tag is-secondary"
           >
             <span

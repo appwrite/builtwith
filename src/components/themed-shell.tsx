@@ -1,12 +1,12 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { useRouterState } from "@tanstack/react-router";
 import { useApp } from "./providers";
 
 export default function ThemedShell({ children }: { children: ReactNode }) {
   const { theme } = useApp();
-  const pathname = usePathname();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const hasSidebar = pathname === "/" || pathname?.startsWith("/search");
 
   const classes = [

@@ -2,20 +2,26 @@
   "name": "builtwith",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "vite dev",
+    "build": "vite build",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@appwrite.io/pink": "^0.11.0",
     "@appwrite.io/pink-icons": "^0.25.0",
+    "@tanstack/react-router": "^1.169.1",
+    "@tanstack/react-start": "^1.167.57",
+    "@tanstack/router-plugin": "^1.167.31",
+    "@vitejs/plugin-react": "^6.0.1",
     "appwrite": "^16.1.0",
     "marked": "^9.1.2",
-    "next": "14.2.35",
+    "nitro": "^3.0.260429-beta",
     "node-appwrite": "^14.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "vite": "^8.0.10",
     "xss": "^1.0.15"
   },
   "devDependencies": {
@@ -23,7 +29,6 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.35",
     "typescript": "^5.4.5"
   }
 }

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 export default function Group({
@@ -15,7 +15,7 @@ export default function Group({
       <div className="u-flex u-cross-center u-main-space-between">
         <h2 className="eyebrow-heading-2">{title}</h2>
         {href && (
-          <Link href={href} className="button is-text">
+          <Link to={href} className="button is-text">
             <span className="text">See All</span>
           </Link>
         )}

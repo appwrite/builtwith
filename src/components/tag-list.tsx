@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 const tags = [
   {
@@ -43,7 +43,7 @@ export default function TagList({ totals }: Props) {
         const total = totals[tag.id] ?? 0;
         return (
           <li key={tag.id}>
-            <Link href={`/search?useCase=${tag.id}`}>
+            <Link to="/search" search={{ useCase: tag.id }}>
               <div
                 className="card u-flex-vertical u-cross-center u-main-center"
                 style={{ padding: 0 }}

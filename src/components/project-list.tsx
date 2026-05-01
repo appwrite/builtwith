@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import type { Project } from "~/lib/types";
 import ProjectCard from "./project-card";
 
@@ -29,7 +29,7 @@ export default function ProjectList({
               </p>
             </div>
             <div className="u-flex u-gap-16 u-main-center">
-              <Link href="/submit-project" className="button is-secondary">
+              <Link to="/submit-project" className="button is-secondary">
                 <span className="text">Submit Project</span>
               </Link>
             </div>
@@ -39,7 +39,7 @@ export default function ProjectList({
 
       {projects.length >= 1 && href && (
         <Link
-          href={href}
+          to={href}
           className="is-only-mobile button is-secondary u-width-full-line u-text-center"
         >
           <span className="text u-width-full-line">See More</span>

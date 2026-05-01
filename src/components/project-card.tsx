@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { ServerAppwrite } from "~/lib/appwrite-server";
+import { Link } from "@tanstack/react-router";
+import { thumbnailUrl } from "~/lib/appwrite-urls";
 import type { Project } from "~/lib/types";
 import ProjectTags from "./project-tags";
 import Upvote from "./upvote";
@@ -15,7 +15,7 @@ export default function ProjectCard({ project }: { project: Project | null }) {
           className="u-flex u-cross-center u-main-center u-width-full-line"
           style={{ padding: "var(--p-card-padding)", height: "100%" }}
         >
-          <Link href="/submit-project" className="button is-secondary">
+          <Link to="/submit-project" className="button is-secondary">
             <span className="text">Submit Project</span>
           </Link>
         </div>
@@ -35,7 +35,10 @@ export default function ProjectCard({ project }: { project: Project | null }) {
         <div className="u-flex u-cross-center u-gap-8 u-main-space-between u-width-full-line">
           <div className="u-stretch u-flex-vertical u-gap-16">
             <div className="u-flex u-main-space-between u-cross-center u-gap-8">
-              <Link href={`/projects/${project.$id}`}>
+              <Link
+                to="/projects/$projectId"
+                params={{ projectId: project.$id }}
+              >
                 <p
                   className="heading-level-4 c-trim"
                   style={{ fontSize: "1.3rem" }}
@@ -45,7 +48,10 @@ export default function ProjectCard({ project }: { project: Project | null }) {
               </Link>
               <Upvote projectId={project.$id} votes={project.upvotes} />
             </div>
-            <Link href={`/projects/${project.$id}`}>
+            <Link
+              to="/projects/$projectId"
+              params={{ projectId: project.$id }}
+            >
               <p
                 className="u-margin-block-start-4 c-trim-2"
                 style={{ minHeight: "3em" }}
@@ -57,10 +63,13 @@ export default function ProjectCard({ project }: { project: Project | null }) {
         </div>
       </div>
 
-      <Link className="object-og" href={`/projects/${project.$id}`}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
+      <Link
+        className="object-og"
+        to="/projects/$projectId"
+        params={{ projectId: project.$id }}
+      >
         <img
-          src={ServerAppwrite.thumbnailUrl(project.imageId, 720)}
+          src={thumbnailUrl(project.imageId, 720)}
           loading="lazy"
           decoding="async"
           width={1280}

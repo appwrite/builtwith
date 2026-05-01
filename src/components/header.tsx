@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ClientAppwrite } from "~/lib/appwrite-client";
 import { useApp } from "./providers";
@@ -39,7 +39,7 @@ export default function Header() {
           <span aria-hidden="true" className={open ? "icon-x" : "icon-menu"} />
         </button>
         <Link
-          href="/"
+          to="/"
           className="u-flex u-cross-center u-gap-8 u-margin-inline-end-8"
           aria-label="Built with Appwrite"
         >
@@ -52,7 +52,7 @@ export default function Header() {
                 key={link.name}
                 className="buttons-list-item u-padding-inline-0"
               >
-                <Link href={link.url} className="button is-text">
+                <Link to={link.url} className="button is-text">
                   {link.name}
                 </Link>
               </li>
@@ -110,7 +110,7 @@ export default function Header() {
             ) : (
               <>
                 <li className="buttons-list-item u-padding-inline-0">
-                  <Link href="/submit-project" className="button is-text">
+                  <Link to="/submit-project" className="button is-text">
                     <span className="text">Submit</span>
                   </Link>
                 </li>
@@ -137,7 +137,7 @@ export default function Header() {
                   {links.map((link) => (
                     <li key={link.name} className="drop-list-item">
                       <Link
-                        href={link.url}
+                        to={link.url}
                         className="drop-button u-capitalize u-small u-bold"
                       >
                         <span>{link.name}</span>

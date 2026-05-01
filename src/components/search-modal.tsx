@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { ClientAppwrite } from "~/lib/appwrite-client";
 import {
   APPWRITE_ENDPOINT,
@@ -47,7 +47,7 @@ const rankResults = (list: Project[], term: string): Project[] => {
 
 export default function SearchModal() {
   const { searchOpen, closeSearch } = useApp();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [results, setResults] = useState<Project[]>([]);
   const [selected, setSelected] = useState(-1);
@@ -107,13 +107,13 @@ export default function SearchModal() {
         if (r) {
           e.preventDefault();
           closeSearch();
-          router.push(`/projects/${r.$id}`);
+          navigate({ to: `/projects/${r.$id}` });
         }
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [results, selected, searchOpen, closeSearch, router]);
+  }, [results, selected, searchOpen, closeSearch, navigate]);
 
   useEffect(() => {
     if (selected < 0 || !listRef.current) return;
@@ -213,7 +213,7 @@ export default function SearchModal() {
                   onClick={(e) => {
                     e.preventDefault();
                     closeSearch();
-                    router.push(`/projects/${result.$id}`);
+                    navigate({ to: `/projects/${result.$id}` });
                   }}
                   onMouseEnter={() => setSelected(index)}
                   className={`search-modal-item${
@@ -222,7 +222,6 @@ export default function SearchModal() {
                   aria-selected={isSelected}
                 >
                   <div className="search-modal-thumb">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={thumbUrl(result.imageId)}
                       alt=""

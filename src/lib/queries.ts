@@ -1,6 +1,6 @@
-import { Query } from "node-appwrite";
+import { Query } from "appwrite";
 
-// Match Next.js App Router's runtime shape: a key can be string, string[]
+// Match router search param runtime shape: a key can be string, string[]
 // (duplicate keys), or undefined. Treat string[] as a comma-joined value.
 export type RawSearchParams = Record<
   string,

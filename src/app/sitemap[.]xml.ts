@@ -1,12 +1,15 @@
-import type { MetadataRoute } from "next";
+import { createFileRoute } from "@tanstack/react-router";
 import { ServerAppwrite } from "~/lib/appwrite-server";
 import { Config } from "~/lib/config";
 import { SITE_URL } from "~/lib/site";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 3600;
-
 const Q = ServerAppwrite.Query;
+type SitemapEntry = {
+  url: string;
+  lastModified: Date;
+  changeFrequency: "daily" | "weekly";
+  priority: number;
+};
 
 // Appwrite Cloud caps a single guest read at 100 documents, so page through
 // with cursorAfter until the response is shorter than the page size.
@@ -27,7 +30,7 @@ async function listAllProjectIds(): Promise<
   return out;
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+async function sitemap(): Promise<SitemapEntry[]> {
   const now = new Date();
 
   const home = {
@@ -40,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Single-filter category pages — these are the high-value indexable
   // search URLs. Combinations and sort-only pages are explicitly noindexed
   // by /search itself, so we don't list them here.
-  const categories: MetadataRoute.Sitemap = [];
+  const categories: SitemapEntry[] = [];
   for (const id of Object.keys(Config.platforms)) {
     categories.push({
       url: `${SITE_URL}/search?platform=${encodeURIComponent(id)}`,
@@ -82,7 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  let projects: MetadataRoute.Sitemap = [];
+  let projects: SitemapEntry[] = [];
   try {
     const all = await listAllProjectIds();
     projects = all.map((p) => ({
@@ -98,3 +101,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [home, ...categories, ...projects];
 }
+
+const escapeXml = (s: string) =>
+  s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
+const serializeSitemap = (entries: SitemapEntry[]) =>
+  [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...entries.map(
+      (entry) => `  <url>
+    <loc>${escapeXml(entry.url)}</loc>
+    <lastmod>${entry.lastModified.toISOString()}</lastmod>
+    <changefreq>${entry.changeFrequency}</changefreq>
+    <priority>${entry.priority}</priority>
+  </url>`
+    ),
+    "</urlset>",
+    "",
+  ].join("\n");
+
+export const Route = createFileRoute("/sitemap.xml")({
+  server: {
+    handlers: {
+      GET: async () =>
+        new Response(serializeSitemap(await sitemap()), {
+          headers: {
+            "content-type": "application/xml; charset=utf-8",
+            "cache-control": "public, max-age=3600",
+          },
+        }),
+    },
+  },
+});

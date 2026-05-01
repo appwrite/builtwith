@@ -1,10 +1,10 @@
-import "server-only";
 import { Client, Databases, Query } from "node-appwrite";
 import {
   APPWRITE_ENDPOINT,
   APPWRITE_PROJECT_ID,
   type Project,
 } from "./types";
+import { thumbnailUrl } from "./appwrite-urls";
 
 const client = new Client()
   .setEndpoint(APPWRITE_ENDPOINT)
@@ -61,12 +61,5 @@ export const ServerAppwrite = {
       return null;
     }
   },
-  thumbnailUrl: (fileId: string, width = 1280) => {
-    const params = new URLSearchParams({
-      project: APPWRITE_PROJECT_ID,
-      width: String(width),
-      output: "webp",
-    });
-    return `${APPWRITE_ENDPOINT}/storage/buckets/thumbnails/files/${fileId}/preview?${params.toString()}`;
-  },
+  thumbnailUrl,
 };

@@ -4,12 +4,12 @@
 
 > Explore popular projects built with Appwrite — live at [builtwith.appwrite.network](https://builtwith.appwrite.network/).
 
-The frontend is a Next.js 14 (App Router) site that runs on **Appwrite Sites SSR**. Server components fetch projects directly from Appwrite via `node-appwrite`, so every URL — including dynamic project pages — is server-rendered on demand. Theme, account state, upvoting, and the ⌘K search live on the client.
+The frontend is a TanStack Start site that runs on **Appwrite Sites SSR**. Route loaders and server functions fetch projects directly from Appwrite via `node-appwrite`, so every URL — including dynamic project pages — is server-rendered on demand. Theme, account state, upvoting, and the ⌘K search live on the client.
 
 ## 🧰 Tech Stack
 
 - [Appwrite Cloud](https://cloud.appwrite.io/) — database, auth, storage, functions, and hosting via [Appwrite Sites](https://appwrite.io/docs/products/sites)
-- [Next.js 14](https://nextjs.org/) — App Router, React Server Components, SSR
+- [TanStack Start](https://tanstack.com/start) — file-based routing, server functions, SSR
 - [Pink Design](https://pink.appwrite.io/) — Appwrite's design system
 - [TypeScript](https://www.typescriptlang.org/) + [marked](https://marked.js.org/) + [xss](https://github.com/leizongmin/js-xss)
 
@@ -41,13 +41,13 @@ Useful scripts:
 
 | Command         | Purpose                                           |
 | --------------- | ------------------------------------------------- |
-| `npm run dev`   | Next.js dev server with HMR                       |
-| `npm run build` | Production build (typecheck + page bundle)        |
+| `npm run dev`   | TanStack Start dev server with HMR                |
+| `npm run build` | Production SSR build                              |
 | `npm start`     | Run the production build locally                  |
 
 ## 🚀 Deploy to Appwrite Sites
 
-This repo ships with an `appwrite.config.json` describing the site (`framework: nextjs`, `adapter: ssr`, `outputDirectory: ./.next`, `path: ./`). Deploying is a single command:
+This repo ships with an `appwrite.config.json` describing the site (`framework: tanstack-start`, `adapter: ssr`, `outputDirectory: ./.output`, `path: ./`). Deploying is a single command:
 
 ```bash
 appwrite push site
@@ -84,12 +84,12 @@ appwrite.json            # Database / storage / functions definitions
 functions/               # Source for upvoteProject, submitProject, rejectProject
 public/                  # Static assets, logos, manifest
 src/
-├── app/                 # Next.js App Router pages + route handlers
-│   ├── layout.tsx       # Root layout: fonts, providers, themed shell
-│   ├── page.tsx         # Home (featured / new / trending / use-case counts)
-│   ├── search/          # Filtered project list driven by search params
-│   ├── projects/[projectId]/  # Server-rendered project detail
-│   └── submit-project/  # Submission form (sectioned, with thumbnail uploader)
+├── app/                 # TanStack Start file routes and server routes
+│   ├── __root.tsx       # Root document: fonts, providers, themed shell
+│   ├── index.tsx        # Home (featured / new / trending / use-case counts)
+│   ├── search.tsx       # Filtered project list driven by search params
+│   ├── projects.$projectId.tsx # Server-rendered project detail
+│   └── submit-project.tsx      # Submission page
 ├── components/          # Header, footer, sidebar, project cards, upvote,
 │                        # toast, search modal, theme provider, etc.
 └── lib/                 # Appwrite server SDK, web SDK, query helpers, types
@@ -97,8 +97,8 @@ src/
 
 A few patterns worth knowing before contributing:
 
-- **Server vs client.** Server components render data via `ServerAppwrite` (`node-appwrite`). Client components use `ClientAppwrite` (browser SDK) for things that need the user's session: upvotes, submit, theme toggle, account state, search modal.
-- **Theme.** `Providers` reads the `theme_buildwithappwrite` cookie SSR-side; if absent, the inline pre-hydration script in `app/layout.tsx` falls back to `prefers-color-scheme` so the page paints in the right colour on first paint.
+- **Server vs client.** Route loaders and server functions render data via `ServerAppwrite` (`node-appwrite`). Client components use `ClientAppwrite` (browser SDK) for things that need the user's session: upvotes, submit, theme toggle, account state, search modal.
+- **Theme.** The inline pre-hydration script in `app/__root.tsx` reads the `theme_buildwithappwrite` cookie and falls back to `prefers-color-scheme` so the page paints in the right colour on first paint.
 - **Toasts.** Use `useToast()` from `src/components/toast.tsx` instead of `alert()`.
 - **Sidebar containment.** `.main-side` and `.project-card-virtual` use CSS `contain` to keep scroll work cheap with many cards on screen.
 

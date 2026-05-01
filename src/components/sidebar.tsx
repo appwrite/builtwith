@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Config } from "~/lib/config";
 
@@ -16,9 +16,10 @@ const filters: { id: FilterId; name: string; options: Record<string, any> }[] =
   ];
 
 export default function Sidebar() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const location = useRouterState({ select: (s) => s.location });
+  const pathname = location.pathname;
+  const searchParams = new URLSearchParams(location.searchStr);
 
   const visible =
     pathname === "/" || (pathname?.startsWith("/search") ?? false);
@@ -49,7 +50,7 @@ export default function Sidebar() {
   const onSelect = (key: FilterId, value: string) => {
     const params = new URLSearchParams();
     params.set(key, value);
-    router.push(`/search?${params.toString()}`);
+    navigate({ to: `/search?${params.toString()}` });
   };
 
   const toggle = (id: FilterId) =>

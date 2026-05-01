@@ -1,15 +1,13 @@
-import Link from "next/link";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { Link, createFileRoute, notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { marked } from "marked";
 import xss from "xss";
 import { ServerAppwrite } from "~/lib/appwrite-server";
+import { thumbnailUrl } from "~/lib/appwrite-urls";
 import { SITE_URL } from "~/lib/site";
 import ProjectTags from "~/components/project-tags";
 import Upvote from "~/components/upvote";
 import { XIcon } from "~/components/icons";
-
-export const dynamic = "force-dynamic";
 
 const escape = (unsafe: string) =>
   unsafe
@@ -34,54 +32,72 @@ marked.use({
   },
 });
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { projectId: string };
-}): Promise<Metadata> {
-  const project = await ServerAppwrite.getProject(params.projectId);
-  if (!project) {
+const getProjectPage = createServerFn({ method: "GET" })
+  .inputValidator((projectId: string) => projectId)
+  .handler(async ({ data: projectId }) => {
+    const project = await ServerAppwrite.getProject(projectId);
+    if (!project) return null;
     return {
-      title: "Project not found",
-      robots: { index: false, follow: true },
+      project,
+      safeHtml: xss(await marked(project.description)),
     };
-  }
-  // The root layout's title.template adds "| Built with Appwrite".
-  const title = project.name;
-  const description = project.tagline;
-  const url = `${SITE_URL}/projects/${project.$id}`;
-  const image = ServerAppwrite.thumbnailUrl(project.imageId, 1200);
-  return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      url,
-      siteName: "Built with Appwrite",
-      images: [{ url: image, width: 1200, height: 630, alt: `${project.name} screenshot` }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
-    },
-  };
-}
+  });
 
-export default async function ProjectPage({
-  params,
-}: {
-  params: { projectId: string };
-}) {
-  const project = await ServerAppwrite.getProject(params.projectId);
-  if (!project) notFound();
+export const Route = createFileRoute("/projects/$projectId")({
+  loader: async ({ params }) => {
+    const data = await getProjectPage({ data: params.projectId });
+    if (!data) throw notFound();
+    return data;
+  },
+  head: ({ loaderData }) => {
+    const project = loaderData?.project;
+    if (!project) {
+      return {
+        meta: [
+          { title: "Project not found" },
+          { name: "robots", content: "noindex,follow" },
+        ],
+      };
+    }
+    const title = `${project.name} | Built with Appwrite`;
+    const description = project.tagline;
+    const url = `${SITE_URL}/projects/${project.$id}`;
+    const image = thumbnailUrl(project.imageId, 1200);
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { property: "og:site_name", content: "Built with Appwrite" },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { property: "og:image:alt", content: `${project.name} screenshot` },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: image },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
+  component: ProjectPage,
+  notFoundComponent: () => (
+    <div className="card u-text-center" style={{ padding: "3rem" }}>
+      <h1 className="heading-level-3">Project not found</h1>
+      <Link to="/" className="button is-secondary u-margin-block-start-24">
+        <span className="text">Back to Projects</span>
+      </Link>
+    </div>
+  ),
+});
 
-  const imageSrc = ServerAppwrite.thumbnailUrl(project.imageId);
-  const safeHtml = xss(await marked(project.description));
+function ProjectPage() {
+  const { project, safeHtml } = Route.useLoaderData();
+  const imageSrc = thumbnailUrl(project.imageId);
   const url = `${SITE_URL}/projects/${project.$id}`;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -89,7 +105,7 @@ export default async function ProjectPage({
     name: project.name,
     description: project.tagline,
     url,
-    image: ServerAppwrite.thumbnailUrl(project.imageId, 1200),
+    image: thumbnailUrl(project.imageId, 1200),
     applicationCategory: "WebApplication",
     operatingSystem: project.platform || "Web",
     aggregateRating:
@@ -110,7 +126,7 @@ export default async function ProjectPage({
       />
       <ul className="u-flex u-gap-24 u-flex-vertical-mobile">
         <div className="u-flex-vertical u-gap-24 u-flex-shrink-0 u-flex-basis-50-percent">
-          <Link href="/" style={{ padding: 0 }} className="button is-text">
+          <Link to="/" style={{ padding: 0 }} className="button is-text">
             <span className="icon-cheveron-left" aria-hidden="true" />
             <span className="text">Back to Projects</span>
           </Link>
@@ -209,7 +225,6 @@ export default async function ProjectPage({
 
         <div>
           <div className="object-og object-og-rounded">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={imageSrc} alt={`${project.name} screenshot`} />
           </div>
         </div>
