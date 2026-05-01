@@ -110,6 +110,8 @@ export default function Providers({
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.documentElement.dataset.themePreboot = theme;
+    document.documentElement.classList.toggle("theme-dark", theme === "dark");
+    document.body.classList.toggle("theme-dark", theme === "dark");
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
 

@@ -99,6 +99,7 @@ const themeBootstrap = `
         var c = document.cookie.match(/(?:^|; )theme_buildwithappwrite=(dark|light)/);
         var theme = c ? c[1] : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.dataset.themePreboot = theme;
+        document.documentElement.classList.toggle('theme-dark', theme === 'dark');
         document.documentElement.style.colorScheme = theme;
       } catch (e) {}
     })();

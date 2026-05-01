@@ -233,6 +233,11 @@
   background-color: hsl(var(--p-body-bg-color));
 }
 
+html[data-theme-preboot="dark"],
+html[data-theme-preboot="dark"] body {
+  background-color: hsl(var(--color-neutral-500));
+}
+
 /* Project cards isolate their layout/style/paint so reflows inside one card
    (e.g. images loading, tag wrap, upvote re-render) cannot invalidate the
    ancestor chain and trigger a full-page repaint mid-scroll. */
