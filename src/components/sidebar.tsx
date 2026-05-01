@@ -1,7 +1,7 @@
 "use client";
 
 import { useNavigate, useRouterState } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Config } from "~/lib/config";
 
 type FilterId = "platform" | "service" | "framework" | "uiLibrary" | "useCase";
@@ -15,27 +15,38 @@ const filters: { id: FilterId; name: string; options: Record<string, any> }[] =
     { id: "useCase", name: "Use Case", options: Config.useCases },
   ];
 
+function pickInitialFilter(searchParams: URLSearchParams): FilterId {
+  for (const key of searchParams.keys()) {
+    if (filters.some((f) => f.id === key)) return key as FilterId;
+  }
+  return "platform";
+}
+
 export default function Sidebar() {
   const navigate = useNavigate();
-  const location = useRouterState({ select: (s) => s.location });
-  const pathname = location.pathname;
-  const searchParams = new URLSearchParams(location.searchStr);
+  // Drive visibility off `state.matches` (updated in the same batch as the
+  // route commit) instead of pathname, which either flips eagerly (location)
+  // or lags one paint behind the commit (resolvedLocation, which is set in
+  // the Transitioner's useLayoutEffect). The mismatch is what causes the
+  // sidebar to pop in/out a beat after the page lands.
+  const visible = useRouterState({
+    select: (s) =>
+      s.matches.some((m) => m.routeId === "/" || m.routeId === "/search"),
+  });
+  // searchStr is fine to read from `location` here — by the time `visible`
+  // is true the matched route owns the URL, so location.searchStr matches.
+  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
+  const searchParams = new URLSearchParams(searchStr);
 
-  const visible =
-    pathname === "/" || (pathname?.startsWith("/search") ?? false);
-
-  const [opened, setOpened] = useState<FilterId | null>(null);
-
-  useEffect(() => {
-    if (opened !== null) return;
-    for (const key of searchParams.keys()) {
-      if (filters.some((f) => f.id === key)) {
-        setOpened(key as FilterId);
-        return;
-      }
-    }
-    setOpened("platform");
-  }, [searchParams, opened]);
+  // Pick the initial open panel synchronously during the first render so
+  // the matching `.filter-panel.is-open` class lands on first paint. If we
+  // start from null and assign in a useEffect, the panel briefly mounts
+  // collapsed and the open transition (grid-rows + staggered options) fires
+  // after navigation lands — visible as a split-second delay when coming
+  // back from a project page.
+  const [opened, setOpened] = useState<FilterId | null>(() =>
+    pickInitialFilter(searchParams),
+  );
 
   if (!visible) return null;
 
