@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import xss from "xss";
 import { ServerAppwrite } from "~/lib/appwrite-server";
+import { SITE_URL } from "~/lib/site";
 import ProjectTags from "~/components/project-tags";
 import Upvote from "~/components/upvote";
+import { XIcon } from "~/components/icons";
 
 export const dynamic = "force-dynamic";
 
@@ -39,12 +41,34 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const project = await ServerAppwrite.getProject(params.projectId);
   if (!project) {
-    return { title: "Project not found | Built with Appwrite" };
+    return {
+      title: "Project not found",
+      robots: { index: false, follow: true },
+    };
   }
+  // The root layout's title.template adds "| Built with Appwrite".
+  const title = project.name;
+  const description = project.tagline;
+  const url = `${SITE_URL}/projects/${project.$id}`;
+  const image = ServerAppwrite.thumbnailUrl(project.imageId, 1200);
   return {
-    title: `${project.name} | Built with Appwrite`,
-    description: project.tagline,
-    openGraph: { title: `${project.name} | Built with Appwrite`, description: project.tagline },
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      url,
+      siteName: "Built with Appwrite",
+      images: [{ url: image, width: 1200, height: 630, alt: `${project.name} screenshot` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
   };
 }
 
@@ -58,9 +82,32 @@ export default async function ProjectPage({
 
   const imageSrc = ServerAppwrite.thumbnailUrl(project.imageId);
   const safeHtml = xss(await marked(project.description));
+  const url = `${SITE_URL}/projects/${project.$id}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: project.name,
+    description: project.tagline,
+    url,
+    image: ServerAppwrite.thumbnailUrl(project.imageId, 1200),
+    applicationCategory: "WebApplication",
+    operatingSystem: project.platform || "Web",
+    aggregateRating:
+      project.upvotes && project.upvotes > 0
+        ? {
+            "@type": "AggregateRating",
+            ratingValue: 5,
+            ratingCount: project.upvotes,
+          }
+        : undefined,
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ul className="u-flex u-gap-24 u-flex-vertical-mobile">
         <div className="u-flex-vertical u-gap-24 u-flex-shrink-0 u-flex-basis-50-percent">
           <Link href="/" style={{ padding: 0 }} className="button is-text">
@@ -69,7 +116,7 @@ export default async function ProjectPage({
           </Link>
 
           <div className="u-flex u-gap-16 u-cross-center">
-            <h2 className="heading-level-2">{project.name}</h2>
+            <h1 className="heading-level-2">{project.name}</h1>
             <Upvote projectId={project.$id} votes={project.upvotes} />
           </div>
 
@@ -138,8 +185,8 @@ export default async function ProjectPage({
                 )}
                 {project.urlTwitter && (
                   <a href={project.urlTwitter} target="_blank" rel="noreferrer" className="button is-secondary">
-                    <span className="icon-twitter" aria-hidden="true" />
-                    <p>Follow on Twitter</p>
+                    <XIcon />
+                    <p>Follow on X</p>
                   </a>
                 )}
                 {project.urlArticle && (
@@ -163,7 +210,7 @@ export default async function ProjectPage({
         <div>
           <div className="object-og object-og-rounded">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imageSrc} alt="" />
+            <img src={imageSrc} alt={`${project.name} screenshot`} />
           </div>
         </div>
       </ul>

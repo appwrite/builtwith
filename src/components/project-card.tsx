@@ -65,7 +65,7 @@ export default function ProjectCard({ project }: { project: Project | null }) {
           decoding="async"
           width={1280}
           height={720}
-          alt=""
+          alt={`${project.name} screenshot`}
         />
       </Link>
 

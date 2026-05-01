@@ -12,6 +12,7 @@ import {
 import { ClientAppwrite } from "~/lib/appwrite-client";
 import { Config } from "~/lib/config";
 import { useApp } from "~/components/providers";
+import { XIcon } from "~/components/icons";
 
 const SERVICE_KEYS = [
   "databases",
@@ -55,7 +56,7 @@ type UrlKey =
 const URL_FIELDS: { key: UrlKey; label: string; icon: string; placeholder: string }[] = [
   { key: "website", label: "Website", icon: "external-link", placeholder: "https://your-app.com" },
   { key: "github", label: "GitHub", icon: "github", placeholder: "https://github.com/owner/repo" },
-  { key: "twitter", label: "Twitter / X", icon: "twitter", placeholder: "https://x.com/handle" },
+  { key: "twitter", label: "X", icon: "x-brand", placeholder: "https://x.com/handle" },
   { key: "article", label: "Article / Blog", icon: "book-open", placeholder: "https://blog.example.com/post" },
   { key: "googlePlay", label: "Google Play", icon: "google", placeholder: "https://play.google.com/..." },
   { key: "appStore", label: "App Store (iOS)", icon: "apple", placeholder: "https://apps.apple.com/..." },
@@ -559,7 +560,12 @@ export default function SubmitForm() {
           {URL_FIELDS.map(({ key, label, icon, placeholder }) => (
             <div className="form-item" key={key}>
               <label className="label" htmlFor={`url-${key}`}>
-                <span className={`icon-${icon}`} aria-hidden="true" /> {label}
+                {icon === "x-brand" ? (
+                  <XIcon />
+                ) : (
+                  <span className={`icon-${icon}`} aria-hidden="true" />
+                )}{" "}
+                {label}
               </label>
               <input
                 id={`url-${key}`}

@@ -27,7 +27,7 @@ export default function ProjectFeatured({
               fetchPriority={lazy ? "low" : "high"}
               width={1280}
               height={720}
-              alt=""
+              alt={`${project.name} screenshot`}
             />
           </Link>
         </div>

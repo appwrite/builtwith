@@ -10,12 +10,55 @@ import Providers from "~/components/providers";
 import ThemedShell from "~/components/themed-shell";
 import SearchModal from "~/components/search-modal";
 import ToastProvider from "~/components/toast";
+import { SITE_URL } from "~/lib/site";
+
+const SITE_NAME = "Built with Appwrite";
+const SITE_DESCRIPTION =
+  "Discover the projects, tools, and apps the community is building with Appwrite.";
 
 export const metadata: Metadata = {
-  title: "Built with Appwrite",
-  description: "Explore popular projects built with Appwrite.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_NAME,
+    template: "%s | Built with Appwrite",
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
   icons: { icon: "/logo.svg" },
   manifest: "/manifest.json",
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    locale: "en_US",
+    images: [
+      { url: "/cover.png", width: 1200, height: 630, alt: "Built with Appwrite" },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@appwrite",
+    creator: "@appwrite",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: ["/cover.png"],
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  url: SITE_URL,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/search?framework={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function RootLayout({
@@ -59,6 +102,10 @@ export default function RootLayout({
         />
         {/* Inter is loaded via `@import` in globals.css; no <link rel="stylesheet"> here. */}
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
       </head>
       <body>
         <Providers initialTheme={initialTheme}>
