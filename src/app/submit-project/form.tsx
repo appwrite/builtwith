@@ -6,9 +6,9 @@ import {
   useRef,
   useState,
   type ChangeEvent,
+  type DragEvent,
   type FormEvent,
 } from "react";
-import Link from "next/link";
 import { ClientAppwrite } from "~/lib/appwrite-client";
 import { Config } from "~/lib/config";
 import { useApp } from "~/components/providers";
@@ -98,8 +98,10 @@ export default function SubmitForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dragDepth = useRef(0);
 
   useEffect(() => {
     if (!file) {
@@ -113,6 +115,45 @@ export default function SubmitForm() {
 
   const onFile = (e: ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files?.[0] ?? null);
+  };
+
+  const acceptDropped = (f: File | undefined | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      setError("Please drop an image file (PNG, JPG, or WebP).");
+      return;
+    }
+    setError("");
+    setFile(f);
+    if (fileInputRef.current) {
+      const dt = new DataTransfer();
+      dt.items.add(f);
+      fileInputRef.current.files = dt.files;
+    }
+  };
+
+  // Drag depth counter handles nested elements firing dragenter/leave —
+  // without it, hovering over child nodes flickers the visual state.
+  const onDragEnter = (e: DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    if (!Array.from(e.dataTransfer.types).includes("Files")) return;
+    dragDepth.current += 1;
+    setIsDragOver(true);
+  };
+  const onDragOver = (e: DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+  const onDragLeave = (e: DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    dragDepth.current = Math.max(0, dragDepth.current - 1);
+    if (dragDepth.current === 0) setIsDragOver(false);
+  };
+  const onDrop = (e: DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    dragDepth.current = 0;
+    setIsDragOver(false);
+    acceptDropped(e.dataTransfer.files?.[0]);
   };
 
   const onUrl = (key: UrlKey) => (e: ChangeEvent<HTMLInputElement>) =>
@@ -268,7 +309,14 @@ export default function SubmitForm() {
           </p>
         </div>
 
-        <label htmlFor="thumb" className="submit-thumb-drop">
+        <label
+          htmlFor="thumb"
+          className={`submit-thumb-drop${isDragOver ? " is-drag-over" : ""}`}
+          onDragEnter={onDragEnter}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+        >
           {previewUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={previewUrl} alt="Thumbnail preview" />
@@ -551,11 +599,7 @@ export default function SubmitForm() {
 
       <div className="submit-footer">
         <p className="u-x-small">
-          By submitting you agree your project will be reviewed publicly. See the{" "}
-          <Link href="https://appwrite.io/policy/terms" target="_blank">
-            terms
-          </Link>
-          .
+          By submitting you agree your project will be reviewed publicly.
         </p>
         <button type="submit" className="button is-primary" disabled={isLoading}>
           {isLoading ? (

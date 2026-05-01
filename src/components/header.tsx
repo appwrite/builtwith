@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ClientAppwrite } from "~/lib/appwrite-client";
 import { useApp } from "./providers";
 import Logo from "./logo";
@@ -14,6 +14,14 @@ const links = [
 export default function Header() {
   const { theme, setTheme, account, refreshAccount, openSearch } = useApp();
   const [open, setOpen] = useState(false);
+  // Default to ⌘ on the server and first client render (matches SSR), then
+  // swap to "Ctrl" on non-Mac platforms after mount.
+  const [modKey, setModKey] = useState("⌘");
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const ua = navigator.userAgent || navigator.platform || "";
+    if (!/Mac|iPod|iPhone|iPad/i.test(ua)) setModKey("Ctrl");
+  }, []);
 
   const onSignOut = async () => {
     await ClientAppwrite.signOut();
@@ -70,7 +78,9 @@ export default function Header() {
                   search
                 </span>
                 <div className="u-flex u-cross-center u-gap-4 u-margin-inline-start-32 is-not-mobile">
-                  <kbd className="kbd">⌘</kbd>
+                  <kbd className="kbd" suppressHydrationWarning>
+                    {modKey}
+                  </kbd>
                   <kbd className="kbd">K</kbd>
                 </div>
               </button>

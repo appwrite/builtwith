@@ -3,8 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ClientAppwrite } from "~/lib/appwrite-client";
-import type { Project } from "~/lib/types";
+import {
+  APPWRITE_ENDPOINT,
+  APPWRITE_PROJECT_ID,
+  type Project,
+} from "~/lib/types";
 import { useApp } from "./providers";
+
+const thumbUrl = (imageId: string) =>
+  `${APPWRITE_ENDPOINT}/storage/buckets/thumbnails/files/${imageId}/preview` +
+  `?project=${APPWRITE_PROJECT_ID}&width=128&height=128&output=webp`;
 
 export default function SearchModal() {
   const { searchOpen, closeSearch } = useApp();
@@ -12,6 +20,7 @@ export default function SearchModal() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState<Project[]>([]);
   const [selected, setSelected] = useState(-1);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -29,12 +38,17 @@ export default function SearchModal() {
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | null = null;
     const run = async () => {
-      const list = term
-        ? await ClientAppwrite.searchProjects(term)
-        : await ClientAppwrite.listLatestProjects(12);
-      if (!cancelled) {
-        setResults(list);
-        setSelected(-1);
+      setLoading(true);
+      try {
+        const list = term
+          ? await ClientAppwrite.searchProjects(term)
+          : await ClientAppwrite.listLatestProjects(12);
+        if (!cancelled) {
+          setResults(list);
+          setSelected(-1);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     };
     if (!term) {
@@ -42,9 +56,6 @@ export default function SearchModal() {
     } else {
       timer = setTimeout(run, 200);
     }
-    // Always return the cleanup so the cancellation flag flips even on the
-    // empty-term path; otherwise a slow listLatestProjects can resolve after
-    // a newer search and overwrite results.
     return () => {
       cancelled = true;
       if (timer) clearTimeout(timer);
@@ -93,68 +104,131 @@ export default function SearchModal() {
 
   if (!searchOpen) return null;
 
+  const term = input.trim();
+  const showEmpty = !loading && term && results.length === 0;
+
   return (
     <dialog
       ref={dialogRef}
       open
+      className="search-modal-dialog"
       onClick={(e) => {
         if (e.target === dialogRef.current) closeSearch();
       }}
-      style={{
-        position: "fixed",
-        zIndex: 10000,
-        backgroundColor: "#00000080",
-        color: "hsl(var(--search-color))",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        border: 0,
-      }}
     >
       <div
-        className="card u-position-absolute u-flex u-flex-vertical u-overflow-hidden search-modal"
+        className="search-modal-card"
+        role="combobox"
+        aria-expanded="true"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="input-text-wrapper is-with-end-button">
+        <div className="search-modal-input-row">
+          <span
+            className="icon-search search-modal-input-icon"
+            aria-hidden="true"
+          />
           <input
             type="search"
-            placeholder="Search"
+            placeholder="Search projects…"
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            className="search-modal-input"
+            aria-label="Search projects"
           />
-          <div className="icon-search" aria-hidden="true" />
-          <button
-            type="button"
-            className="button is-text is-only-icon"
-            aria-label="Clear search"
-            style={{ ["--button-size" as string]: "1.5rem" }}
-            onClick={() => {
-              setInput("");
-              inputRef.current?.focus();
-            }}
-            disabled={!input}
-          >
-            <span className="icon-x" aria-hidden="true" />
-          </button>
-        </div>
-        <div className="box search-results" ref={listRef}>
-          {results.map((result, index) => (
-            <a
-              key={result.$id}
-              href={`/projects/${result.$id}`}
-              onClick={(e) => {
-                e.preventDefault();
-                closeSearch();
-                router.push(`/projects/${result.$id}`);
+          {input ? (
+            <button
+              type="button"
+              className="search-modal-clear"
+              aria-label="Clear search"
+              onClick={() => {
+                setInput("");
+                inputRef.current?.focus();
               }}
-              className={`search-item${index === selected ? " selected" : ""}`}
             >
-              <p style={{ fontWeight: 800 }}>{result.name}</p>
-              <p>{result.tagline}</p>
-            </a>
-          ))}
+              <span className="icon-x" aria-hidden="true" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={closeSearch}
+              className="search-modal-esc"
+              aria-label="Close search"
+            >
+              esc
+            </button>
+          )}
+        </div>
+
+        {showEmpty ? (
+          <div className="search-modal-empty">
+            <span
+              className="icon-search search-modal-empty-icon"
+              aria-hidden="true"
+            />
+            <p className="search-modal-empty-title">No matches</p>
+            <p className="search-modal-empty-hint">
+              Nothing found for &ldquo;{term}&rdquo;. Try a different keyword.
+            </p>
+          </div>
+        ) : (
+          <div className="search-modal-list" ref={listRef}>
+            {results.map((result, index) => {
+              const isSelected = index === selected;
+              return (
+                <a
+                  key={result.$id}
+                  href={`/projects/${result.$id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    closeSearch();
+                    router.push(`/projects/${result.$id}`);
+                  }}
+                  onMouseEnter={() => setSelected(index)}
+                  className={`search-modal-item${
+                    isSelected ? " is-selected" : ""
+                  }`}
+                  aria-selected={isSelected}
+                >
+                  <div className="search-modal-thumb">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={thumbUrl(result.imageId)}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      width={64}
+                      height={64}
+                    />
+                  </div>
+                  <div className="search-modal-text">
+                    <p className="search-modal-name">{result.name}</p>
+                    <p className="search-modal-tagline">{result.tagline}</p>
+                  </div>
+                  <span
+                    className="icon-cheveron-right search-modal-chevron"
+                    aria-hidden="true"
+                  />
+                </a>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="search-modal-footer">
+          <span className="search-modal-hint">
+            <kbd className="search-modal-kbd">↑</kbd>
+            <kbd className="search-modal-kbd">↓</kbd>
+            Navigate
+          </span>
+          <span className="search-modal-hint">
+            <kbd className="search-modal-kbd">↵</kbd>
+            Open
+          </span>
+          <span className="search-modal-hint">
+            <kbd className="search-modal-kbd">Esc</kbd>
+            Close
+          </span>
         </div>
       </div>
     </dialog>

@@ -102,6 +102,17 @@ export default function Providers({
     return () => mql.removeEventListener("change", onChange);
   }, [hasUserChoice]);
 
+  // Keep <html data-theme-preboot> in sync with the active theme. The inline
+  // bootstrap script sets this attribute once on first paint; without this
+  // sync, [data-theme-preboot="dark"] CSS still applies dark colors to
+  // .grid-with-side after the user toggles to light, leaving the body dark
+  // while the wrapper has no .theme-dark class.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.dataset.themePreboot = theme;
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
+
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
     setHasUserChoice(true);
