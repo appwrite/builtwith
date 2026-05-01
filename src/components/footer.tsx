@@ -23,7 +23,7 @@ export default function Footer() {
           </li>
           <li className="inline-links-item">
             <a
-              href="https://appwrite.io/policy/cookies"
+              href="https://appwrite.io/cookies"
               target="_blank"
               rel="noreferrer"
             >

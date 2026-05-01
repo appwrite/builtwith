@@ -114,6 +114,15 @@
 .submit-grid-full {
   grid-column: 1 / -1;
 }
+
+/* Pink Design's dark-mode placeholder color resolves to the same neutral as
+   our remapped input background, which makes hint text invisible on dark
+   inputs. Override with a brighter gray that reads against #6c6c71. */
+.theme-dark ::placeholder,
+.theme-dark [contentEditable="true"] {
+  --p-placeholder-color: var(--color-neutral-50);
+}
+
 .submit-thumb-drop {
   display: flex;
   align-items: center;
@@ -161,7 +170,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.7rem 0.9rem;
-  border: 1px solid hsl(var(--color-border));
+  border: 1px solid hsl(var(--color-neutral-30));
   border-radius: var(--border-radius-small, 0.5rem);
   background: transparent;
   color: inherit;
@@ -169,6 +178,9 @@
   text-align: left;
   transition: border-color 140ms ease, background-color 140ms ease,
     color 140ms ease;
+}
+.theme-dark .submit-service-pill {
+  border-color: hsl(var(--color-neutral-150));
 }
 .submit-service-pill:hover {
   border-color: hsl(var(--color-primary-100, 340 82% 59%));
