@@ -1,15 +1,23 @@
-import { defineConfig } from 'vite';
-import { qwikVite } from '@builder.io/qwik/optimizer';
-import { qwikCity } from '@builder.io/qwik-city/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
+import { defineConfig } from "vite";
 
-export default defineConfig(() => {
-  return {
-    plugins: [qwikCity(), qwikVite(), tsconfigPaths()],
-    preview: {
-      headers: {
-        'Cache-Control': 'public, max-age=600',
+export default defineConfig({
+  server: {
+    port: 3000,
+  },
+  resolve: {
+    tsconfigPaths: true,
+  },
+  plugins: [
+    tanstackStart({
+      router: {
+        routesDirectory: "./app",
+        generatedRouteTree: "./routeTree.gen.ts",
       },
-    },
-  };
+    }),
+    viteReact(),
+    nitro(),
+  ],
 });

@@ -1,0 +1,28 @@
+"use client";
+
+import type { ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
+import { useApp } from "./providers";
+
+export default function ThemedShell({ children }: { children: ReactNode }) {
+  const { theme } = useApp();
+  // Derive sidebar visibility from `state.matches`, which is updated in the
+  // same batch as the route commit. `location.pathname` flips immediately on
+  // click (before the loader resolves) and `resolvedLocation` lags one paint
+  // behind the commit (it's set in the Transitioner's useLayoutEffect),
+  // either of which causes a visible pop-in/out when navigating between
+  // routes that have a sidebar and routes that don't.
+  const hasSidebar = useRouterState({
+    select: (s) =>
+      s.matches.some((m) => m.routeId === "/" || m.routeId === "/search"),
+  });
+
+  const classes = [
+    hasSidebar ? "grid-with-side" : "u-flex-vertical u-full-screen-height",
+    theme === "dark" ? "theme-dark" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return <div className={classes}>{children}</div>;
+}

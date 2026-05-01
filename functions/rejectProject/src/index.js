@@ -25,7 +25,7 @@ module.exports = async function (req, res) {
   }
 
   const project = JSON.parse(req.variables["APPWRITE_FUNCTION_EVENT_DATA"]);
-  if (!project || !project.userId || !project.name) {
+  if (!project || !project.$id || !project.name) {
     throw new Error("Invalid project update event.");
   }
 
@@ -35,10 +35,25 @@ module.exports = async function (req, res) {
     return;
   }
 
+  if (!project.userId) {
+    console.log("Project has no userId. Deleting invalid legacy record.");
+    try {
+      await database.deleteDocument("main", "projects", project.$id);
+      console.log("Done");
+    } catch (error) {
+      throw new Error(`Failed to delete invalid project: ${error}`);
+    }
+
+    res.json({
+      ok: true,
+    });
+    return;
+  }
+
   console.log("Fetching project author");
   const author = await user.get(project.userId);
   if (!author || !author.email) {
-    throw new Error("Project author has no email.");
+    throw new Error("Project author has no email. Keeping record for retry.");
   }
   console.log("Done");
 
@@ -46,7 +61,7 @@ module.exports = async function (req, res) {
     host: SMTP_URL,
     port: SMTP_PORT,
     auth: {
-      user: SMTP_USERNAME,
+      user: SMTP_USERNAME.trim(),
       pass: SMTP_PASSWORD,
     },
     secure: false,
@@ -58,7 +73,7 @@ module.exports = async function (req, res) {
   console.log("Sending email to project author");
   try {
     await transporter.sendMail({
-      from: SMTP_USERNAME,
+      from: SMTP_USERNAME.trim(),
       to: author.email,
       bcc: req.variables["APPROVER_EMAILS"],
       subject: "Project Review - builtwith.appwrite.io ",
@@ -66,15 +81,15 @@ module.exports = async function (req, res) {
     });
     console.log("Done");
   } catch (error) {
-    throw new Error(`Failed to send email: ${error}`);
+    throw new Error(`Failed to send rejection email. Keeping record for retry: ${error}`);
   }
 
-  console.log("Deleting the project document");
+  console.log("Deleting the project document after successful email");
   try {
     await database.deleteDocument("main", "projects", project.$id);
     console.log("Done");
   } catch (error) {
-    throw new Error(`Failed to delete project: ${error}`);
+    throw new Error(`Email was sent, but failed to delete project: ${error}`);
   }
 
   res.json({
