@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-appwrite": "^8.0.0",
+    "node-appwrite": "^31.0.0",
     "nodemailer": "^10.2.0"
   }
 }
